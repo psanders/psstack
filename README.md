@@ -26,7 +26,7 @@ psstack/
 | **kaizen** | `/ps:kaizen [lens]` | Daily 1%-better pass — surveys a repo, picks ONE high-leverage improvement, proposes it, applies on approval, and logs to a per-repo ledger. |
 | **issues-daily** | `/ps:issues-daily [filter]` | Pull open GitHub issues for the current repo, grouped by type and priority, ready to pick work from. |
 | **issues-report** | `/ps:issues-report [desc]` | File a structured GitHub issue (bug/feature/chore) in the current repo. |
-| **bootstrap** | `/ps:bootstrap` | Scaffold a new TS/Node project from my opinionated baseline — Prisma (SQLite/Postgres), Zod-validated functions with DI, tRPC, mocha/sinon tests, standard tooling. |
+| **bootstrap** | `/ps:bootstrap` | Scaffold a new TS/Node project from my opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, oclif CLI, LangChain LLM, Storybook, docs/media) as opt-in choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. |
 
 All skills auto-detect the current repo — nothing is hardcoded to a single project.
 

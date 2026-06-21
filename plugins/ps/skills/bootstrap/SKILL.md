@@ -1,6 +1,6 @@
 ---
 name: bootstrap
-description: Scaffold a new TypeScript/Node project using a captured, opinionated engineering baseline — Prisma (SQLite or Postgres), Zod-validated functions with dependency injection, tRPC, mocha/sinon tests, and standard tooling. Use when starting a new project or service from scratch, or runs /ps:bootstrap.
+description: Scaffold a new TypeScript/Node project from a captured, opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, CLI/oclif, LangChain LLM, Storybook, docs/media) as opt-in choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. Use when starting a new project or service from scratch, or runs /ps:bootstrap.
 license: MIT
 metadata:
   author: psanders
@@ -13,28 +13,45 @@ Stand up a new TypeScript/Node project the way I actually build them, so a fresh
 starts from my conventions instead of a blank page. This is not a generic generator — it
 encodes a specific, opinionated baseline.
 
-**Read `references/conventions.md` first.** It is the source of truth for every choice
-below. The copyable code lives in `references/templates/`.
+**Read `references/conventions.md` and `references/dependency-groups.md` first.** Together they
+are the source of truth for every choice below. The copyable code lives in `references/templates/`.
 
 ## When to use
 
 Starting a new project or service from scratch (empty or near-empty directory). For
 improving an existing repo, use `/ps:kaizen` instead.
 
-## Step 1 — Decide the shape
+## Step 1 — Pick the stack (interactive, BEFORE scaffolding)
 
-Ask the user with **AskUserQuestion** (batch the questions). Infer sensible defaults from
-anything they already said and only ask what's genuinely open:
+The whole point of this skill is to assemble the right **dependency groups** for this project
+and confirm them with the user before a single file is written. Drive it like this:
 
-1. **Project name + package scope** (e.g. `acme` → packages named `@acme/...`).
-2. **Domain complexity → database.** Simple/single-writer → **SQLite** (`@prisma/adapter-better-sqlite3`).
-   Rich/relational/concurrent → **Postgres**. When unsure, default SQLite (migration later is mechanical).
-3. **Layout.** Single package (one simple service) or **monorepo** (multiple surfaces:
-   API + agents + CLI + web). Monorepo always gets a shared `common` package.
-4. **Surfaces to include.** Any of: tRPC API server, agent/LLM layer, CLI, web app.
-5. **Org + license + year** for the copyright header (default to the user's identity and MIT).
+1. **State the always-on baseline** (don't ask): TypeScript (strict, ESM), Zod + the
+   validated-function pattern, eslint + prettier + husky + lint-staged, mocha + chai + sinon,
+   conventional commits, `@fonoster/logger`. These come with every project.
 
-Confirm the resulting plan in one short summary before writing anything.
+2. **Gather identity** with **AskUserQuestion** (batch): project name + package scope
+   (`acme` → `@acme/...`), and org + license + year for the copyright header (default to the
+   user's identity and MIT).
+
+3. **Choose project surfaces** — **AskUserQuestion, `multiSelect: true`**: Backend API (tRPC),
+   Web (Vite + React + Tailwind), Desktop (Tauri), Mobile (Expo), CLI, LLM/Agents. Surfaces imply
+   groups: Desktop implies Web; any frontend implies the client data layer (`@tanstack/react-query`
+   + tRPC client). Since the tool caps at 4 options per question, split across two questions
+   rather than dropping any surface.
+
+4. **Choose the database** — **AskUserQuestion**: SQLite (simple/single-writer, default),
+   Postgres (rich/relational/concurrent), or none. Prisma either way.
+
+5. **Choose add-ons** — **AskUserQuestion, `multiSelect: true`**: Storybook, Documents & media
+   (pdf/excel/qr/images). Skip the question if no surface would use them.
+
+6. **Infer layout**: more than one surface → **monorepo** (npm workspaces + Lerna) with a shared
+   `common` package; a single surface → single package. State which you chose and why.
+
+7. **Resolve and confirm.** Expand the selected surfaces + add-ons into the concrete package list
+   using `references/dependency-groups.md`, then **echo the full resolved dependency set back to
+   the user for confirmation before installing anything.** Do not scaffold until they confirm.
 
 ## Step 2 — Scaffold the baseline
 
