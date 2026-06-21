@@ -24,6 +24,10 @@ psstack/
 | Skill | Invoke | What it does |
 | :--- | :--- | :--- |
 | **kaizen** | `/ps:kaizen [lens]` | Daily 1%-better pass — surveys a repo, picks ONE high-leverage improvement, proposes it, applies on approval, and logs to a per-repo ledger. |
+| **issues-daily** | `/ps:issues-daily [filter]` | Pull open GitHub issues for the current repo, grouped by type and priority, ready to pick work from. |
+| **issues-report** | `/ps:issues-report [desc]` | File a structured GitHub issue (bug/feature/chore) in the current repo. |
+
+All skills auto-detect the current repo — nothing is hardcoded to a single project.
 
 ## Install
 
