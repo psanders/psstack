@@ -1,0 +1,14 @@
+{
+  "name": "psstack",
+  "owner": {
+    "name": "Pedro Sanders",
+    "email": "psanders@fonoster.com"
+  },
+  "plugins": [
+    {
+      "name": "ps",
+      "source": "./plugins/ps",
+      "description": "Pedro's personal Claude Code toolbelt — daily craft, review, and workflow skills."
+    }
+  ]
+}
