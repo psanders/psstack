@@ -86,6 +86,11 @@ See `templates/createCreateWidget.test.ts`.
 - Always cover a **validation-failure** case asserting `ValidationError` and that the side
   effect never fired.
 - Integration tests (real DB) live under `test/integration/**` and run on their own script.
+- **E2E is a separate tier, not a replacement for unit tests.** When there's a UI surface, drive
+  it end-to-end: **Playwright** for web/desktop (specs under `e2e/`, `playwright.config.ts`,
+  script `test:e2e`), **Maestro** for mobile (YAML flows under `.maestro/`, script `test:e2e` →
+  `maestro test .maestro`; Maestro is a machine-level CLI, not an npm dep). Keep E2E thin and
+  flow-level — unit tests still own business logic.
 
 ## File hygiene
 

@@ -55,6 +55,7 @@ The ORM is always Prisma; the engine is the decision.
 - Extras as needed: `expo-haptics`, `expo-linear-gradient`, `expo-local-authentication`,
   `expo-file-system`, `expo-sharing`, `react-native-ble-plx`, `react-native-view-shot`
 - Pairs with group C for data. Reanimated needs its babel plugin.
+- **E2E**: Maestro (group L) — implied whenever Mobile is selected.
 
 ### G. CLI
 - `@oclif/core`, `@inquirer/prompts`, `cliui`, `figlet`, `moment`, `@types/figlet`
@@ -76,6 +77,30 @@ The ORM is always Prisma; the engine is the decision.
 - Data/exports: `exceljs`, `qrcode`, `yaml`
 - Misc: `jsonwebtoken` (signed artifacts), `phone` (E.164 normalization)
 
+### K. E2E — Playwright  *(web / desktop end-to-end)*
+- `@playwright/test` (dev); `npx playwright install` pulls the browsers.
+- Implied whenever a Web (group D) or Desktop (group E) surface is selected; offered, not forced.
+- Specs live under `e2e/`; `playwright.config.ts` at the package root. Script: `test:e2e`.
+- Complements mocha unit tests — it does **not** replace them. Unit tests stay the default for
+  business logic; Playwright covers the rendered UI / full-stack flows.
+
+### L. E2E — Maestro  *(mobile end-to-end)*
+- Maestro is a CLI, **not** an npm dependency — installed once per machine
+  (`curl -fsSL https://get.maestro.mobile.dev | bash`), not added to `package.json`.
+- Implied whenever Mobile (group F) is selected.
+- Flows are YAML under `.maestro/` (e.g. `.maestro/launch.yaml`). Script: `test:e2e`
+  → `maestro test .maestro`. Note the prerequisite in the README rather than installing it.
+
+### M. Workflow tooling  *(commands & skills wired into the new repo)*
+These are not runtime deps — they configure the project's AI/dev workflow. Offered as opt-in.
+- **psstack commands** — make this toolbelt's skills (`/ps:kaizen`, `/ps:issues-daily`,
+  `/ps:issues-report`, `/ps:bootstrap`) available in the new repo by adding the marketplace +
+  plugin to the project's `.claude/settings.json` (`extraKnownMarketplaces` + `enabledPlugins`),
+  so a fresh clone gets them without per-machine setup.
+- **OpenSpec** — spec-driven development. `npx openspec@latest init --tools claude` scaffolds the
+  `openspec/` spec layer and registers the `/openspec:*` (a.k.a. `/opsx:*` — `propose`, `apply`,
+  `archive`) slash commands for Claude Code. Adds an `openspec` dev dependency.
+
 ---
 
 ## Presentation rules for the skill
@@ -84,7 +109,11 @@ The ORM is always Prisma; the engine is the decision.
 2. Ask **project surfaces** first (multi-select): Backend API, Web, Desktop (Tauri), Mobile,
    CLI, LLM/Agents. These imply their groups (Desktop implies Web; any frontend implies C).
 3. Ask the **database** decision (SQLite vs Postgres vs none).
-4. Ask **add-ons** (multi-select): Storybook, Documents & media.
-5. `AskUserQuestion` caps at 4 options per question — split a long list across multiple
+4. Ask **add-ons** (multi-select): Storybook, Documents & media, **E2E tests (Playwright)** —
+   only offer Playwright when a Web or Desktop surface is in play. Maestro is **not** asked: it
+   is implied by the Mobile surface (noted as a machine prerequisite, not an install).
+5. Ask **workflow tooling** (multi-select): **psstack commands**, **OpenSpec** — always offer,
+   regardless of surfaces.
+6. `AskUserQuestion` caps at 4 options per question — split a long list across multiple
    questions rather than dropping choices.
-6. Echo back the final resolved dependency set for confirmation **before** installing anything.
+7. Echo back the final resolved dependency set for confirmation **before** installing anything.

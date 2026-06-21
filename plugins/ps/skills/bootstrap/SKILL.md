@@ -1,10 +1,10 @@
 ---
 name: bootstrap
-description: Scaffold a new TypeScript/Node project from a captured, opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, CLI/oclif, LangChain LLM, Storybook, docs/media) as opt-in choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. Use when starting a new project or service from scratch, or runs /ps:bootstrap.
+description: Scaffold a new TypeScript/Node project from a captured, opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, CLI/oclif, LangChain LLM, Storybook, docs/media, Playwright/Maestro E2E) plus opt-in workflow tooling (psstack commands, OpenSpec) as choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. Use when starting a new project or service from scratch, or runs /ps:bootstrap.
 license: MIT
 metadata:
   author: psanders
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Bootstrap — capture the opinionated starting line
@@ -37,19 +37,26 @@ and confirm them with the user before a single file is written. Drive it like th
 3. **Choose project surfaces** — **AskUserQuestion, `multiSelect: true`**: Backend API (tRPC),
    Web (Vite + React + Tailwind), Desktop (Tauri), Mobile (Expo), CLI, LLM/Agents. Surfaces imply
    groups: Desktop implies Web; any frontend implies the client data layer (`@tanstack/react-query`
-   + tRPC client). Since the tool caps at 4 options per question, split across two questions
-   rather than dropping any surface.
+   + tRPC client); **Mobile implies Maestro** for E2E (group L — a machine-level CLI, noted as a
+   prerequisite, not installed). Since the tool caps at 4 options per question, split across two
+   questions rather than dropping any surface.
 
 4. **Choose the database** — **AskUserQuestion**: SQLite (simple/single-writer, default),
    Postgres (rich/relational/concurrent), or none. Prisma either way.
 
 5. **Choose add-ons** — **AskUserQuestion, `multiSelect: true`**: Storybook, Documents & media
-   (pdf/excel/qr/images). Skip the question if no surface would use them.
+   (pdf/excel/qr/images), **E2E tests (Playwright)** — only offer Playwright when a Web or Desktop
+   surface was chosen. Skip the question entirely if no surface would use any add-on.
 
-6. **Infer layout**: more than one surface → **monorepo** (npm workspaces + Lerna) with a shared
+6. **Choose workflow tooling** — **AskUserQuestion, `multiSelect: true`** (always ask): **psstack
+   commands** (wire this toolbelt's `/ps:*` skills into the new repo via `.claude/settings.json`)
+   and **OpenSpec** (`npx openspec@latest init --tools claude` → spec layer + `/openspec:*` slash
+   commands). Both are opt-in; install only what's picked. See group M in `dependency-groups.md`.
+
+7. **Infer layout**: more than one surface → **monorepo** (npm workspaces + Lerna) with a shared
    `common` package; a single surface → single package. State which you chose and why.
 
-7. **Resolve and confirm.** Expand the selected surfaces + add-ons into the concrete package list
+8. **Resolve and confirm.** Expand the selected surfaces + add-ons into the concrete package list
    using `references/dependency-groups.md`, then **echo the full resolved dependency set back to
    the user for confirmation before installing anything.** Do not scaffold until they confirm.
 
@@ -78,6 +85,17 @@ Create the structure for the chosen shape. Match `references/conventions.md` exa
 - **Agent layer** (only if chosen): `tools/definitions.ts` + `tools/executor/` that route tool
   calls into the validated functions; an `agents` schema + a config file. See the optional
   section in `conventions.md`.
+- **E2E** (only if chosen / implied): for **Playwright** (web/desktop), add `playwright.config.ts`,
+  an `e2e/` dir with one example spec, and a `test:e2e` script; note `npx playwright install` in
+  the README. For **Maestro** (mobile), add `.maestro/` with one example flow (`launch.yaml`), a
+  `test:e2e` script (`maestro test .maestro`), and a README note that Maestro is a machine-level
+  CLI to install once — never add it to `package.json`.
+- **Workflow tooling** (only if chosen):
+  - **psstack commands** → write `.claude/settings.json` (or merge) registering the marketplace
+    and enabling the plugin (`extraKnownMarketplaces` for `psanders/psstack` + `enabledPlugins`
+    for `ps@psstack`) so a fresh clone gets `/ps:*` without per-machine setup.
+  - **OpenSpec** → run `npx openspec@latest init --tools claude` (scaffolds `openspec/` and the
+    `/openspec:*` commands). Add `openspec` as a dev dependency and mention it in the README.
 
 When copying a template, replace placeholders: `{{YEAR}}`, `{{ORG}}`, `{{LICENSE}}`, `{{SCOPE}}`.
 
@@ -85,6 +103,8 @@ When copying a template, replace placeholders: `{{YEAR}}`, `{{ORG}}`, `{{LICENSE
 
 - Install deps. Generate the Prisma client. Run an initial migration (or `db:push` for SQLite).
 - Run `lint`, `typecheck`, and `test` — the example function + its test must pass.
+- E2E is the secondary tier: the Playwright/Maestro example must **typecheck/parse**, but don't
+  block the green bar on a running browser/emulator — note `test:e2e` as a follow-up to run locally.
 - Report honestly what passed; fix what didn't before declaring done.
 
 ## Step 4 — Initialize git + first commit
