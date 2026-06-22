@@ -43,6 +43,7 @@ Look across these lenses. Do not go deep on all of them — sweep wide, then dri
 | **Security** | leaked-secret patterns, weak authz boundaries, dependency CVEs, unsafe input handling |
 | **Deps / hygiene** | stale or duplicate deps, unused packages, lockfile drift, pinned-too-loose versions |
 | **Docs** | stale README, undocumented onboarding step, missing "how to run X" |
+| **Storybook / components** | repeated UI patterns ripe for extraction into shared components, components lacking stories, stories that have drifted from implementation, undocumented props or variants |
 
 ### 2. Score
 
@@ -107,7 +108,7 @@ Append to `.claude/kaizen/log.md` (newest first) regardless of outcome:
 
 ## Arguments
 
-`/ps:kaizen [lens]` — optional lens focuses today's pick (`dx`, `ci`, `deploy`, `code`, `tests`, `security`, `deps`, `docs`). With no arg, sweep all lenses balanced and let the ledger rotate coverage.
+`/ps:kaizen [lens]` — optional lens focuses today's pick (`dx`, `ci`, `deploy`, `code`, `tests`, `security`, `deps`, `docs`, `storybook`). With no arg, sweep all lenses balanced and let the ledger rotate coverage.
 
 ## Rules
 

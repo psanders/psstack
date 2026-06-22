@@ -1,0 +1,33 @@
+name: Validate plugin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON manifests
+        run: |
+          jq . .claude-plugin/marketplace.json > /dev/null
+          jq . plugins/ps/.claude-plugin/plugin.json > /dev/null
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          failed=0
+          while IFS= read -r -d '' f; do
+            if ! grep -q "^name:" "$f"; then
+              echo "MISSING name: in $f"
+              failed=1
+            fi
+            if ! grep -q "^description:" "$f"; then
+              echo "MISSING description: in $f"
+              failed=1
+            fi
+          done < <(find plugins -name "SKILL.md" -print0)
+          exit $failed
