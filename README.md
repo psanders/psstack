@@ -68,4 +68,6 @@ If left unbumped, the git commit SHA is used as the version (every commit counts
 
 1. `mkdir -p plugins/ps/skills/<name>`
 2. Write `plugins/ps/skills/<name>/SKILL.md` with `name` + `description` frontmatter.
-3. `/reload-plugins` (or restart) to pick it up; invoke as `/ps:<name>`.
+3. Add a row for the skill in the **Skills** table above.
+4. Bump `version` in `plugins/ps/.claude-plugin/plugin.json`.
+5. `/reload-plugins` (or restart) to pick it up; invoke as `/ps:<name>`.
