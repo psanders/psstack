@@ -4,7 +4,7 @@ description: Scaffold a new TypeScript/Node project from a captured, opinionated
 license: MIT
 metadata:
   author: psanders
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Bootstrap — capture the opinionated starting line
@@ -82,6 +82,11 @@ Create the structure for the chosen shape. Match `references/conventions.md` exa
   - schema → `templates/widget.schema.ts`
   - function → `templates/createCreateWidget.ts`
   - test → `templates/createCreateWidget.test.ts`
+- **A base `CLAUDE.md`** from `templates/CLAUDE.md`. This is the agent guide for the new repo;
+  fill its placeholders and prune the conditional bullets to match the chosen stack. It follows
+  the project-specific-facts-here / reusable-how-to-by-pointer split: state repo layout and
+  project rules directly, but keep reusable conventions as a one-line summary + a pointer to the
+  plugin (`/ps:create-validated-function`, `/ps:ship`) rather than re-explaining them.
 - **Agent layer** (only if chosen): `tools/definitions.ts` + `tools/executor/` that route tool
   calls into the validated functions; an `agents` schema + a config file. See the optional
   section in `conventions.md`.
@@ -97,7 +102,8 @@ Create the structure for the chosen shape. Match `references/conventions.md` exa
   - **OpenSpec** → run `npx openspec@latest init --tools claude` (scaffolds `openspec/` and the
     `/openspec:*` commands). Add `openspec` as a dev dependency and mention it in the README.
 
-When copying a template, replace placeholders: `{{YEAR}}`, `{{ORG}}`, `{{LICENSE}}`, `{{SCOPE}}`.
+When copying a template, replace placeholders: `{{YEAR}}`, `{{ORG}}`, `{{LICENSE}}`, `{{SCOPE}}`,
+`{{PROJECT}}`, `{{COMMON_DIR}}`.
 
 ## Step 3 — Make it run green
 
