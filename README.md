@@ -27,6 +27,7 @@ psstack/
 | **kaizen** | `/ps:kaizen [lens]` | Daily 1%-better pass — surveys a repo, picks ONE high-leverage improvement, proposes it, applies on approval, and logs to a per-repo ledger. |
 | **issues-daily** | `/ps:issues-daily [filter]` | Pull open GitHub issues for the current repo, grouped by type and priority, ready to pick work from. |
 | **issues-report** | `/ps:issues-report [desc]` | File a structured GitHub issue (bug/feature/chore) in the current repo. |
+| **release-card** | `/ps:release-card [tag] [--color fonoster-green\|blue\|orange] [--logo Routr]` | Generate a branded release-notes image (PNG) for a repo's latest GitHub release — groups the actual commit messages by conventional-commit type (🎉 Features, 🐛 Bug Fixes, …) with short-SHA chips, on a white 1080×1350 social card, via satori + resvg. |
 | **create-validated-function** | `/ps:create-validated-function` | Scaffold one validated function (factory + DI + Zod validation + structured errors) and its sinon test in an existing repo. Reuses bootstrap's canonical templates. |
 | **bootstrap** | `/ps:bootstrap` | Scaffold a new TS/Node project from my opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, oclif CLI, LangChain LLM, Storybook, docs/media, Playwright/Maestro E2E) plus opt-in workflow tooling (psstack commands, OpenSpec) as choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. |
 
