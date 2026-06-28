@@ -24,6 +24,7 @@ psstack/
 | Skill | Invoke | What it does |
 | :--- | :--- | :--- |
 | **ship** | `/ps:ship [change]` | Drive ONE OpenSpec change to production-ready through fixed stages — design (Pencil) → spec reconcile → build (Storybook-first) → tests (unit + e2e) → sync → archive. Resumable across sessions via a per-change checkpoint. |
+| **docs** | `/ps:docs [topic]` | Write or update ONE documentation page through fixed stages — purpose narrative → sources → placement → Diátaxis-typed outline → Pencil assets → Mintlify MDX → proof → wire into nav. Mintlify-first, repo-agnostic; resumable via a per-doc checkpoint. |
 | **kaizen** | `/ps:kaizen [lens]` | Daily 1%-better pass — surveys a repo, picks ONE high-leverage improvement, proposes it, applies on approval, and logs to a per-repo ledger. |
 | **issues-daily** | `/ps:issues-daily [filter]` | Pull open GitHub issues for the current repo, grouped by type and priority, ready to pick work from. |
 | **issues-report** | `/ps:issues-report [desc]` | File a structured GitHub issue (bug/feature/chore) in the current repo. |
