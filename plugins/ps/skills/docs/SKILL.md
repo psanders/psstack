@@ -128,6 +128,10 @@ Only if the outline flagged an asset slot. Otherwise mark the stage `skipped` an
 
 - Read `references/assets.md` for the **asset taxonomy and the preset dimensions** — use
   the encoded sizes, do not invent new ones.
+- For **diagrams** (flow, architecture, sequence, state), follow
+  `references/diagram-craft.md`: write the node/edge spec in text and confirm it, then
+  render to the product's design system (instance the existing card/logo/label components,
+  bind colors to variables) so the asset looks like the dashboard built it.
 - Draft in **Pencil** when the repo has a `.pen` file, honoring the project's Pencil
   conventions (read `CLAUDE.md` and any design memories first — e.g. copy an existing
   frame rather than adding raw frames). For screenshots, capture at 2×.

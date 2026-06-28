@@ -37,6 +37,10 @@ PNG only when the design can't export clean SVG.
 Draft diagrams and OG cards in Pencil when the repo has a `.pen` file. Never `Read`/`Grep`
 a `.pen` file — use the `pencil` MCP only.
 
+**For diagrams** (flow, architecture, sequence, state), follow **`diagram-craft.md`** — it
+carries the brief-then-render procedure, the archetypes, and the visual grammar bound to
+the product's design system. The recipe below is the general frame for any asset:
+
 1. **Load the schema first**: `get_editor_state(include_schema: true)` if you don't already
    have the file's schema in context.
 2. **Honor the project's Pencil conventions.** Read `CLAUDE.md` and any design memories
@@ -45,10 +49,13 @@ a `.pen` file — use the `pencil` MCP only.
    shifted*). Follow the project's idiom; don't reinvent it.
 3. **Make a frame at the preset size** from the table above (e.g. 1600×900 for a 16:9
    diagram, 1200×630 for an OG card).
-4. **Use the design system**: pull brand colors and type from the file's variables
-   (`get_variables`) — match the product's palette, don't hardcode hexes.
-5. **Keep diagrams legible at half size**: large labels, few boxes, clear arrows, generous
-   spacing. A diagram that needs zooming has failed.
+4. **Use the design system, not raw shapes**: pull brand colors and type from the file's
+   variables (`get_variables`) and **instance the existing reusable components**
+   (`batch_get(patterns:[{reusable:true}])`) — cards, logo, labels — rather than redrawing
+   their styling. Bind colors to variables, don't hardcode hexes. This is what makes an
+   asset look like the product built it. See `diagram-craft.md` for the component mapping.
+5. **Keep it legible at half size**: large labels, few boxes, clear arrows, generous
+   spacing. An asset that needs zooming has failed.
 6. **Export** via `export_nodes` to the slug's image folder, as SVG for diagrams (PNG
    fallback) and PNG for OG cards.
 
