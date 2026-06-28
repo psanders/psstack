@@ -68,6 +68,11 @@ Resolve what page we are writing and what it is for.
   *reference* (look-up: config, API, fields), or *explanation* (the why/concepts).
   If the topic seems to need two types, that is two pages — say so and pick the one to
   write now.
+- **Read the project's docs policy** — a docs-scoped `CLAUDE.md` or similar (Claude Code
+  auto-loads nested `CLAUDE.md`). It defines the **audience** and what is **shareable vs
+  internal**. Respect it in every page and asset: describe the behavior the reader touches,
+  not internal mechanism, unless the policy explicitly allows it. If no policy exists and
+  the topic risks exposing internals, ask before writing.
 - This stage is **human-gated**: confirm the purpose narrative, the reader, and the type
   before sourcing anything.
 
