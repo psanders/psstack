@@ -2,133 +2,117 @@
 
 This is the metaprompt for stage 4 when an asset is a **diagram** (flow, architecture,
 sequence, state). It teaches the architect mindset and binds it to the product's real
-design system, so a generated diagram looks like the dashboard built it — same palette,
-type, radii, icons, and components — not like a generic boxes-and-arrows tool.
+design system, so a generated diagram looks like the dashboard built it.
 
-**Golden rule:** don't improvise. Produce a *spec* first, confirm it, then render to the
-design system. A diagram is an act of architecture, not decoration.
+Two golden rules:
+- **Don't improvise.** Produce a *spec* first, confirm it, then render. A diagram is an act
+  of architecture, not decoration.
+- **The image is an artifact, not the source.** Build from the **Diagram Kit** + a saved
+  spec so the asset can be tweaked and rebranded at scale — see `asset-system.md`.
 
 ## The brief-then-render procedure
 
-1. **Name the one message.** Write a single sentence: "This diagram shows how an outreach
-   request fans out to voice and SMS channels." If you can't say it in one sentence, the
-   diagram is doing too much — split it.
-2. **Pick the archetype** (below) that fits the message. The archetype dictates layout.
-3. **Write the node/edge spec in text** and confirm it with the user before drawing:
+1. **Name the one message.** One sentence. If you can't, the diagram does too much — split.
+2. **Pick the archetype** (below). It dictates layout.
+3. **Write the node/edge spec in text** and confirm it before drawing:
    ```
-   Nodes:  Engine(service) · dispatchOutreach(process) · Fonoster Voice(external) ·
-           Twilio SMS(external) · Contact log(datastore)
-   Edges:  Engine → dispatchOutreach (solid, "trigger")
-           dispatchOutreach ⇢ Fonoster Voice (dashed, "async call")
-           dispatchOutreach ⇢ Twilio SMS (dashed, "async call")
-           dispatchOutreach → Contact log (solid, "writes")
-   Legend: solid = sync · dashed = async/event
+   Nodes:  Engine(service) · dispatchOutreach(process) · Fonoster(external) · …
+   Edges:  Engine → dispatchOutreach ("trigger") · dispatchOutreach → Fonoster ("VOICE")
+   Legend: action vs input · Boundary: providers outside our system
    ```
-4. **Render to the design system** in Pencil, following the visual grammar below.
-5. **Check** against the quality bar, then export (see `assets.md` for size/format/path).
+4. **Render to the Diagram Kit** (below). Reuse the kit's components and tokens.
+5. **Save + register**: write the per-asset build doc, add a ledger row (`asset-system.md`).
+6. **Check** against the quality bar, then export (size/format/path in `assets.md`).
 
 ## Archetypes — pick one
 
-| Archetype | Use when the message is… | Layout |
+| Archetype | Message is… | Layout |
 | :--- | :--- | :--- |
-| **Flow / pipeline** | "data/requests move through stages" | left→right lanes |
-| **Sequence** | "components talk in this order over time" | vertical actors, time down |
-| **Component / architecture** | "these parts make up the system and how they connect" | grouped by boundary |
-| **Layered** | "the stack has these tiers" | stacked horizontal bands |
-| **State machine** | "an entity moves between states" | nodes + labelled transitions |
-| **Hierarchy / tree** | "this contains that" | top→down tree |
-| **Entity-relationship** | "these records relate like so" | boxes + cardinality edges |
+| **Flow / pipeline** | "things move through stages" | left→right |
+| **Sequence** | "components talk in order over time" | vertical actors, time down |
+| **Component / architecture** | "these parts connect" | grouped by boundary |
+| **Layered** | "the stack has tiers" | stacked bands |
+| **State machine** | "an entity changes state" | nodes + labelled transitions |
+| **Hierarchy / tree** | "this contains that" | top→down |
+| **Entity-relationship** | "records relate" | boxes + cardinality |
 
-If two archetypes tempt you, the message is split → two diagrams.
+Two archetypes tempting you = the message is split → two diagrams.
 
-## Visual grammar — bound to the QCobro dashboard design system
+## Visual grammar — bound to the QCobro dashboard
 
-Read the live values with `get_variables` and reuse the design-system components from the
-active `.pen` (`batch_get` for `reusable: true`). The values below are the dashboard's
-system as authored — treat them as the target, but prefer the live variables if they've
-moved.
+Color comes from flat **`dgm-*` diagram tokens** seeded from the dashboard palette (read
+with `get_variables`; if absent, seed them once — see `asset-system.md`). Do **not** bind
+diagram nodes to the app's themed design-system variables — they may not resolve on an
+unthemed node (a real failure seen in practice). Use color *semantically*, ≤ 3 hues.
 
-**Type** — everything is **Inter**.
-- Node title: Inter 14–18, weight 600–800, color `--foreground` `#0F172A`.
-- Node sub-label: Inter 12, weight 500, color `--muted-foreground` `#64748B`.
-- Edge label: Inter 10–12, weight 500, `#64748B`, on a small white pill so it reads over
-  lines.
+| Token | Value | Meaning |
+| :--- | :--- | :--- |
+| `dgm-ink` / `dgm-muted` | `#0F172A` / `#64748B` | titles / sub-labels |
+| `dgm-surface` / `dgm-canvas` / `dgm-border` | `#FFFFFF` / `#F8FAFC` / `#E2E8F0` | node fill / boundary fill / borders |
+| `dgm-our` / `dgm-our-deep` / `dgm-our-soft` / `dgm-our-ink` | `#10B981` / `#047857` / `#ECFDF5` / `#065F46` | our service & its action edges; step chips |
+| `dgm-edge-input` | `#94A3B8` | edges feeding in |
+| `dgm-icon` / `dgm-icon-box` | `#475569` / `#F1F5F9` | external icon + chip |
+| `dgm-radius-node` / `dgm-radius-inner` / `dgm-pill` | `16` / `12` / `999` | geometry |
 
-**Palette** — emerald primary, slate neutrals, amber accent. Use color *semantically*,
-2–3 hues max per diagram. Never decorative rainbow.
-- Primary / "our system" / happy path: `--primary` / `--green-500` `#10B981`; deep
-  emphasis (the brand mark) `--green-700` `#047857`.
-- Neutral structure (most boxes): surface `#FFFFFF`, border `--border` `#E2E8F0`, text
-  `#0F172A`, muted `#64748B`, canvas `--background` `#F8FAFC`.
-- Accent / "needs attention" / human step: `--accent` `#F59E0B`, soft fill
-  `--accent-soft` `#FEF3C7`. Sparingly.
-- Semantic states (state machines, status): success `#10B981` on `#ECFDF5`; info `#059669`
-  on `#ECFDF5`; warning `#D97706` on `#FFFBEB`; error `#DC2626` on `#FEF2F2`.
+**Type** — everything is **Inter**. Node title 14–18 / 600–800 `dgm-ink`; sub 12 / 500
+`dgm-muted`; edge label 11 / 700 on a white pill.
 
-**Nodes** — reuse the design system; don't hand-draw new box styles.
-- Default component/box = the **`Card` / `Card Plain`** component: white fill, 1px `#E2E8F0`
-  inner stroke, the card's subtle shadow (`#0000000d`, blur ~1.75, y+1), corner radius
-  `--radius-m` `16`. Title + optional sub-label inside.
-- The **product/our-service node** = reuse **`Comp/Logo`** or its mark (green-700 `#047857`
-  rounded square, radius 8, white "Q" Inter 800).
-- **External system / third party** = same card but border-only/neutral, with the
-  provider's name + a line icon; optionally a dashed border to read as "outside our
-  boundary."
-- **Datastore** = card with a small cylinder/database line icon; label it.
-- **Tags / counts / status** = the **`Icon Label` / `Label`** pill components (radius
-  `--radius-pill` `999`, fill `#F1F5F9` secondary, or `#ECFDF5` success / `#FEF3C7`
-  accent), icon + text.
-- **Boundary / grouping** = a large rounded rectangle (radius 16), `#F8FAFC` fill or just a
-  1px dashed `#E2E8F0` outline, with a small muted title in the top-left ("Workspace",
-  "QCobro engine").
+**Nodes** — reuse the **card *style*** (white, 1px `dgm-border`, radius `dgm-radius-node`,
+soft shadow), **not** the app's full `Card` component — its Header/Content/Actions slots
+and 24px padding are too heavy for a diagram node. The kit's `Diagram/Node`,
+`Diagram/External`, and `Diagram/Service` already encode this. The "our service" node
+carries the brand mark (green-`dgm-our-deep` rounded "Q", from `Comp/Logo`).
 
-**Connectors** — drawn as `line`/`path` nodes (this file has no special connection type),
-1px, with small arrowheads.
-- **Solid `#10B981`** (or `#475569` slate for plain structure) = synchronous call / direct
-  flow / "writes".
-- **Dashed `#94A3B8`** = asynchronous / event / optional / "outside boundary" call.
-- Arrowhead points to the dependency/target. Label edges with a short **verb** on a white
-  pill. Prefer orthogonal (right-angle) routing; keep lines from crossing — reorder nodes
-  before you let lines cross.
+**Icons** — native `icon` nodes, `library: "lucide"`, 16–18px, `dgm-ink`/`dgm-icon`. This
+matches the dashboard's line icons and Mintlify. Always **icon + label**, never alone.
 
-**Icons** — match the dashboard: **16px line icons, 1px stroke** (Lucide/Feather family —
-the same set Mintlify renders), colored `#0F172A` or the node's semantic color. Always
-**icon + label**, never an icon alone. One icon per node, top-left or leading the title.
+**Edges & connectors** — `.pen` has **no dashed strokes and no connection node type**.
+So:
+- Draw connectors as thin `frame`/`rectangle` segments (1–2px) filled with an edge token;
+  route orthogonally (right angles), reorder nodes before letting lines cross.
+- Encode meaning by **color + a label pill**, not by dash: `dgm-our` = the subject's own
+  action / return; `dgm-edge-input` = data feeding in. Label edges with a short verb/term
+  on a white pill; note async in the legend if it matters.
+- Arrowheads are small `path` triangles (kit: `Diagram/Arrow R`, `Diagram/Arrow D`),
+  filled with the edge token.
+
+**Tags / counts / status** — pill components (`Diagram/Step`, or the app `Label`/
+`Icon Label`), radius `dgm-pill`.
+
+**Boundary / grouping** — a rounded frame (`dgm-radius-node`), `dgm-canvas` fill or 1px
+`dgm-border`, with a small muted top-left title ("INPUTS", "PROVIDERS · OUTSIDE QCOBRO").
 
 ## Layout discipline
 
-- **Reading order**: left→right for flows, top→down for hierarchy/sequence. Inputs on the
-  left/top, outcomes on the right/bottom.
-- **Grid & alignment**: snap to a grid; align node edges and centers. Equal gaps between
-  peers. Misalignment is the #1 tell of an amateur diagram.
-- **Whitespace**: generous padding inside the frame (≥48px margin) and between nodes. Let
-  it breathe.
-- **Restraint**: ≤ 7 primary nodes. More than that → introduce a boundary/group and
-  abstract, or split the diagram.
-- **Legend**: include one only when an encoding (dashed vs solid, a color) isn't
-  self-evident; place it bottom-left, small and muted.
+- Reading order: left→right for flows, top→down for hierarchy/sequence.
+- Snap to a grid; align edges/centers; equal gaps. Misalignment is the #1 amateur tell.
+- Generous padding (≥ 48px frame margin) and space between nodes.
+- ≤ 7 primary nodes; beyond that, group into a boundary and abstract, or split.
+- Legend only when an encoding isn't self-evident; bottom-left, small, muted.
 
-## Pencil build steps
+## Pencil build steps (the real procedure)
 
-1. `get_editor_state(include_schema: true)` if the schema isn't loaded; `get_variables`
-   for live tokens; `batch_get(patterns:[{reusable:true}])` to list reusable components.
-2. **Honor the project's Pencil build workaround** (read `CLAUDE.md` / design memories) —
-   e.g. *copy an existing frame and override it rather than adding raw frames*, which can
-   render blank or shifted. Do that here too: duplicate a clean frame at the preset size.
-3. Make the frame at the `assets.md` preset (16:9 `1600×900`, wide flow `1600×600`).
-4. Place nodes by **instancing the design-system components** (`Card`, `Comp/Logo`,
-   `Label`/`Icon Label`) — don't redraw their styling. Bind colors to variables, not raw
-   hexes, so theme changes carry through.
-5. Draw connectors as 1px lines/paths with the solid/dashed semantics above; add arrowheads
-   and verb labels on white pills.
-6. Align to grid, equalize gaps, add the boundary group and legend if needed.
+1. `get_editor_state(include_schema: true)` if the schema isn't loaded; `get_variables`;
+   `batch_get(patterns:[{reusable:true}])` to find the `Diagram Kit` components.
+2. **No kit yet?** Seed it once: define the `dgm-*` tokens (`SetVariables`) and build the
+   reusable components in a `Diagram Kit` frame (see `asset-system.md`). Then instance.
+3. **Honor the project's Pencil build workaround** (`CLAUDE.md` / design memories) — e.g.
+   *copy an existing frame rather than adding raw frames*, which can render blank/shifted.
+4. Make the diagram frame at the `assets.md` preset (16:9 `1600×900`, wide flow `1600×600`).
+   Use `layout: "none"` so zones can be absolutely positioned.
+5. **Place the zones first** by instancing kit components (inputs, service, providers,
+   output, boundaries). Override only content (`descendants`) and width.
+6. **`snapshot_layout` the frame** to read the exact rectangles, then draw connectors to
+   those measured anchors (stubs + a vertical bus for fan-outs) with arrowhead instances
+   and edge-label pills. Drawing connectors blind, before measuring, is the main source of
+   misalignment.
+7. Add the legend and caption. Screenshot to verify; fix in place (don't delete-and-redo).
 
 ## Quality bar (reject and redo if any fail)
 
 - One message, statable in a sentence.
 - ≤ 7 primary nodes; nothing crosses that could be reordered.
-- Reuses the design-system card/logo/label components and the Inter type.
-- Emerald/slate/amber used semantically; ≤ 3 hues.
-- Legible at half-size (it displays at ~half the export width) — read it zoomed to 50%.
-- Every node labelled with a noun; every edge with a verb (where it carries meaning).
-- Descriptive `alt` text written for the page.
+- Built from kit components; color only from `dgm-*` tokens; Inter throughout; ≤ 3 hues.
+- Legible at 50% (it displays at ~half the export width).
+- Nouns on nodes, verbs on edges (where edges carry meaning).
+- Build doc written and ledger row added; descriptive `alt` text drafted for the page.

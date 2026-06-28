@@ -128,13 +128,19 @@ Only if the outline flagged an asset slot. Otherwise mark the stage `skipped` an
 
 - Read `references/assets.md` for the **asset taxonomy and the preset dimensions** — use
   the encoded sizes, do not invent new ones.
+- Assets are **artifacts, not sources**: build from a shared kit + a saved spec so they
+  stay consistent and can be rebranded at scale. Read `references/asset-system.md` and the
+  project's asset ledger (e.g. `docs-site/images/ASSETS.md`) before drawing.
 - For **diagrams** (flow, architecture, sequence, state), follow
   `references/diagram-craft.md`: write the node/edge spec in text and confirm it, then
-  render to the product's design system (instance the existing card/logo/label components,
-  bind colors to variables) so the asset looks like the dashboard built it.
+  render by **instancing the project's Diagram Kit** (token-bound components) — seeding the
+  kit once if it doesn't exist yet — so the asset looks like the dashboard built it.
 - Draft in **Pencil** when the repo has a `.pen` file, honoring the project's Pencil
   conventions (read `CLAUDE.md` and any design memories first — e.g. copy an existing
   frame rather than adding raw frames). For screenshots, capture at 2×.
+- **After rendering**, write the per-asset build doc (`references/build-doc-template.md`)
+  next to the image and add a row to the ledger, so the asset can be regenerated and
+  rebranded later.
 - Export into the docs site's image folder (`<docs-dir>/images/<slug>/`), reference with
   a path that resolves at the site root, and always set descriptive `alt` text.
 

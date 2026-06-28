@@ -37,6 +37,10 @@ PNG only when the design can't export clean SVG.
 Draft diagrams and OG cards in Pencil when the repo has a `.pen` file. Never `Read`/`Grep`
 a `.pen` file — use the `pencil` MCP only.
 
+Treat every asset as an **artifact regenerated from a source**, not a hand-edited file:
+build from a shared kit + a saved spec, register it in the ledger. See
+**`asset-system.md`** for the kit / build-doc / ledger model and rebrand-at-scale flow.
+
 **For diagrams** (flow, architecture, sequence, state), follow **`diagram-craft.md`** — it
 carries the brief-then-render procedure, the archetypes, and the visual grammar bound to
 the product's design system. The recipe below is the general frame for any asset:
