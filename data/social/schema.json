@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psstack/data/social/post.schema.json",
+  "title": "Social post record",
+  "description": "One published social post and its engagement time series. One JSON object per line in posts.jsonl.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "network", "url", "posted_at", "pillar", "exemplar", "text", "snapshots"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable key: <network-prefix>-<yyyy-mm-dd>-<slug>, e.g. ln-2026-06-29-karma-hot-take or tw-2026-06-29-eot-take.",
+      "pattern": "^(ln|tw)-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$"
+    },
+    "network": { "type": "string", "enum": ["linkedin", "twitter"] },
+    "url": { "type": "string", "format": "uri", "description": "Canonical permalink; the dedupe key for /ps:post-pulse." },
+    "posted_at": { "type": "string", "format": "date" },
+    "pillar": {
+      "type": "string",
+      "enum": ["build-in-public", "industry-take", "operators-journal", "educational-tactical"]
+    },
+    "hook_pattern": {
+      "type": ["string", "null"],
+      "description": "Name from references/hook-library.md (e.g. industry-frustration, build-milestone), or null if unknown."
+    },
+    "cta": {
+      "type": "string",
+      "enum": ["engagement-question", "github", "discord", "newsletter", "dm-advisory", "karma-waitlist", "none"]
+    },
+    "exemplar": {
+      "type": "boolean",
+      "description": "true once the post has proven engagement; /ps:post reads these as drafting examples."
+    },
+    "text": { "type": "string", "description": "The post body as published." },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "snapshots": {
+      "type": "array",
+      "description": "Append-only engagement readings, one per /ps:post-pulse run.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["captured_at"],
+        "properties": {
+          "captured_at": { "type": "string", "format": "date" },
+          "impressions": { "type": ["integer", "null"] },
+          "reactions": { "type": ["integer", "null"] },
+          "comments": { "type": ["integer", "null"] },
+          "reposts": { "type": ["integer", "null"] },
+          "saves": { "type": ["integer", "null"] },
+          "clicks": { "type": ["integer", "null"] },
+          "top_comments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["text"],
+              "properties": {
+                "author": { "type": ["string", "null"] },
+                "text": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "notes": { "type": ["string", "null"] }
+  }
+}

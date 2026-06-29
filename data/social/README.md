@@ -1,0 +1,92 @@
+# Social performance data
+
+The shared, version-controlled store for Pedro's social posts and their engagement.
+Both skills read and write here:
+
+- **`/ps:post`** reads the high-performing posts (`exemplar: true`) as drafting examples.
+- **`/ps:post-pulse`** sweeps a week/month of live posts, appends an engagement
+  snapshot to each record, and promotes the best performers to `exemplar: true`.
+
+It lives in the psstack repo (not inside the plugin) so a marketplace reinstall of
+`ps` never clobbers it, and so the data travels with the toolbelt and diffs cleanly.
+
+## Conventions & provenance
+
+- **Seeded 2026-06-29** from a research pull of Pedro's LinkedIn creator-analytics
+  "Top posts" view (past 365 days). ~36 posts so far, LinkedIn only.
+- **`exemplar: true` means "good to draft from"** — a clean, pillar-representative example
+  of how Pedro writes. It is *not* only the highest-engagement posts: lower-reach posts are
+  kept as voice examples too, because reach ≠ writing quality.
+- **Engagement optimization is a separate query, not the `exemplar` flag.** To answer
+  "which posts get the most comments / reach / engagement-per-impression?" or "what posted
+  best", read the per-snapshot metrics across records — don't conflate that with `exemplar`.
+- **Bodies are stored em-dash-free.** Pedro's one forward style rule is "no em-dash," so the
+  stored text is lightly normalized to drop `—` (period / colon / comma instead). Wording
+  and metrics are otherwise faithful to what was published, so they still map to the post.
+- **Impressions** are trailing-365-day (≈ lifetime for posts under a year). **Reactions /
+  comments / reposts** are lifetime cumulative as read on the capture date. A value of `null`
+  means "not legible in the pull," to be back-filled by `/ps:post-pulse`.
+- **`url`** is the canonical permalink where confirmed; otherwise a `…BACKFILL-<slug>`
+  placeholder URI that the next pulse run (which clicks through each post) should replace.
+  Several records also note a body that still needs back-filling.
+
+## Location resolution
+
+Skills resolve this directory as `data/social/` at the **root of the psstack repo**
+(the repo that contains the `ps` plugin). If a skill is running as an installed
+plugin and cannot locate the checkout, it falls back to `~/Projects/psstack/data/social/`
+and, failing that, asks Pedro for the path. You can override with `PSSTACK_DIR`
+(the data dir is then `$PSSTACK_DIR/data/social`).
+
+## Files
+
+| File | What it holds |
+| :--- | :--- |
+| `posts.jsonl` | One JSON object per **post** (one line each). The source of truth. Engagement is a growing list of timestamped snapshots inside each record. |
+| `schema.json` | JSON Schema for a single `posts.jsonl` record. Validate against it before committing. |
+| `examples/` | Optional Markdown copies of standout posts for easy human reading. Derived from `posts.jsonl`; never the source of truth. |
+
+## Record shape
+
+Each line in `posts.jsonl` is one post. See `schema.json` for the authoritative
+contract. Summary:
+
+```jsonc
+{
+  "id": "ln-2026-06-29-karma-hot-take",   // <network-prefix>-<yyyy-mm-dd>-<slug>; stable key
+  "network": "linkedin",                   // "linkedin" | "twitter"
+  "url": "https://www.linkedin.com/...",   // canonical permalink (the dedupe key for pulse)
+  "posted_at": "2026-06-29",               // ISO date the post went live
+  "pillar": "industry-take",               // build-in-public | industry-take | operators-journal | educational-tactical
+  "hook_pattern": "industry-frustration",  // name from references/hook-library.md, or null
+  "cta": "engagement-question",            // engagement-question | github | discord | newsletter | dm-advisory | karma-waitlist | none
+  "exemplar": true,                        // true once it has proven engagement; /ps:post reads these
+  "text": "The Voice AI industry is in desperate need of ...",  // the post body as published
+  "tags": ["karma", "voice-ai"],           // freeform topic tags
+  "snapshots": [                            // append-only; one per /ps:post-pulse run
+    {
+      "captured_at": "2026-07-06",          // ISO date the metrics were read
+      "impressions": 6275,                  // null when the platform doesn't expose it
+      "reactions": 120,
+      "comments": 39,
+      "reposts": 8,
+      "saves": null,
+      "clicks": null,
+      "top_comments": [                     // a few notable comments, for qualitative learning
+        { "author": "…", "text": "…" }
+      ]
+    }
+  ],
+  "notes": "Why it worked / what to repeat."  // optional, free text
+}
+```
+
+## How `/ps:post-pulse` updates this file
+
+1. Match each scraped live post to an existing record by `url` (or `id`).
+2. If no record exists, create one (back-fill `pillar`/`hook_pattern`/`cta` best-effort).
+3. **Append** a new `snapshots[]` entry — never overwrite prior snapshots; the
+   time series is the point.
+4. Promote to `exemplar: true` when a post clears the bar (see post-pulse SKILL.md).
+
+Append-only + line-per-record keeps merges and `git diff` sane.
