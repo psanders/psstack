@@ -19,6 +19,10 @@ psstack/
                 └── SKILL.md
 ```
 
+Pedro's social performance data (shared by `/ps:post` and `/ps:post-pulse`) lives
+version-controlled at the repo root in `data/social/` — not inside the plugin, so a
+marketplace reinstall never clobbers it. See `data/social/README.md` for the schema.
+
 ## Skills
 
 | Skill | Invoke | What it does |
@@ -29,6 +33,8 @@ psstack/
 | **today** | `/ps:today [filter]` | Morning radar for the current repo — open issues, PRs that need you, and pending releases that shouldn't pile up, grouped and ready to act on. (Alias: `/ps:issues-daily`.) |
 | **issues-report** | `/ps:issues-report [desc]` | File a structured GitHub issue (bug/feature/chore) in the current repo. |
 | **release-card** | `/ps:release-card [tag] [--color fonoster-green\|blue\|orange] [--logo Routr]` | Generate a branded release-notes image (PNG) for a repo's latest GitHub release — groups the actual commit messages by conventional-commit type (🎉 Features, 🐛 Bug Fixes, …) with short-SHA chips, on a white 1080×1350 social card, via satori + resvg. |
+| **post** | `/ps:post [--network linkedin\|twitter]` | Draft a social post in Pedro's voice for LinkedIn (default) or Twitter/X — picks the content pillar, applies the voice signatures, adds one matching CTA, and shapes length/glyphs/threading to the network. Never uses the em-dash. Drafts from the proven exemplars in the performance store. |
+| **post-pulse** | `/ps:post-pulse [week\|month] [--network linkedin\|twitter\|all]` | Recurring engagement harvest — opens a browser, sweeps a window of Pedro's posts, reads impressions/reactions/comments/reposts, and saves it as structured time-series data in `data/social/`. Promotes high performers to exemplars so `/ps:post` drafts from what works. Run weekly/monthly. |
 | **create-validated-function** | `/ps:create-validated-function` | Scaffold one validated function (factory + DI + Zod validation + structured errors) and its sinon test in an existing repo. Reuses bootstrap's canonical templates. |
 | **bootstrap** | `/ps:bootstrap` | Scaffold a new TS/Node project from my opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, oclif CLI, LangChain LLM, Storybook, docs/media, Playwright/Maestro E2E) plus opt-in workflow tooling (psstack commands, OpenSpec) as choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. |
 
