@@ -93,7 +93,7 @@ The ORM is always Prisma; the engine is the decision.
 
 ### M. Workflow tooling  *(commands & skills wired into the new repo)*
 These are not runtime deps — they configure the project's AI/dev workflow. Offered as opt-in.
-- **psstack commands** — make this toolbelt's skills (`/ps:kaizen`, `/ps:issues-daily`,
+- **psstack commands** — make this toolbelt's skills (`/ps:kaizen`, `/ps:today`,
   `/ps:issues-report`, `/ps:bootstrap`) available in the new repo by adding the marketplace +
   plugin to the project's `.claude/settings.json` (`extraKnownMarketplaces` + `enabledPlugins`),
   so a fresh clone gets them without per-machine setup.
