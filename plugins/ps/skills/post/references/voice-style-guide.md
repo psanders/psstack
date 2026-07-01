@@ -82,6 +82,32 @@ breaks the rhythm. Pedro's real bullets are tight:
 
 Keep each bullet 3–7 words, ≤ ~40 characters. Tighten, don't wrap.
 
+## The mobile line-width rule (LinkedIn) — no orphan wraps
+
+The same narrow column that wraps bullets also wraps **prose lines**. Most of Pedro's
+readers are on mobile, where a line runs ~30–35 characters before it wraps. A line that
+runs just past that wraps a single word (or two) onto its own line. That dangling
+"orphan" looks broken and kills the beat rhythm.
+
+Apply this to **every line, not just bullets**:
+
+- Keep each visual line ≤ ~35 characters so it renders on one mobile line, **or**
+- If the thought is longer, split it into two balanced short lines at a natural pause
+  (comma, conjunction, or clause boundary), so neither line leaves a 1–2 word orphan.
+- Never end a line so the wrap leaves one or two words alone below it. Break earlier.
+
+```
+# Bad — wraps to a two-word orphan on mobile
+And everywhere means scale most voice infra was never built to survive.
+
+# Good — split at the clause boundary, both lines land
+And everywhere means scale
+most voice infra was never built to survive.
+```
+
+Read the draft as a tall, thin column. If any line looks like it will spill a fragment
+onto the next line, break it yourself. White space is free; orphan words are not.
+
 ## Two voice registers
 
 Pedro writes in two distinguishable registers. Match the register to the pillar.

@@ -89,9 +89,10 @@ Pedro has a recognizable style. These are *not* decorative — they are the part
 - **Italic Unicode for naming.** When introducing a product/concept/named entity for the first time, italicize it with Unicode: `𝘝𝘰𝘪𝘤𝘦 𝘈𝘐`, `𝘍𝘰𝘯𝘰𝘴𝘵𝘦𝘳`, `𝙆𝘼𝙍𝙈𝘼`. This is Pedro's tell. Don't overdo it — once or twice per post.
 - **Bold Unicode for headers inside a post.** `𝗪𝗵𝗮𝘁 𝘁𝗼 𝗲𝘅𝗽𝗲𝗰𝘁?` style headers break up longer LinkedIn posts. Use 1–3 in posts over ~600 characters. (Skip on X.)
 - **Sentence rhythm.** Short. Then shorter. Then a single line that lands. Pedro writes in beats, not paragraphs. 1–2 sentence "lines" separated by line breaks, occasionally a 3-line burst for punch.
+- **Mobile line width (no orphan wraps).** Most readers are on mobile, where a line wraps at ~30–35 characters. Keep every line (not just bullets) short enough to render on one mobile line, or split it at a natural pause so the wrap never leaves a 1–2 word orphan below it. See the mobile line-width rule in the style guide.
 - **No hashtag spam.** One or two relevant hashtags max on LinkedIn, only when they map to a real community (e.g. `#VoiceAI`). Most posts can have zero. On X, 0–1.
 
-Read `references/voice-style-guide.md` for the full rulebook (Unicode character set, sentence-rhythm rules, the em-dash ban with rewrite examples, the bullet-width rule, the two voice registers, and an anti-pattern list).
+Read `references/voice-style-guide.md` for the full rulebook (Unicode character set, sentence-rhythm rules, the em-dash ban with rewrite examples, the bullet-width rule, the mobile line-width rule, the two voice registers, and an anti-pattern list).
 
 ## Post structure (the proven template)
 
@@ -214,6 +215,7 @@ Follow this order. It keeps drafts on-strategy and minimizes back-and-forth.
    - Italic Unicode on at least one named entity?
    - At least one `⟡`-style bulleted list on LinkedIn (unless intentionally short)? On X, glyphs trimmed appropriately?
    - **Every LinkedIn bullet ≤ ~40 characters** so it fits one line.
+   - **Mobile check: read the draft as a narrow column. Does any line (not just bullets) wrap a 1–2 word orphan onto the next line?** If so, shorten it or split at a natural pause. Every line ≤ ~35 chars or deliberately broken.
    - For X: within length budget (single tweet ≤ 280, or a clean numbered thread), link out of tweet 1?
    - Would Pedro stop scrolling at the hook?
    - For this slot: does it satisfy any required rule (paid-offer mention if it's the weekly paid slot; lead magnet if Thursday; instantly-applicable tip)?
