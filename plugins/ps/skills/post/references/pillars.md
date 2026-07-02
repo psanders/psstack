@@ -4,6 +4,36 @@ The detailed companion to the "four content pillars" and "weekly cadence" sectio
 `SKILL.md`. **Grounded in Pedro's real top posts** (see `../../../../data/social/posts.jsonl`
 and `examples.md`), researched 2026-06-29.
 
+## The North Star (governs every pillar below)
+
+Pedro's actual banner/tagline copy — every post ladders up to it:
+
+> **Building Fonoster and helping companies ship Voice AI without the legacy stack.**
+> Short form: **Ship voice without the legacy stack.**
+
+- **Headline — Fonoster + Routr:** open Voice AI infra, the infra beneath the model. The way you ship voice *without* the legacy stack.
+- **Wedge — the legacy stack (KARMA):** KARMA (Kamailio/Asterisk/RTPEngine/Homer/ARI) **is** the legacy stack, the duct-taped hard way. The contrarian angle is you shouldn't have to hand-roll it; the KARMA training serves engineers still stuck running it.
+- **Proof — QCobro:** real collections calls in LATAM 🇩🇴. Evidence, never the headline alone.
+
+The four pillars are **formats, not topics** — four registers for this one subject. Every
+draft must pass: *does it teach/argue/build/recount something about how voice gets built on
+open infrastructure?*
+
+### On-niche vs drift (the topic allowlist)
+
+| ✅ On-niche (write these) | ❌ Drift (reframe through voice, or cut) |
+| :--- | :--- |
+| Fonoster, Routr, open-source voice infra | Procurement / **Outlast AI** (abandoned positioning) |
+| SIP / telephony / CPaaS / Twilio-interop | Generic AI / LLM / AGI hype not tied to voice |
+| KARMA stack, Kamailio/Asterisk/RTPEngine/Homer/ARI | psstack / Claude Code / kaizen / Pencil / tooling meta |
+| EoT / VAD / barge-in / the bidirectional stream | Founder-motivation with no voice-AI substance |
+| Fonoster vs Vapi/Bland/Retell, infra-vs-model takes | "High-ticket clients" / creator-guru framing |
+| QCobro / LATAM collections **as proof of the infra** | Anything a generic LinkedIn founder could have written |
+
+The data is blunt: on-niche infra + contrarian-founder posts hit 5–8k impressions; the
+off-niche tooling/meta posts died under 1k. When unsure, run it through the wedge: *would a
+Kamailio/Asterisk engineer or a voice-AI builder care?* If not, it has drifted.
+
 ## Real entities and links (use these, not placeholders)
 
 | Thing | What it is | Link |

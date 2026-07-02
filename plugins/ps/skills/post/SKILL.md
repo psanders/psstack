@@ -11,6 +11,28 @@ metadata:
 
 Draft social posts that sound like Pedro Sanders and convert attention into action — Fonoster signups, consulting/advisory inbound, and KARMA training waitlist signups. Works for **LinkedIn** (default) and **Twitter/X**, adapting format to the network while keeping the same voice and strategy.
 
+## The North Star (read this first — it governs everything below)
+
+Every post ladders up to Pedro's actual positioning — the words on his LinkedIn banner and tagline:
+
+> **Building Fonoster and helping companies ship Voice AI without the legacy stack.**
+>
+> Rallying cry / short form: **Ship voice without the legacy stack.**
+
+That positioning has a fixed structure. Hold it in your head while drafting:
+
+- **Headline — Fonoster + Routr.** Open Voice AI infrastructure: the infra *beneath* the model, not the model. The way you ship voice *without* the legacy stack. This is what Pedro is known for and what the banner/tagline say.
+- **Wedge — the legacy stack (KARMA).** KARMA (Kamailio, Asterisk, RTPEngine, Homer, ARI) **is** the legacy stack: the hard, duct-taped way voice has always been built. The contrarian angle is that you shouldn't have to hand-roll it anymore. (The KARMA training cohort serves the engineers still stuck running it — naming the pain is the wedge, Fonoster is the escape.)
+- **Proof — QCobro.** It runs real collections calls in LATAM 🇩🇴. QCobro is *evidence the infra works*, never the headline on its own.
+
+**Why this exists:** the four pillars below are **formats, not topics.** The *subject* is constant — open Voice AI infra — and only the *register* changes (build / take / story / teach). Without this rule the pillars drift into being four different topics, and the feed stops reading as one person with one thesis. A reader should be able to finish "Pedro is the guy who ___" the same way after any post.
+
+**The one test every draft must pass** (it's also in the self-check):
+
+> *Does this teach, argue, build, or recount something about **how voice gets built on open infrastructure**?*
+
+If the honest answer is no — if the draft is really about procurement / Outlast AI, generic LLM-or-AGI hype not tied to voice, or psstack / Claude Code / kaizen / tooling meta — **it has drifted.** Reframe it through the voice-infra lens or don't post it. (The historical data is blunt on this: the on-niche infra + contrarian-founder posts hit 5–8k impressions; the off-niche tooling/meta posts died under 1k.)
+
 ## Input
 
 - The prompt: a release note, a customer story, a hot take, a milestone, a half-finished draft, even a Slack rant.
@@ -54,6 +76,8 @@ When `--network` is absent, default to LinkedIn but say so in your delivery note
 This applies to the post body only, not to this skill's own documentation. Check it explicitly in the self-check (step 5).
 
 ## The four content pillars
+
+**The pillars are formats, not topics.** They are four *registers* for talking about the **same** subject (open Voice AI infra — see The North Star). Build = *what we shipped*. Industry = *what I think*. Operator = *what happened to me*. Educational = *how to do it*. The subject never changes; only the voice does. If picking a pillar makes you reach for a different topic, you've misread the pillar.
 
 Every post belongs to exactly one pillar. The pillar determines hook, structure, and CTA.
 
@@ -209,6 +233,7 @@ Follow this order. It keeps drafts on-strategy and minimizes back-and-forth.
 5. **Pick the hook pattern.** From the prompt, pillar, and the exemplars you just loaded, choose a hook from `references/hook-library.md`. If the prompt implies a hook, honor it.
 6. **Draft.** Follow the post structure, shaped for the network, mirroring the chosen exemplar's architecture. Use the voice signatures (scaled to network). Bake in any monetization-aware rules for this slot. **Write zero em-dashes.**
 7. **Self-check before delivering.** Run this silently; fix anything that fails:
+   - **North Star test: does it teach/argue/build/recount something about how voice gets built on open infrastructure?** If it's really about procurement, generic AI/AGI hype, or psstack/Claude-Code/tooling meta, it has drifted — reframe through the voice-infra lens or don't post it.
    - One pillar?
    - **One close — `▶` link CTA *or* engagement question, almost never both.**
    - **Zero em-dashes (`—`)?** Scan the draft; rewrite any (see "Never use the em-dash").
