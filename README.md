@@ -37,6 +37,7 @@ marketplace reinstall never clobbers it. See `data/social/README.md` for the sch
 | **post-pulse** | `/ps:post-pulse [week\|month] [--network linkedin\|twitter\|all]` | Recurring engagement harvest — opens a browser, sweeps a window of Pedro's posts, reads impressions/reactions/comments/reposts, and saves it as structured time-series data in `data/social/`. Promotes high performers to exemplars so `/ps:post` drafts from what works. Run weekly/monthly. |
 | **create-validated-function** | `/ps:create-validated-function` | Scaffold one validated function (factory + DI + Zod validation + structured errors) and its sinon test in an existing repo. Reuses bootstrap's canonical templates. |
 | **bootstrap** | `/ps:bootstrap` | Scaffold a new TS/Node project from my opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, oclif CLI, LangChain LLM, Storybook, docs/media, Playwright/Maestro E2E) plus opt-in workflow tooling (psstack commands, OpenSpec) as choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. |
+| **executive-report** | `/ps:executive-report` | Turn raw project notes into a polished, branded biweekly executive report PDF — anonymizing teammate and customer names along the way. |
 
 All skills auto-detect the current repo — nothing is hardcoded to a single project.
 
