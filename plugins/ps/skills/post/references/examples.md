@@ -64,6 +64,9 @@ of what shipped → `▶` GitHub / Discord / qcobro.com CTA.
 
 > Current Build-in-Public exemplar: `qcobro-v010-bet` (2,210) — the "boring vertical" QCobro
 > launch, the most on-strategy recent post (Voice AI collections, DR, ship milestone, question close).
+> `routr-half-million` (3,749 impressions, 60 reactions, 10 comments; confirmed 2026-07-11 pulse,
+> corrected posted_at 2026-06-29) — number-drop proof post ("quietly made over half a million
+> dollars"), the strongest recent Build-in-Public by reach after github-trending.
 
 ## Educational Tactical ★ — "What's the difference between 𝘍𝘰𝘯𝘰𝘴𝘵𝘦𝘳 and Vapi, Bland, Retell?"
 
