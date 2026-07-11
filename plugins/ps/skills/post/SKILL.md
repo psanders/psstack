@@ -13,23 +13,27 @@ Draft social posts that sound like Pedro Sanders and convert attention into acti
 
 ## The North Star (read this first — it governs everything below)
 
-Every post ladders up to Pedro's actual positioning — the words on his LinkedIn banner and tagline:
+Every post ladders up to Pedro's actual positioning — the words on his LinkedIn banner and site hero (updated 2026-07-11):
 
-> **Building Fonoster and helping companies ship Voice AI without the legacy stack.**
+> **I build Voice AI from the carrier edge to the LLM.**
 >
-> Rallying cry / short form: **Ship voice without the legacy stack.**
+> Rallying cry / banner form: **Voice AI, from the carrier edge to the LLM.**
+>
+> Support line: **Founder of Fonoster: infrastructure for Voice AI, proven on our own production traffic, with real money on the line.**
 
 That positioning has a fixed structure. Hold it in your head while drafting:
 
-- **Headline — Fonoster + Routr.** Open Voice AI infrastructure: the infra *beneath* the model, not the model. The way you ship voice *without* the legacy stack. This is what Pedro is known for and what the banner/tagline say.
+- **Headline — Fonoster.** Infrastructure for Voice AI: the infra *beneath* the model, not the model, spanning the whole stack from carrier edge to LLM. Pedro is its founder and CEO. The register is **founder**, never helper/consultant ("I build", not "I help you ship").
 - **Wedge — the legacy stack (KARMA).** KARMA (Kamailio, Asterisk, RTPEngine, Homer, ARI) **is** the legacy stack: the hard, duct-taped way voice has always been built. The contrarian angle is that you shouldn't have to hand-roll it anymore. (The KARMA training cohort serves the engineers still stuck running it — naming the pain is the wedge, Fonoster is the escape.)
-- **Proof — QCobro.** It runs real collections calls in LATAM 🇩🇴. QCobro is *evidence the infra works*, never the headline on its own.
+- **Proof — QCobro.** A product **by Fonoster** that runs real collections calls in LATAM 🇩🇴: Fonoster as its own toughest customer, real calls, real money. QCobro is *evidence the infra works* — the **setting** of a post, never the headline and never a sibling brand.
 
-**Why this exists:** the four pillars below are **formats, not topics.** The *subject* is constant — open Voice AI infra — and only the *register* changes (build / take / story / teach). Without this rule the pillars drift into being four different topics, and the feed stops reading as one person with one thesis. A reader should be able to finish "Pedro is the guy who ___" the same way after any post.
+**Open source is retired as positioning.** Pedro built Fonoster and Routr in the open, and repo/community CTAs are still fine, but "open source" no longer appears in hooks, taglines, or identity claims ("the open-source alternative to X" is dead). It filed him as a developer; the brand is founder. At most, open source is a background fact inside a post body.
+
+**Why this exists:** the four pillars below are **formats, not topics.** The *subject* is constant — Voice AI infra — and only the *register* changes (build / take / story / teach). Without this rule the pillars drift into being four different topics, and the feed stops reading as one person with one thesis. A reader should be able to finish "Pedro is the guy who ___" the same way after any post.
 
 **The one test every draft must pass** (it's also in the self-check):
 
-> *Does this teach, argue, build, or recount something about **how voice gets built on open infrastructure**?*
+> *Does this teach, argue, build, or recount something about **how Voice AI gets built, from the carrier edge to the LLM**?*
 
 If the honest answer is no — if the draft is really about procurement / Outlast AI, generic LLM-or-AGI hype not tied to voice, or psstack / Claude Code / kaizen / tooling meta — **it has drifted.** Reframe it through the voice-infra lens or don't post it. (The historical data is blunt on this: the on-niche infra + contrarian-founder posts hit 5–8k impressions; the off-niche tooling/meta posts died under 1k.)
 
@@ -40,7 +44,7 @@ If the honest answer is no — if the draft is really about procurement / Outlas
 
 ## When you're invoked
 
-Pedro is the founder of **Fonoster** (open-source Voice AI infra). He sells three things: (1) Fonoster to developers, voice AI builders, and CTOs; (2) Voice AI consulting / advisory engagements to founders, CTOs, and contact-center / CCaaS leaders; (3) KARMA training (cohort course on Kamailio + Asterisk + RTPEngine + Homer + ARI) to voice engineers. His audience is voice/telephony pros, voice AI builders, founders/CTOs, and operators evaluating voice agents in real environments — the same audience on both LinkedIn and X.
+Pedro is the founder of **Fonoster** (infrastructure for Voice AI). He sells three things: (1) Fonoster to developers, voice AI builders, and CTOs; (2) Voice AI consulting / advisory engagements to founders, CTOs, and contact-center / CCaaS leaders; (3) KARMA training (cohort course on Kamailio + Asterisk + RTPEngine + Homer + ARI) to voice engineers. His audience is voice/telephony pros, voice AI builders, founders/CTOs, and operators evaluating voice agents in real environments — the same audience on both LinkedIn and X.
 
 Your job is to take a prompt and turn it into a post that:
 
@@ -77,13 +81,13 @@ This applies to the post body only, not to this skill's own documentation. Check
 
 ## The four content pillars
 
-**The pillars are formats, not topics.** They are four *registers* for talking about the **same** subject (open Voice AI infra — see The North Star). Build = *what we shipped*. Industry = *what I think*. Operator = *what happened to me*. Educational = *how to do it*. The subject never changes; only the voice does. If picking a pillar makes you reach for a different topic, you've misread the pillar.
+**The pillars are formats, not topics.** They are four *registers* for talking about the **same** subject (Voice AI infra — see The North Star). Build = *what we shipped*. Industry = *what I think*. Operator = *what happened to me*. Educational = *how to do it*. The subject never changes; only the voice does. If picking a pillar makes you reach for a different topic, you've misread the pillar.
 
 Every post belongs to exactly one pillar. The pillar determines hook, structure, and CTA.
 
 1. **Build-in-Public — Fonoster & Voice AI infra.** Shipped features, architecture decisions, performance numbers, GitHub milestones, "we just fixed X" stories, beta program updates, demo videos. Buyer: developers, voice AI builders, CTOs. CTA: link to GitHub repo, Discord community, or Beta Program.
 
-2. **Industry Take — opinions about Voice AI, telecom, and the open-source voice space.** Hot takes, contrarian predictions, "what nobody says out loud" framing, vertical-vs-horizontal arguments, what big platforms get wrong, hype-vs-reality. Buyer: operators, founders, technical buyers. CTA: newsletter signup, "DM me" for technical conversation, or follow-for-more.
+2. **Industry Take — opinions about Voice AI, telecom, and the voice infrastructure space.** Hot takes, contrarian predictions, "what nobody says out loud" framing, vertical-vs-horizontal arguments, what big platforms get wrong, hype-vs-reality. Buyer: operators, founders, technical buyers. CTA: newsletter signup, "DM me" for technical conversation, or follow-for-more.
 
 3. **Operator's Journal — sales, founder, on-the-road, life-pivot stories.** Customer conversations (anonymized), what buyers said in the room, founder transitions, military-to-tech narrative, sales-trip insights, "I walked away from $4M VC". Buyer: humans (humanizes the founder; pre-sells consulting). CTA: "DM me" for consulting/advisory, discovery-call link, or newsletter. Picture the buyer cluster from `references/pillars.md` when writing.
 
@@ -233,7 +237,8 @@ Follow this order. It keeps drafts on-strategy and minimizes back-and-forth.
 5. **Pick the hook pattern.** From the prompt, pillar, and the exemplars you just loaded, choose a hook from `references/hook-library.md`. If the prompt implies a hook, honor it.
 6. **Draft.** Follow the post structure, shaped for the network, mirroring the chosen exemplar's architecture. Use the voice signatures (scaled to network). Bake in any monetization-aware rules for this slot. **Write zero em-dashes.**
 7. **Self-check before delivering.** Run this silently; fix anything that fails:
-   - **North Star test: does it teach/argue/build/recount something about how voice gets built on open infrastructure?** If it's really about procurement, generic AI/AGI hype, or psstack/Claude-Code/tooling meta, it has drifted — reframe through the voice-infra lens or don't post it.
+   - **North Star test: does it teach/argue/build/recount something about how Voice AI gets built, from the carrier edge to the LLM?** If it's really about procurement, generic AI/AGI hype, or psstack/Claude-Code/tooling meta, it has drifted — reframe through the voice-infra lens or don't post it.
+   - **No "open source" in positioning: not in the hook, not as an identity claim.** Repo/community CTAs are fine; "open-source [anything]" as framing is not (see The North Star).
    - One pillar?
    - **One close — `▶` link CTA *or* engagement question, almost never both.**
    - **Zero em-dashes (`—`)?** Scan the draft; rewrite any (see "Never use the em-dash").

@@ -6,24 +6,25 @@ and `examples.md`), researched 2026-06-29.
 
 ## The North Star (governs every pillar below)
 
-Pedro's actual banner/tagline copy — every post ladders up to it:
+Pedro's actual banner/tagline copy (updated 2026-07-11) — every post ladders up to it:
 
-> **Building Fonoster and helping companies ship Voice AI without the legacy stack.**
-> Short form: **Ship voice without the legacy stack.**
+> **I build Voice AI from the carrier edge to the LLM.**
+> Banner form: **Voice AI, from the carrier edge to the LLM.**
+> Support: **Founder of Fonoster: infrastructure for Voice AI, proven on our own production traffic.**
 
-- **Headline — Fonoster + Routr:** open Voice AI infra, the infra beneath the model. The way you ship voice *without* the legacy stack.
+- **Headline — Fonoster:** infrastructure for Voice AI, the infra beneath the model, the whole stack from carrier edge to LLM. Register is founder ("I build"), never helper/consultant ("I help you ship"). Open source is retired as positioning: repo CTAs fine, "open-source [anything]" as identity is not.
 - **Wedge — the legacy stack (KARMA):** KARMA (Kamailio/Asterisk/RTPEngine/Homer/ARI) **is** the legacy stack, the duct-taped hard way. The contrarian angle is you shouldn't have to hand-roll it; the KARMA training serves engineers still stuck running it.
-- **Proof — QCobro:** real collections calls in LATAM 🇩🇴. Evidence, never the headline alone.
+- **Proof — QCobro:** a product by Fonoster running real collections calls in LATAM 🇩🇴. Fonoster as its own toughest customer. The setting of a post, never the headline and never a sibling brand.
 
 The four pillars are **formats, not topics** — four registers for this one subject. Every
-draft must pass: *does it teach/argue/build/recount something about how voice gets built on
-open infrastructure?*
+draft must pass: *does it teach/argue/build/recount something about how Voice AI gets
+built, from the carrier edge to the LLM?*
 
 ### On-niche vs drift (the topic allowlist)
 
 | ✅ On-niche (write these) | ❌ Drift (reframe through voice, or cut) |
 | :--- | :--- |
-| Fonoster, Routr, open-source voice infra | Procurement / **Outlast AI** (abandoned positioning) |
+| Fonoster, Routr, voice infrastructure | Procurement / **Outlast AI** (abandoned positioning) |
 | SIP / telephony / CPaaS / Twilio-interop | Generic AI / LLM / AGI hype not tied to voice |
 | KARMA stack, Kamailio/Asterisk/RTPEngine/Homer/ARI | psstack / Claude Code / kaizen / Pencil / tooling meta |
 | EoT / VAD / barge-in / the bidirectional stream | Founder-motivation with no voice-AI substance |

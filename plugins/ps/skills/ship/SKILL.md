@@ -116,6 +116,15 @@ Confirm with the user, then promote the change's delta specs into the main specs
 Confirm with the user, then archive the completed change (e.g. invoke `/opsx:archive`),
 moving it out of `changes/` and finalizing the main specs. Mark the checkpoint done.
 
+**Branch cleanup.** If this change shipped on its own branch and its PR is now merged
+into the base branch, delete the branch without waiting to be asked:
+- Verify first: `git merge-base --is-ancestor <branch> origin/<base>`.
+- Delete locally (switching off it first if checked out); check
+  `git ls-remote --heads origin <branch>` and delete remotely too if the host didn't
+  already auto-delete it on merge.
+Skip silently (no prompt needed) if the work landed straight on the base branch, or the
+PR isn't merged yet — don't delete an in-flight branch.
+
 ## Checkpoint
 
 State lives at `.claude/ship/<name>.md` **in the repo being shipped** (not in this plugin),
