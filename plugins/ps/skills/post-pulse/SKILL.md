@@ -4,7 +4,7 @@ description: Recurring engagement harvest for Pedro's social posts. Opens a brow
 license: MIT
 metadata:
   author: psanders
-  version: "1.0"
+  version: "1.1"
 ---
 
 # post-pulse
@@ -61,7 +61,22 @@ Stay focused: if pages won't load, selectors don't resolve, or you hit a login w
 Parse the window and `--network`. Resolve and confirm the `data/social/` absolute path.
 Load `posts.jsonl` into memory (it may be large; read it once).
 
-### 2. Open the activity feed for each network
+### 2. Re-measure pass — refresh recent posts already in the store (do this first)
+
+Before sweeping the new window, re-snapshot posts **already** in `posts.jsonl` so the
+time series actually grows. LinkedIn engagement keeps accruing for weeks, so a single
+snapshot per post is nearly worthless for trend.
+
+- Select records whose **latest** `snapshots[].captured_at` is **more than ~10 days ago**
+  and whose `posted_at` is **within the last ~60 days** (old enough to have moved, recent
+  enough to still be accruing). Skip anything already snapshotted in the last ~10 days.
+- Visit each one's `url` and read the current counters. **Append** a fresh snapshot (Step 4);
+  never overwrite. This is what turns single points into growth curves — the whole reason
+  the schema is a time series.
+- This pass reuses URLs you already have, so it's cheap. Cap it at ~15 posts per run if the
+  list is long; prioritize the highest-engagement and most-recent ones.
+
+### 3. Open the activity feed for each network
 New tab, then navigate:
 - **LinkedIn:** Pedro's profile → "Activity" → "Posts" (his own recent posts feed), e.g. `https://www.linkedin.com/in/<handle>/recent-activity/all/`. If the handle isn't known, ask once and remember it for the session.
 - **Twitter/X:** Pedro's profile timeline filtered to his posts, e.g. `https://x.com/<handle>`.
@@ -69,18 +84,23 @@ New tab, then navigate:
 Scroll to load posts until you pass the start of the window (posts older than the window
 boundary). Use `get_page_text` / `read_page` to extract; scroll incrementally.
 
-### 3. For each post in the window, capture
+### 4. For each post in the window, capture
 - `url` (canonical permalink — the dedupe key)
 - `posted_at` (ISO date)
 - `text` (the body as published)
 - `impressions` (LinkedIn often shows this on your own posts; X shows "Views"). `null` if not visible.
 - `reactions`, `comments`, `reposts`, and `saves`/`clicks` when shown (`null` otherwise)
-- `top_comments`: 2–4 notable comments (`author` + `text`) for qualitative signal. Open the post if needed to read them. Keep it light; don't scrape every comment.
+- `top_comments`: notable comments (`author` + `text`) for qualitative signal.
+  **Required for the ~5 highest-engagement posts of this run** (across both the
+  re-measure and window passes): click into each and capture 2–3 comments. These are the
+  posts whose comments are worth mining for voice, so this is not optional for them. For
+  the rest, capture comments best-effort if they're already visible; don't click into
+  every post. (Empty `top_comments` across the store is a known gap — this rule closes it.)
 
 Best-effort classify `pillar`, `hook_pattern`, and `cta` by matching the text against the
 `/ps:post` references (pillars / hook-library). Leave `hook_pattern: null` if unsure.
 
-### 4. Upsert into `posts.jsonl`
+### 5. Upsert into `posts.jsonl`
 For each captured post:
 - **Match** an existing record by `url` (fallback: `id`). 
 - **If found:** append a new `snapshots[]` entry with today's `captured_at` and the fresh metrics. **Never overwrite prior snapshots** — the time series is the point. Back-fill any previously-null top-level fields (e.g. the placeholder seed record) if you now have better data.
@@ -90,7 +110,7 @@ For each captured post:
 Write the file back as JSONL (one object per line, newest-first by `posted_at` is fine but
 not required). With `--dry-run`, skip writing and just show the diff you would make.
 
-### 5. Promote exemplars
+### 6. Promote exemplars
 After updating, recompute exemplars. Promote a post to `exemplar: true` when, in its latest
 snapshot, it clears the bar for its network:
 
@@ -103,22 +123,53 @@ When you promote a post, also add or refresh its block in
 `plugins/ps/skills/post/references/examples.md` (record id, performance, hook pattern, why
 it worked, scaffold to mirror) so `/ps:post` picks it up.
 
-### 6. Report
+### 7. Recompute the aggregate scorecard (`patterns.md`) — the learning loop
+This is what feeds *strategy* (not just shape) back to `/ps:post`. After the store is
+updated, regenerate `data/social/patterns.md` from **all** records in `posts.jsonl`:
+
+- Recompute averages of engagement (reactions+comments+reposts, latest snapshot per post)
+  broken down **by pillar, by CTA, by length bucket, and by day-of-week**, plus the current
+  **engagement-rate baseline** (median + avg over posts with visible impressions) and the
+  current **outliers** (highest ER, highest reach).
+- Write each section as a short table followed by a plain-language `→ RULE:` / `→ WATCH:`
+  line. Mark every cell with **n<4 as directional only** — do not state weak cells as rules.
+- **Surface contradictions explicitly.** Wherever a data pattern conflicts with a rule in
+  `/ps:post` (e.g. engagement-question underperforming the skill's "always end with a
+  question" rule, or short posts beating its "700–1,500 chars typical" default), call it
+  out in the relevant section. These contradictions are the highest-value output of the run.
+- Keep the file to ~1 screen: it is a summary that `/ps:post` loads every draft, not an
+  archive. Follow the existing structure in `patterns.md` if present.
+
+Then **flag instruction rewrites**: if a contradiction has held across **two or more**
+consecutive pulses, propose the concrete edit to `/ps:post` (SKILL.md or the relevant
+`references/*.md`) in your report — but **don't edit the drafting skill's rules
+automatically**; let Pedro approve the change. `patterns.md` and `examples.md` are yours to
+regenerate; the skill's rulebook changes only on his say-so.
+
+With `--dry-run`, show the `patterns.md` you would write but don't save it.
+
+### 8. Report
 Summarize to Pedro:
 - How many posts captured, per network, and the window.
 - A small table: post (short hook) · pillar · impressions · comments · reactions · reposts · Δ vs previous snapshot (if any).
 - New exemplars promoted (and anything demoted).
-- 2–3 **patterns** worth acting on, grounded in the data: which pillar/hook over- or under-performed, which CTA type pulled comments, best posting day if discernible. Keep it specific and honest; if the sample is too small to conclude, say so.
-- The absolute path of the data file written.
+- 2–3 **patterns** worth acting on, pulled straight from the refreshed `patterns.md`:
+  which pillar/hook over- or under-performed, which CTA type pulled comments, best posting
+  day if discernible. Keep it specific and honest; if the sample is too small to conclude,
+  say so. Include any **instruction-rewrite proposals** from Step 7 (contradictions that
+  held across ≥2 pulses).
+- The absolute paths of the files written (`posts.jsonl`, `patterns.md`, and
+  `examples.md` if you touched it).
 
-### 7. Offer to commit the data to the repo
+### 9. Offer to commit the data to the repo
 The data store is version-controlled, so a run isn't finished until it's saved. After
 writing (and not on `--dry-run`):
 
 1. Show what changed: `git -C <psstack repo> status --short data/social/` and a short
    `git diff --stat data/social/`.
-2. **Propose a commit** and, on Pedro's go-ahead, make it. Stage only `data/social/` (plus
-   `plugins/ps/skills/post/references/examples.md` if you promoted/demoted an exemplar there).
+2. **Propose a commit** and, on Pedro's go-ahead, make it. Stage `data/social/` (which
+   includes both `posts.jsonl` and the regenerated `patterns.md`), plus
+   `plugins/ps/skills/post/references/examples.md` if you promoted/demoted an exemplar there.
    Suggested message:
    `chore(social): post-pulse <window> — <N> posts, <M> new exemplars (<captured_at>)`.
    Follow the repo's commit conventions (sole-author; no Co-Authored-By trailer).
