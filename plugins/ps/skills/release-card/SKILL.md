@@ -13,8 +13,9 @@ Build a branded, shareable release-notes image for **the repo you're currently i
 
 **Input**: Optional args —
 - A release tag (e.g. `v2.1.0`). Default: the latest release.
-- `--color` / `--theme`: `fonoster-green` (default), `fonoster-blue`, or `fonoster-orange`.
-- `--logo "<wordmark>"`: product name shown on the card (e.g. `Routr`, `QCobro`, `Goodtook`, `Fonoster`). Default: the repo name.
+- `--color` / `--theme`: `fonoster-green` (default), `fonoster-blue`, `fonoster-orange`, or `micobro` (the micobro.app brand — deep-teal lettermark, Sora wordmark, Plus Jakarta Sans body; see Guardrails).
+- `--logo "<wordmark>"`: product name shown on the card (e.g. `Routr`, `QCobro`, `Goodtook`, `Fonoster`, `micobro`). Default: the repo name.
+- `--lang`: `en` (default) or `es`. Translates the card's own chrome (kicker, section headings, footer stats) via the `I18N` table in `references/render-card.mjs`. Does **not** translate commit messages — when `--lang es`, translate each commit's `message` into Spanish yourself before writing it into notes.json (step 3).
 - `--max <n>`: max commits to list before truncating with "+N more" (default 16).
 
 ---
@@ -67,7 +68,9 @@ fi
 
 Read `/tmp/release-commits.tsv` (one `SHA<TAB>subject` per line) and route each commit by the prefix on its subject. Match case-insensitively against `^<type>(\(scope\))?!?:` — tolerate a scope and the `!` breaking marker (e.g. `feat(api)!: …`). Strip the `type(scope)!:` prefix so only the human-readable message remains; keep the original casing of the message.
 
-Known types (others fall through and are skipped): `feat`, `fix`, `perf`, `refactor`, `docs`, `build`, `ci`, `test`, `chore`, `style`. The renderer supplies each type's emoji + heading and the section order — you only emit `type` + `items`.
+Known types (others fall through and are skipped): `feat`, `fix`, `perf`, `refactor`, `docs`, `build`, `ci`, `test`, `chore`, `style`. The renderer supplies each type's emoji + heading (in the chosen `--lang`) and the section order — you only emit `type` + `items`.
+
+If `--lang es` (or the user asked for a Spanish card), translate each commit's `message` into natural Spanish yourself at this point — the renderer only translates its own chrome, never the commit text. Keep `sha` untouched.
 
 Assemble the notes JSON (omit empty sections; the renderer orders and truncates):
 
@@ -87,9 +90,11 @@ cat > /tmp/release-notes.json <<JSON
 JSON
 ```
 
-### 3b. Pick the theme (if not passed)
+### 3b. Pick the theme and language (if not passed)
 
-If no `--color`/`--theme` arg, ask with **AskUserQuestion** — "Brand color?": Fonoster Green (Recommended), Fonoster Blue, Fonoster Orange. Map to `fonoster-green` / `fonoster-blue` / `fonoster-orange`. The logo wordmark defaults to the repo name unless `--logo` was given.
+If no `--color`/`--theme` arg, ask with **AskUserQuestion** — "Brand color?": Fonoster Green (Recommended), Fonoster Blue, Fonoster Orange, micobro. Map to `fonoster-green` / `fonoster-blue` / `fonoster-orange` / `micobro`. The logo wordmark defaults to the repo name unless `--logo` was given.
+
+If no `--lang` arg and the repo's user-facing text is Spanish (e.g. micobro — see its `CLAUDE.md`), ask whether the card itself should be in Spanish rather than assuming; otherwise default to `en` without asking.
 
 ### 4. Render the PNG
 
@@ -105,11 +110,12 @@ cp "$SKILL_DIR/references/render-card.mjs" "$WORKDIR/"
 node "$WORKDIR/render-card.mjs" \
   --data /tmp/release-notes.json \
   --theme "$THEME" \
+  --lang "${LANG_ARG:-en}" \
   --logo "$LOGO" \
   --out "$PWD/release-$TAG.png"
 ```
 
-On first run the script fetches the fonts (Inter body, Poppins wordmark, JetBrains Mono chips) and the Twemoji SVGs for the section emoji (all cached in a temp dir). If the machine is offline, set `FONT_PATH=/path/to/font.ttf` before the `node` call; missing emoji degrade gracefully to no image.
+On first run the script fetches the theme's fonts (Inter body / Poppins wordmark for the Fonoster themes; Plus Jakarta Sans / Sora for `micobro`; JetBrains Mono chips always) and the Twemoji SVGs for the section emoji (all cached in a temp dir). If the machine is offline, set `FONT_PATH=/path/to/font.ttf` before the `node` call (used for the theme's body-regular weight only); missing emoji degrade gracefully to no image.
 
 ### 5. Report
 
@@ -119,5 +125,7 @@ Print the output path (`release-<tag>.png`) and a one-line summary of what was r
 
 - Read-only against GitHub — never edits the release or repo. Writing the PNG into the current directory is the only side effect; don't overwrite an unrelated existing file without noting it.
 - Grouping is best-effort on conventional commits; if **zero** commits match any known type, say so (the repo likely doesn't use conventional commits) and offer to render a flat list of recent commit subjects instead.
-- Colors use the official Fonoster palette (`THEMES` in `references/render-card.mjs`): green Primary `#39E19E`, blue Secondary `#5FCFCE`, orange Tertiary `#FF9965`. Accent is intentionally sparing — band, logo mark, tag pill — with neutral Base grays for everything else. The wordmark uses Poppins (brand primary typeface); body stays Inter. Section emoji/labels and dimensions also live there.
+- Fonoster themes (`fonoster-green`/`-blue`/`-orange` in `THEMES`, `references/render-card.mjs`) use the official palette: green Primary `#39E19E`, blue Secondary `#5FCFCE`, orange Tertiary `#FF9965`. Accent is intentionally sparing — band, logo mark, tag pill — with neutral Base grays for everything else, Poppins wordmark, Inter body.
+- `micobro` is a full re-skin, not just an accent swap: teal `#0e7c6b` accent (brand-blue-primary), deep-teal `#0b4f4a` lettermark badge + wordmark (brand-blue-deep), Sora wordmark font, Plus Jakarta Sans body — tokens pulled from `site/src/index.css` and `site/src/components/Logo.tsx` in the micobro repo, not guessed or scraped from the live site. If another repo wants its own from-scratch brand (not just a new accent color), add a theme the same way: full palette + font overrides in `THEMES`, following the `micobro` entry as the template.
+- `--lang` only translates the renderer's own chrome (`I18N` table); commit messages are translated by the agent when assembling notes.json, never by the script.
 - If `gh` fails, show the error and suggest `gh auth status`.
