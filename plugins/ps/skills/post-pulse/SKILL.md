@@ -96,6 +96,10 @@ boundary). Use `get_page_text` / `read_page` to extract; scroll incrementally.
   posts whose comments are worth mining for voice, so this is not optional for them. For
   the rest, capture comments best-effort if they're already visible; don't click into
   every post. (Empty `top_comments` across the store is a known gap — this rule closes it.)
+  **Privacy: never store a commenter's full name.** This file is committed to git, and
+  these are third parties who never consented to being in a version-controlled dataset.
+  Write `author` as first name + last initial only (e.g. "Jeff Pulver" → "Jeff P."). If
+  only a single name/handle is visible, keep it as-is (nothing to truncate).
 
 Best-effort classify `pillar`, `hook_pattern`, and `cta` by matching the text against the
 `/ps:post` references (pillars / hook-library). Leave `hook_pattern: null` if unsure.
