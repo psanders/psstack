@@ -23,6 +23,13 @@ Pedro's social performance data (shared by `/ps:post` and `/ps:post-pulse`) live
 version-controlled at the repo root in `data/social/` — not inside the plugin, so a
 marketplace reinstall never clobbers it. See `data/social/README.md` for the schema.
 
+`/ps:sdr signal-scan`'s prospect data is the opposite case: it holds other people's PII
+(names, titles, companies, and eventually reply content), so it is **not**
+version-controlled. It's still written to a fixed local path at the repo root,
+**`data/sdr/signals.jsonl`**, but that path is listed in `.gitignore` — a `git clone` or
+marketplace reinstall will never include it, and it's on Pedro to back it up himself if he
+wants durability. See `data/sdr/README.md` for the schema and the full rationale.
+
 ## Skills
 
 | Skill | Invoke | What it does |
@@ -38,6 +45,7 @@ marketplace reinstall never clobbers it. See `data/social/README.md` for the sch
 | **create-validated-function** | `/ps:create-validated-function` | Scaffold one validated function (factory + DI + Zod validation + structured errors) and its sinon test in an existing repo. Reuses bootstrap's canonical templates. |
 | **bootstrap** | `/ps:bootstrap` | Scaffold a new TS/Node project from my opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, oclif CLI, LangChain LLM, Storybook, docs/media, Playwright/Maestro E2E) plus opt-in workflow tooling (psstack commands, OpenSpec) as choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. |
 | **executive-report** | `/ps:executive-report` | Turn raw project notes into a polished, branded biweekly executive report PDF — anonymizing teammate and customer names along the way. |
+| **sdr** | `/ps:sdr <subcommand>` | SDR toolkit routed by subcommand, `/ps:sdr signal-scan` built first — prospects LinkedIn via a people-first executive/decision-maker search (title + sector keywords), saved **locally, not version-controlled**, to `data/sdr/signals.jsonl` (see above). Other subcommands (intent-score, icp-match, dossier-build, voice-writer, sequence-builder, reply-classify, objection-tag, book-call, no-show-save, pipeline-report, sequence-audit) are planned, not yet built. |
 
 All skills auto-detect the current repo — nothing is hardcoded to a single project.
 

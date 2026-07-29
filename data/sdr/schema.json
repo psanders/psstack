@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psstack/data/sdr/signal.schema.json",
+  "title": "SDR signal record",
+  "description": "One buying-intent signal detected on LinkedIn. One JSON object per line in signals.jsonl.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "detected_at", "source_url", "snippet", "status"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable key: sig-<yyyy-mm-dd>-<slug>, e.g. sig-2026-07-26-acme-voice-latency.",
+      "pattern": "^sig-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["keyword_post", "job_change", "exec_search", "company_match"],
+      "description": "keyword_post = a post/comment matched a pain-point or topic keyword (lowest signal, mostly vendor/ad noise in testing). job_change = someone at a relevant title/company signaled a new role. exec_search = a named executive/decision-maker found via title+sector people search (highest signal, the primary pass as of 2026-07-28). company_match = a target account found via company search."
+    },
+    "detected_at": { "type": "string", "format": "date", "description": "When /ps:sdr signal-scan found this." },
+    "posted_at": { "type": ["string", "null"], "description": "Best-effort date the underlying post/announcement went live; null if only a relative time (\"2d\") was legible and couldn't be resolved." },
+    "source_url": { "type": "string", "format": "uri", "description": "The LinkedIn post or profile URL that surfaced the signal; the dedupe key." },
+    "keyword_matched": { "type": ["string", "null"], "description": "The keyword/phrase from references/keywords.md that matched, for keyword_post signals." },
+    "query_used": { "type": ["string", "null"], "description": "The exact search query that surfaced this signal (e.g. '\"Gerente General\" cooperativa'). Kept so keywords.md can be tuned from what actually worked." },
+    "snippet": { "type": "string", "description": "The text that triggered the flag (post excerpt or announcement line). Never fabricated; verbatim or empty." },
+    "person": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": ["string", "null"] },
+        "title": { "type": ["string", "null"] },
+        "company": { "type": ["string", "null"] },
+        "profile_url": { "type": ["string", "null"], "format": "uri" }
+      }
+    },
+    "connection_degree": {
+      "type": ["string", "null"],
+      "enum": ["1st", "2nd", "3rd+", null],
+      "description": "LinkedIn connection degree to Pedro, for exec_search signals. A warm-intro signal: 2nd with named mutuals is worth prioritizing over a cold 3rd+."
+    },
+    "mutual_connections": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Named mutual connections shown by LinkedIn (as displayed, may be a partial list plus a count in the raw UI). Empty array if none shown or not applicable."
+    },
+    "org_fit": {
+      "type": ["string", "null"],
+      "enum": ["likely_fit", "needs_verification", "likely_exclude", null],
+      "description": "Best-effort fit flag against references/keywords.md's exclusion patterns (e.g. employer-affiliated employee coops that aren't lenders). null if not assessed."
+    },
+    "company_size": { "type": ["string", "null"], "description": "LinkedIn's employee-count range (e.g. '1K-5K employees'), for company_match signals." },
+    "followers": { "type": ["integer", "null"], "description": "LinkedIn follower count at time of detection, for company_match signals." },
+    "score": {
+      "type": ["number", "null"],
+      "description": "Filled by the future /ps:sdr intent-score subcommand; null until then."
+    },
+    "icp_match": {
+      "type": ["boolean", "null"],
+      "description": "Filled by the future /ps:sdr icp-match subcommand; null until then."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["new", "reviewed", "actioned", "dismissed"],
+      "description": "new = untouched. reviewed = Pedro looked at it. actioned = became outreach. dismissed = not relevant."
+    },
+    "notes": { "type": ["string", "null"] }
+  }
+}

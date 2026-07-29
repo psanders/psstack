@@ -1,3 +1,8 @@
 .DS_Store
 node_modules/
 *.log
+
+# SDR signal data contains third-party prospect PII (names, titles, companies,
+# and eventually reply/DM content) — unlike data/social this must never be
+# committed. See data/sdr/README.md.
+data/sdr/*.jsonl
