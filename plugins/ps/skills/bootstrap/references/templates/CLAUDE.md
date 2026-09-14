@@ -7,8 +7,8 @@
 - **Coding conventions (the HOW)** live in this file. They apply to every change.
 <!-- keep the next two bullets only if OpenSpec was scaffolded -->
 - **Product behavior (the WHAT)** lives in OpenSpec specs under `openspec/specs/`, changed
-  through proposals in `openspec/changes/`. Use `/openspec:propose`, `/openspec:apply`,
-  `/openspec:archive`. Specs describe observable, testable behavior — not coding style.
+  through proposals in `openspec/changes/`. Use `/opsx:propose`, `/opsx:apply`,
+  `/opsx:archive`. Specs describe observable, testable behavior — not coding style.
 - **Shipping a change (the LOOP)** drives one change from design to archive with
   `/ps:ship <change>`: design → spec reconcile → build → tests → sync → archive,
   resumable via a per-change checkpoint.

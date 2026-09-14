@@ -4,7 +4,7 @@ description: Scaffold a new TypeScript/Node project from a captured, opinionated
 license: MIT
 metadata:
   author: psanders
-  version: "1.2"
+  version: "1.3"
 ---
 
 # Bootstrap — capture the opinionated starting line
@@ -50,8 +50,9 @@ and confirm them with the user before a single file is written. Drive it like th
 
 6. **Choose workflow tooling** — **AskUserQuestion, `multiSelect: true`** (always ask): **psstack
    commands** (wire this toolbelt's `/ps:*` skills into the new repo via `.claude/settings.json`)
-   and **OpenSpec** (`npx openspec@latest init --tools claude` → spec layer + `/openspec:*` slash
-   commands). Both are opt-in; install only what's picked. See group M in `dependency-groups.md`.
+   and **OpenSpec** (`npm install -D @fission-ai/openspec` then `npx openspec init --tools claude
+   --no-animation` → spec layer + `/opsx:*` slash commands). Both are opt-in; install only what's
+   picked. See group M in `dependency-groups.md`.
 
 7. **Infer layout**: more than one surface → **monorepo** (npm workspaces + Lerna) with a shared
    `common` package; a single surface → single package. State which you chose and why.
@@ -65,7 +66,8 @@ and confirm them with the user before a single file is written. Drive it like th
 Create the structure for the chosen shape. Match `references/conventions.md` exactly.
 
 - **Root**: `package.json` (npm workspaces if monorepo, `"engines": { "node": ">=22" }`),
-  `.nvmrc` (`22`), `tsconfig` (strict, ESM, `NodeNext`), `eslint.config.mjs` (flat),
+  `.nvmrc` (`22`), `tsconfig` (strict, ESM, `NodeNext`, `"types": ["node"]` — TypeScript 6 no
+  longer pulls in `@types/node` globals by default), `eslint.config.mjs` (flat),
   `.prettierrc`, `.gitignore` (include `dist/`, `node_modules/`, `**/src/generated/`),
   husky `pre-commit` → `lint-staged`, and—if monorepo—`lerna.json` with `conventionalCommits: true`.
 - **Shared `common` package** (if monorepo): `src/{schemas,types,errors,utils}`. Drop in the
@@ -99,8 +101,9 @@ Create the structure for the chosen shape. Match `references/conventions.md` exa
   - **psstack commands** → write `.claude/settings.json` (or merge) registering the marketplace
     and enabling the plugin (`extraKnownMarketplaces` for `psanders/psstack` + `enabledPlugins`
     for `ps@psstack`) so a fresh clone gets `/ps:*` without per-machine setup.
-  - **OpenSpec** → run `npx openspec@latest init --tools claude` (scaffolds `openspec/` and the
-    `/openspec:*` commands). Add `openspec` as a dev dependency and mention it in the README.
+  - **OpenSpec** → `npm install -D @fission-ai/openspec`, then run `npx openspec init --tools
+    claude --no-animation` (scaffolds `openspec/` and the `/opsx:*` commands under
+    `.claude/commands/opsx/` + skills under `.claude/skills/openspec-*`). Mention it in the README.
 
 When copying a template, replace placeholders: `{{YEAR}}`, `{{ORG}}`, `{{LICENSE}}`, `{{SCOPE}}`,
 `{{PROJECT}}`, `{{COMMON_DIR}}`.
