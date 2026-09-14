@@ -6,3 +6,10 @@ node_modules/
 # and eventually reply/DM content) — unlike data/social this must never be
 # committed. See data/sdr/README.md.
 data/sdr/*.jsonl
+
+# Ads data holds a business's spend, cost per lead, Meta account/campaign IDs, and
+# unreleased creative. psstack is a public repo, so only data/ads/README.md and the
+# schemas are tracked. See data/ads/README.md.
+data/ads/*.jsonl
+data/ads/assets/
+data/ads/learnings.md

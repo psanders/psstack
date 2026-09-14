@@ -30,6 +30,12 @@ version-controlled. It's still written to a fixed local path at the repo root,
 marketplace reinstall will never include it, and it's on Pedro to back it up himself if he
 wants durability. See `data/sdr/README.md` for the schema and the full rationale.
 
+`/ps:ads` follows the same local-only rule for a different reason: psstack is a public repo
+and the store holds ad spend, cost per lead, Meta account/campaign IDs, and unreleased
+creative. It lives at **`data/ads/`** (campaigns, the `creatives.jsonl` winners/losers
+tracker, kept asset copies, and derived `learnings.md`), all git-ignored except its
+`README.md` and schemas. See `data/ads/README.md`.
+
 ## Skills
 
 | Skill | Invoke | What it does |
@@ -46,6 +52,7 @@ wants durability. See `data/sdr/README.md` for the schema and the full rationale
 | **bootstrap** | `/ps:bootstrap` | Scaffold a new TS/Node project from my opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, oclif CLI, LangChain LLM, Storybook, docs/media, Playwright/Maestro E2E) plus opt-in workflow tooling (psstack commands, OpenSpec) as choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. |
 | **executive-report** | `/ps:executive-report` | Turn raw project notes into a polished, branded biweekly executive report PDF — anonymizing teammate and customer names along the way. |
 | **sdr** | `/ps:sdr <subcommand>` | SDR toolkit routed by subcommand, `/ps:sdr signal-scan` built first — prospects LinkedIn via a people-first executive/decision-maker search (title + sector keywords), saved **locally, not version-controlled**, to `data/sdr/signals.jsonl` (see above). Other subcommands (intent-score, icp-match, dossier-build, voice-writer, sequence-builder, reply-classify, objection-tag, book-call, no-show-save, pipeline-report, sequence-audit) are planned, not yet built. |
+| **ads** | `/ps:ads <new\|creative\|review>` | Meta (FB/IG) ads with the media-buying strategy built in. `new` is a select-driven campaign wizard (objective, conversion event, geo, budget with learning-phase math, naming, copy) that builds everything **paused** via the Meta Ads MCP; `creative` writes angle-based copy and designs placement-safe assets (feed 4:5 + story 9:16) in Pencil; `review` applies kill/keep/scale rules, marks winners and losers in a local JSON tracker with a kept copy of every asset, and proposes the next single-variable test. Data is **local, not version-controlled** (see above). |
 
 All skills auto-detect the current repo — nothing is hardcoded to a single project.
 

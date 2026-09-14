@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psstack/data/ads/creative.schema.json",
+  "title": "Ad creative tracker record",
+  "description": "One Meta ad (creative + copy + results) in the winners/losers tracker. One JSON object per line in creatives.jsonl. Records are never deleted, even after the ad is archived in Meta.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "ad_name", "brand", "campaign_name", "created_at", "asset", "copy", "tags", "context", "snapshots", "verdict", "verdict_history"],
+  "$defs": {
+    "nullableString": { "type": ["string", "null"] },
+    "nullableNumber": { "type": ["number", "null"] },
+    "verdict": {
+      "type": "string",
+      "enum": ["testing", "winner", "loser", "fatigued", "inconclusive"],
+      "description": "testing = live, not enough evidence yet. winner = at/below target cost per result with enough evidence. loser = killed on the kill rules. fatigued = was a winner, decayed (rising CPR + frequency). inconclusive = stopped or starved before minimum evidence."
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "<brand-lower>-<YYYY-MM-DD created>-<ad_name>. Stable dedupe key.",
+      "pattern": "^[a-z0-9]+-[0-9]{4}-[0-9]{2}-[0-9]{2}-.+$"
+    },
+    "ad_name": { "type": "string", "description": "Ad name as in Ads Manager, per references/naming.md." },
+    "brand": { "type": "string", "description": "Lowercase brand key, e.g. qcobro." },
+    "campaign_id": { "$ref": "#/$defs/nullableString", "description": "campaigns.jsonl id this ad belongs to." },
+    "campaign_name": { "type": "string" },
+    "ad_set_name": { "$ref": "#/$defs/nullableString" },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Meta object IDs.",
+      "properties": {
+        "ad_account_id": { "$ref": "#/$defs/nullableString" },
+        "campaign_id": { "$ref": "#/$defs/nullableString" },
+        "ad_set_id": { "$ref": "#/$defs/nullableString" },
+        "ad_id": { "$ref": "#/$defs/nullableString" },
+        "creative_id": { "$ref": "#/$defs/nullableString" },
+        "image_hashes": { "type": "array", "items": { "type": "string" } },
+        "video_id": { "$ref": "#/$defs/nullableString" },
+        "page_id": { "$ref": "#/$defs/nullableString" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date", "description": "When the ad was created (PAUSED)." },
+    "launched_at": { "$ref": "#/$defs/nullableString", "description": "Date first activated; null while paused-since-creation." },
+    "stopped_at": { "$ref": "#/$defs/nullableString", "description": "Date paused/killed for good; null while running." },
+    "status": { "type": ["string", "null"], "enum": ["draft", "paused", "active", "archived", null], "description": "Last known Meta delivery state." },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["files"],
+      "properties": {
+        "format": { "type": ["string", "null"], "enum": ["static", "video", "carousel", "boosted_post", null] },
+        "files": {
+          "type": "array",
+          "description": "Kept local copies — one per preset/placement asset.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["local_path"],
+            "properties": {
+              "preset": { "type": ["string", "null"], "description": "feed45 | square | story916 | link191 | video916 | card-<n>" },
+              "local_path": { "type": "string", "description": "Path relative to the psstack repo root, e.g. data/ads/assets/qcobro/<ad_name>__feed45.png." },
+              "sha256": { "$ref": "#/$defs/nullableString" },
+              "width": { "type": ["integer", "null"] },
+              "height": { "type": ["integer", "null"] },
+              "mime_type": { "$ref": "#/$defs/nullableString" },
+              "meta_url": { "$ref": "#/$defs/nullableString", "description": "Meta-hosted URL for the uploaded image/video (may expire)." },
+              "image_hash": { "$ref": "#/$defs/nullableString" }
+            }
+          }
+        },
+        "preview_url": { "$ref": "#/$defs/nullableString", "description": "Shareable ad preview link from ads_get_ad_preview, if any." },
+        "pencil_file": { "$ref": "#/$defs/nullableString", "description": "Absolute path to the .pen file the asset was designed in." },
+        "pencil_node_ids": { "type": "array", "items": { "type": "string" }, "description": "Frame node ids in the .pen file, for re-editing and re-export." },
+        "source": { "type": ["string", "null"], "enum": ["pencil", "provided", "ig_post", "generated", null] },
+        "ai_generated": { "type": ["boolean", "null"], "description": "Pedro's self_ai_disclosure answer." }
+      }
+    },
+    "copy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_text": { "$ref": "#/$defs/nullableString" },
+        "headline": { "$ref": "#/$defs/nullableString" },
+        "description": { "$ref": "#/$defs/nullableString" },
+        "cta": { "$ref": "#/$defs/nullableString", "description": "call_to_action_type enum, e.g. BOOK_A_CONSULTATION." },
+        "language": { "$ref": "#/$defs/nullableString", "description": "BCP-47-ish, e.g. es-DO, en." },
+        "link_url": { "$ref": "#/$defs/nullableString" },
+        "image_text": { "$ref": "#/$defs/nullableString", "description": "Text rendered on the image itself (headline overlay)." }
+      }
+    },
+    "tags": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Analysis dimensions. learnings.md aggregates on these.",
+      "properties": {
+        "round": { "type": ["integer", "null"] },
+        "angle": { "type": ["string", "null"], "enum": ["pain", "outcome", "proof", "objection", "contrast", "curiosity", "demo", "other", null] },
+        "framework": { "type": ["string", "null"], "enum": ["PAS", "BAB", "AIDA", "one-liner", "other", null] },
+        "hook_type": { "type": ["string", "null"], "enum": ["question", "stat", "statement", "contrast", "quote", "command", "other", null] },
+        "hook_text": { "$ref": "#/$defs/nullableString" },
+        "aspect_ratios": { "type": "array", "items": { "type": "string" } },
+        "placements": { "type": "array", "items": { "type": "string" }, "description": "advantage_plus, or explicit positions." },
+        "visual_style": { "$ref": "#/$defs/nullableString", "description": "Short free text, e.g. 'product UI screenshot + bold headline on teal'." },
+        "has_person": { "type": ["boolean", "null"] },
+        "has_product_ui": { "type": ["boolean", "null"] },
+        "text_density": { "type": ["string", "null"], "enum": ["none", "low", "medium", "high", null] },
+        "dominant_colors": { "type": "array", "items": { "type": "string" } },
+        "offer": { "$ref": "#/$defs/nullableString", "description": "e.g. demo, free trial, WhatsApp chat, guide." },
+        "test_variable": { "type": ["string", "null"], "enum": ["angle", "format", "hook", "copy", "cta", "offer", "audience", "baseline", null], "description": "What this ad was testing vs its siblings in the same round." },
+        "parent_id": { "$ref": "#/$defs/nullableString", "description": "Tracker id of the ad this one iterated from." },
+        "hypothesis": { "$ref": "#/$defs/nullableString", "description": "One sentence: why we expect this variant to win." }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Campaign conditions at launch, so results are comparable later.",
+      "properties": {
+        "objective": { "$ref": "#/$defs/nullableString" },
+        "optimization_goal": { "$ref": "#/$defs/nullableString" },
+        "optimization_event": { "$ref": "#/$defs/nullableString", "description": "Pixel event or custom conversion name." },
+        "destination": { "$ref": "#/$defs/nullableString" },
+        "geo": { "type": "array", "items": { "type": "string" } },
+        "audience_type": { "type": ["string", "null"], "enum": ["broad", "interests", "lookalike", "retargeting", "custom", null] },
+        "daily_budget": { "$ref": "#/$defs/nullableNumber", "description": "Campaign daily budget in account currency units (not cents)." },
+        "currency": { "$ref": "#/$defs/nullableString" },
+        "special_ad_category": { "$ref": "#/$defs/nullableString" },
+        "target_cpr": { "$ref": "#/$defs/nullableNumber", "description": "Target cost per result set in /ps:ads new." },
+        "sibling_count": { "type": ["integer", "null"], "description": "Ads in the same ad set at launch." }
+      }
+    },
+    "snapshots": {
+      "type": "array",
+      "description": "Append-only. One entry per /ps:ads review run.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["captured_at", "window"],
+        "properties": {
+          "captured_at": { "type": "string", "format": "date" },
+          "window": { "type": "string", "description": "lifetime | last_7d | YYYY-MM-DD..YYYY-MM-DD" },
+          "days_live": { "type": ["integer", "null"] },
+          "spend": { "$ref": "#/$defs/nullableNumber" },
+          "impressions": { "type": ["integer", "null"] },
+          "reach": { "type": ["integer", "null"] },
+          "frequency": { "$ref": "#/$defs/nullableNumber" },
+          "clicks": { "type": ["integer", "null"] },
+          "link_clicks": { "type": ["integer", "null"] },
+          "ctr": { "$ref": "#/$defs/nullableNumber", "description": "Percent, e.g. 1.24." },
+          "link_ctr": { "$ref": "#/$defs/nullableNumber" },
+          "cpc": { "$ref": "#/$defs/nullableNumber" },
+          "cpm": { "$ref": "#/$defs/nullableNumber" },
+          "landing_page_views": { "type": ["integer", "null"] },
+          "results": { "$ref": "#/$defs/nullableNumber" },
+          "result_type": { "$ref": "#/$defs/nullableString" },
+          "cost_per_result": { "$ref": "#/$defs/nullableNumber" },
+          "conversion_rate": { "$ref": "#/$defs/nullableNumber", "description": "results / link_clicks, percent." },
+          "video_hook_rate": { "$ref": "#/$defs/nullableNumber", "description": "3s views / impressions, percent (video only)." },
+          "quality_ranking": { "$ref": "#/$defs/nullableString" },
+          "engagement_ranking": { "$ref": "#/$defs/nullableString" },
+          "conversion_ranking": { "$ref": "#/$defs/nullableString" },
+          "lead_quality_note": { "$ref": "#/$defs/nullableString", "description": "Pedro's qualitative read on lead quality, if given." }
+        }
+      }
+    },
+    "verdict": { "$ref": "#/$defs/verdict" },
+    "verdict_reason": { "$ref": "#/$defs/nullableString", "description": "Which strategy.md rule fired, with the numbers." },
+    "verdict_at": { "$ref": "#/$defs/nullableString" },
+    "benchmark": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "description": "The bar the verdict was judged against.",
+      "properties": {
+        "target_cpr": { "$ref": "#/$defs/nullableNumber" },
+        "min_link_ctr": { "$ref": "#/$defs/nullableNumber" },
+        "source": { "type": ["string", "null"], "enum": ["pedro", "brand_learnings", "industry_benchmark", "strategy_default", null] }
+      }
+    },
+    "verdict_history": {
+      "type": "array",
+      "description": "Every verdict change, oldest first. Never rewritten.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["at", "verdict"],
+        "properties": {
+          "at": { "type": "string", "format": "date" },
+          "verdict": { "$ref": "#/$defs/verdict" },
+          "reason": { "$ref": "#/$defs/nullableString" }
+        }
+      }
+    },
+    "learnings": { "$ref": "#/$defs/nullableString", "description": "One or two sentences on why it won/lost, written at verdict time." },
+    "notes": { "$ref": "#/$defs/nullableString" },
+    "extra": { "type": "object", "description": "Free-form metadata not yet in the schema. Promote recurring keys into tags on the next schema revision." }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psstack/data/ads/campaign.schema.json",
+  "title": "Ad campaign record",
+  "description": "One Meta campaign created or tracked by /ps:ads. One JSON object per line in campaigns.jsonl. Ads live in creatives.jsonl and point back here via campaign_id.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "brand", "campaign_name", "created_at", "brief", "status", "ad_ids"],
+  "properties": {
+    "id": { "type": "string", "description": "<brand-lower>-<campaign_name>." },
+    "brand": { "type": "string" },
+    "campaign_name": { "type": "string" },
+    "ad_set_names": { "type": "array", "items": { "type": "string" } },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ad_account_id": { "type": ["string", "null"] },
+        "campaign_id": { "type": ["string", "null"] },
+        "ad_set_ids": { "type": "array", "items": { "type": "string" } },
+        "page_id": { "type": ["string", "null"] },
+        "instagram_user_id": { "type": ["string", "null"] },
+        "pixel_id": { "type": ["string", "null"] }
+      }
+    },
+    "created_at": { "type": "string", "format": "date" },
+    "launched_at": { "type": ["string", "null"] },
+    "ended_at": { "type": ["string", "null"] },
+    "status": { "type": "string", "enum": ["draft", "paused", "active", "ended"] },
+    "brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "product": { "type": ["string", "null"] },
+        "goal": { "type": ["string", "null"], "description": "Pedro's words for what he wants to happen." },
+        "objective": { "type": ["string", "null"] },
+        "optimization_goal": { "type": ["string", "null"] },
+        "optimization_event": { "type": ["string", "null"] },
+        "destination": { "type": ["string", "null"] },
+        "landing_url": { "type": ["string", "null"] },
+        "offer": { "type": ["string", "null"] },
+        "geo": { "type": "array", "items": { "type": "string" } },
+        "languages": { "type": "array", "items": { "type": "string" } },
+        "audience_type": { "type": ["string", "null"] },
+        "audience_notes": { "type": ["string", "null"] },
+        "special_ad_category": { "type": ["string", "null"] },
+        "budget_type": { "type": ["string", "null"], "enum": ["daily", "lifetime", null] },
+        "budget": { "type": ["number", "null"], "description": "Account currency units (not cents)." },
+        "currency": { "type": ["string", "null"] },
+        "target_cpr": { "type": ["number", "null"] },
+        "target_cpr_source": { "type": ["string", "null"], "enum": ["pedro", "brand_learnings", "industry_benchmark", "strategy_default", null] },
+        "start_date": { "type": ["string", "null"] },
+        "end_date": { "type": ["string", "null"] },
+        "expected_events_per_week": { "type": ["number", "null"], "description": "Learning-phase math shown to Pedro at creation." },
+        "hypothesis": { "type": ["string", "null"], "description": "What this campaign round is testing." }
+      }
+    },
+    "ad_ids": { "type": "array", "items": { "type": "string" }, "description": "Tracker ids (creatives.jsonl) of the ads in this campaign." },
+    "reviews": {
+      "type": "array",
+      "description": "Append-only log of /ps:ads review runs on this campaign.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["at"],
+        "properties": {
+          "at": { "type": "string", "format": "date" },
+          "spend_to_date": { "type": ["number", "null"] },
+          "results_to_date": { "type": ["number", "null"] },
+          "cpr_to_date": { "type": ["number", "null"] },
+          "diagnosis": { "type": ["string", "null"] },
+          "actions_taken": { "type": "array", "items": { "type": "string" } },
+          "next_test": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "notes": { "type": ["string", "null"] }
+  }
+}
