@@ -26,10 +26,17 @@ Stated, not offered. Every project gets these.
 
 ### A. Database — Prisma  *(choice: SQLite or Postgres)*
 The ORM is always Prisma; the engine is the decision.
-- Common: `prisma` (dev), `@prisma/client`
+- Common: `prisma` (dev), `@prisma/client` — pin both to the same stable version, see
+  "Known version pins" below.
 - **SQLite** (simple / single-writer): `@prisma/adapter-better-sqlite3`
-- **Postgres** (rich / relational / concurrent): the `pg` driver (Prisma's `postgresql` provider)
+- **Postgres** (rich / relational / concurrent): `@prisma/adapter-pg` + the `pg` driver
+  (Prisma's `postgresql` provider), pinned alongside `prisma`/`@prisma/client`.
 - Client generated into `src/generated/` (gitignored); enums `@@map` to snake_case tables.
+- Prisma 7: the datasource URL lives in `prisma.config.ts`, not `schema.prisma` —
+  `import "dotenv/config"; export default defineConfig({ datasource: { url: env("DATABASE_URL") } })`
+  (`dotenv` is a dev dep). Use the `prisma-client` generator with `output` and
+  `moduleFormat = "esm"`. A driver adapter is required to connect: Postgres wires
+  `new PrismaClient({ adapter: new PrismaPg({ connectionString }) })`.
 
 ### B. Backend API — tRPC service
 - `express`, `@trpc/server`, `jose` (JWT/auth), `bcryptjs`, `@types/{express,bcryptjs}`
@@ -97,11 +104,28 @@ These are not runtime deps — they configure the project's AI/dev workflow. Off
   `/ps:issues-report`, `/ps:bootstrap`) available in the new repo by adding the marketplace +
   plugin to the project's `.claude/settings.json` (`extraKnownMarketplaces` + `enabledPlugins`),
   so a fresh clone gets them without per-machine setup.
-- **OpenSpec** — spec-driven development. `npx openspec@latest init --tools claude` scaffolds the
-  `openspec/` spec layer and registers the `/openspec:*` (a.k.a. `/opsx:*` — `propose`, `apply`,
-  `archive`) slash commands for Claude Code. Adds an `openspec` dev dependency.
+- **OpenSpec** — spec-driven development. Package is **`@fission-ai/openspec`** (the `openspec`
+  package on npm is an unrelated empty placeholder — don't install it). `npm install -D
+  @fission-ai/openspec`, then `npx openspec init --tools claude --no-animation` scaffolds the
+  `openspec/` spec layer and registers the `/opsx:*` (`propose`, `apply`, `archive`, `explore`,
+  `sync`, `update`) slash commands under `.claude/commands/opsx/` plus skills under
+  `.claude/skills/openspec-*`. (https://github.com/Fission-AI/OpenSpec)
 
 ---
+
+## Known version pins
+
+Versions above are intentionally omitted (install latest) — these are the exceptions, each
+because "latest" is currently broken or mismatched. Revisit and drop each pin once fixed upstream.
+
+- **`mocha@^11`** (not 12) — mocha 12 + this baseline's `node-option: ["import=tsx"]` crashes at
+  startup (`ERR_PACKAGE_PATH_NOT_EXPORTED` in `unicorn-magic`, via mocha 12 → find-up 8; broken
+  under tsx's CJS resolve hook). mocha 11.8.0 works.
+- **`typescript@~6.0`** (not `latest`, currently 7.x) — `typescript-eslint` 8.x peer-requires
+  `typescript >=4.8.4 <6.1.0`; TS 7 breaks that peer range.
+- **`prisma` and `@prisma/client`** (and any driver adapter, e.g. `@prisma/adapter-pg`) pinned
+  to the same stable version — the `latest` dist-tag for `prisma` currently points at a release
+  candidate ahead of `@prisma/client`'s latest stable, so installing both as `latest` mismatches them.
 
 ## Presentation rules for the skill
 
