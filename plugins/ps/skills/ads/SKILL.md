@@ -4,7 +4,7 @@ description: Meta (Facebook/Instagram) ads toolkit with the media-buying strateg
 license: MIT
 metadata:
   author: psanders
-  version: "1.0"
+  version: "1.1"
 ---
 
 # ads
@@ -79,7 +79,7 @@ recommended option first with "(Recommended)"). Pre-fill options from what's kno
 repo, `learnings.md`, the account's Pixel events) so most answers are one click.
 
 ### Batch 1 — What and why
-- **Brand/product** — options from known brands (QCobro, Fonoster, KARMA) + Other. If the brand
+- **Brand/product** — options from known brands (QCobro, micobro, Mikro, Fonoster, KARMA) + Other. If the brand
   has a local repo (e.g. `~/Projects/qcobro`), skim its `CLAUDE.md`/README/site for the
   product pitch, audience, and language.
 - **Goal** (Pedro's words) → map to objective using `strategy.md` §1. Options:
@@ -195,15 +195,24 @@ Pedro edit before designing. Name each per `naming.md` (next round number if ite
   brand repo's `CLAUDE.md` for brand rules.
 - **Frames:** one per variant × preset at exact `placements.md` sizes, named
   `<ad_name>__<preset>`.
-- **Safe-zone guides:** on every frame add a semi-transparent guide layer marking the unsafe
-  top/bottom/side bands (named `safe-zone-guide`). Design with it visible; **hide or remove it
-  before export.**
+- **Safe-zone guides:** on every frame add a semi-transparent guide frame marking the unsafe
+  top/bottom/side bands (named `safe-zone-guide`, `layoutPosition: "absolute"` so it doesn't
+  disturb layout). Design with it visible; before export set `Update(guideId, {enabled: false})`.
+- **Imagery:** use `Generate(nodeId, "stock", "<1-3 keywords>")` for photos or
+  `Generate(nodeId, "ai", "<prompt>")` for AI images (async — check the placeholder flag before
+  exporting). **Any `ai` generation means the asset is AI-generated**: record it and tell Pedro
+  when asking the `self_ai_disclosure` question. Stock photos are not AI.
 - **Composition:** one idea per frame carrying the angle; on-image headline large (≥ ~60px at
   1080 wide) inside the safe area; brand mark small; product UI or a person where it fits the
   angle; no fake buttons.
-- **Export** each frame as PNG using the export method the Pencil skill documents, into
-  `data/ads/assets/<brand>/<ad_name>__<preset>.png`. If no export capability is available,
-  tell Pedro to export those frames (list the names + target paths) and wait.
+- **Verify visually** with `TakeScreenshot([frameId])` once per finished frame (with the guide
+  still on, so safe-zone violations are visible), and `Get(frame, (n,c) => c.problems && Print(...))`
+  for clipping.
+- **Export** inside `execute`: `Export([frameIds], "png", "<abs path>/data/ads/assets/<brand>", {scale: 1})`.
+  **`scale: 1` is mandatory** — the default is 2×, which would produce 2160×2700 instead of
+  1080×1350. Export writes files as `<nodeId>.png`; rename each to
+  `<ad_name>__<preset>.png` right after (`mv`), and confirm size with
+  `sips -g pixelWidth -g pixelHeight`. Re-enable the guide afterwards if more edits are expected.
 
 ### 4. Self-check every export
 Read each PNG (the Read tool shows images) and run the `placements.md` checklist: exact size,
@@ -228,15 +237,26 @@ No args → ask: all active campaigns (Recommended) / pick a campaign / hall of 
 ### 1. Pull
 - Scope: campaigns in `campaigns.jsonl` for the account plus any **live** campaign in the
   account not yet tracked (offer to adopt it).
-- Fields: call `ads_get_field_context` once to confirm canonical names, then
-  `ads_get_ad_entities` at `level: ad` for `lifetime`/`maximum` and `last_7d`: spend,
-  impressions, reach, frequency, clicks, link clicks, CTR, link CTR, CPC, CPM, landing page
-  views, results, cost per result, quality/engagement/conversion rankings, status, created time.
+- Fields: `ads_get_ad_entities` at `level: ad` with `date_preset: maximum` (and again with
+  `last_7d` for trend), `limit: 200`, fields verified to exist (2026-09-14):
+  `name, effective_status, campaign_name, adset_name, created_time, amount_spent, impressions,
+  reach, frequency, ctr, cpc, cpm, results, cost_per_result, landing_page_view`.
+  Look up anything else (link clicks, rankings, conversion events) with
+  `ads_get_field_context` first — `inline_link_click_ctr` and `quality_ranking` do **not**
+  resolve, so store those as `null` unless the field context offers an equivalent.
+  Response quirks: money comes as strings like `"$1.68\u00a0USD"` (parse to a number);
+  `results` is an object `{indicator, values:[{value}]}` — store `value` as `results` and the
+  indicator (e.g. `landing_page_view`) as `result_type`; `ctr` is "CTR (all)", not link CTR.
+- Run it for **every** account with `is_ads_mcp_enabled` (Pedro has more than one). Accounts
+  whose name says read-only: report them, never propose changes there.
 - Context: `ads_insights_performance_trend` (hide_ui), `ads_insights_anomaly_signal`, and
   `ads_insights_industry_benchmark` for the objective.
 - Untracked ads in tracked campaigns: backfill a `creatives.jsonl` record (parse tags from the
-  name per `naming.md`; pull copy + image via `ads_get_creatives` / `ads_get_ad_images`; download
-  the image into `assets/` if a URL is available; unknown tags = `null`).
+  name per `naming.md`, including its legacy `BRAND | Theme | vN` form; pull copy + image via
+  `ads_get_creatives` / `ads_get_ad_images`; download the image into `assets/` if a URL is
+  available; infer `angle` from the copy only when it's obvious, else `null`).
+- Also backfill the campaign into `campaigns.jsonl` (brief fields from what Meta returns; ask
+  Pedro for `target_cpr` once per campaign, since the kill rules need it).
 
 ### 2. Snapshot
 Append one `snapshots[]` entry per ad (`window: lifetime`, plus `days_live`), converting money to
@@ -246,7 +266,10 @@ read if results > 0 ("were these leads real?") and store it in `lead_quality_not
 ### 3. Judge
 For each ad, apply `strategy.md` §5–6 in order: minimum evidence → kill rules → winner/scale →
 fatigue → otherwise `testing`/`inconclusive`. Use the campaign's `target_cpr` (source noted in
-`benchmark`). If the verdict changes: set `verdict`, `verdict_reason` (rule + numbers),
+`benchmark`). **Upstream-event campaigns** (optimizing for landing page views or link clicks):
+cost per result there is cheap by design, so judge on CTR and frequency relative to the other
+ads in the ad set, and flag in the diagnosis that the real test is what happens after the click
+(recommend moving to a conversion event once the Pixel records one — `strategy.md` §2). If the verdict changes: set `verdict`, `verdict_reason` (rule + numbers),
 `verdict_at`, `benchmark`, a one-sentence `learnings`, and **append** to `verdict_history`.
 Set `stopped_at` when an ad gets paused for good.
 

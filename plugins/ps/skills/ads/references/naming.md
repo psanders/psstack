@@ -48,3 +48,12 @@ Example: `r1_angle-pain_fmt-static45_hook-no-alcanza_v1`
 
 `creatives.jsonl` `id` = `<brand-lower>-<YYYY-MM-DD created>-<ad_name>`.
 `campaigns.jsonl` `id` = `<brand-lower>-<campaign_name>`.
+
+## Legacy / hand-made names
+
+Ads created before this convention (or in Ads Manager) use `BRAND | Theme | vN`, e.g.
+`MICOBRO | Receipts | v1`, campaign `MIKRO | Loans | Financial category DR`. `review` accepts
+these when backfilling: `brand` from the first segment, the middle segment kept as
+`tags.hook_text`/`visual_style` hint, `vN` as the variant. Tags it can't infer stay `null`.
+New ads always use the grammar above; don't rename live ads (renaming is harmless to delivery
+but breaks the join with any existing tracker record unless you update it too).
