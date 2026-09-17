@@ -1,7 +1,13 @@
-# Copy frameworks — angles, structures, limits, policy
+# Copy frameworks — angles, structures, CTA, framing
 
 Write variants that differ by **angle**, not by synonyms. Three rewordings of one message is
 one test, not three.
+
+**Awareness gates the angle.** An audience that doesn't know the category exists can't be sold
+a differentiator or an offer — every ad has to open by saying what this *is*, in plain words,
+before any angle plays. Ask the awareness question first (SKILL.md → Batch 4) and filter the
+library with the answer: unaware → category-first first line on `pain`, `contrast` or `demo`;
+category-aware → `outcome`, `proof`, `objection`; brand-aware → offer-led.
 
 ## Angle library
 
@@ -25,14 +31,13 @@ invent one — switch angle.
 - **AIDA** (Attention → Interest → Desire → Action): longer primary text, good for `demo`.
 - **One-liner**: hook + CTA only. Good control variant; surprisingly strong in Feed.
 
-## Field limits (what's visible before truncation)
+## Field limits
 
-| Field | Visible | Hard guidance |
-| :--- | :--- | :--- |
-| Primary text (`message`) | ~125 chars before "See more" | First line = the hook. Can run longer for AIDA. |
-| Headline (`headline`) | ~40 chars | Benefit or offer, not the brand name. |
-| Description (`description`) | ~30 chars | Often hidden; never put critical info here. |
-| CTA button (`call_to_action_type`) | enum | Match the objective (below). |
+Lengths live in `guardrails.md` §1, written to the **strictest** placement rather than to the
+field maximum — with Advantage+ placements one piece of copy runs everywhere, and Reels
+truncate the first line at ~40 characters. Write to those numbers, not to what the field
+accepts. In short: the first line has to work alone, the headline is a benefit or offer rather
+than the brand name, and the description is usually hidden.
 
 ## CTA mapping
 
@@ -59,14 +64,18 @@ in `../../sdr/references/keywords.md`).
 
 ## Policy watch-outs (Meta)
 
-- **Personal attributes:** never imply you know the viewer's situation ("¿Estás endeudado?",
-  "Sabemos que debes…"). Speak to the business role instead.
-- **Financial products & services:** ads *offering credit/loans* must declare the special ad
-  category (targeting limits apply). B2B software for lenders usually doesn't, but copy that
-  sounds like a loan offer can get flagged. Ask Pedro; if in doubt, declare it and keep broad
-  targeting (which the strategy already prefers).
-- No exaggerated guarantees ("recupera el 100% de tu cartera").
-- No fake UI or sensational imagery.
+Full rules in `guardrails.md` §2; two of them shape how a line gets written:
+
+- **Personal attributes:** never imply you know the viewer's situation, not even as a question.
+  Write to the business role instead. This is what makes the call-out a role, not a condition.
+- **Financial products & services:** ads *offering* credit or loans must declare the special ad
+  category. B2B software sold to lenders usually doesn't, but copy that reads like a loan offer
+  gets flagged anyway. Pedro decides per campaign; the reasoning gets recorded.
+
+No exaggerated guarantees, no fake UI, no sensational imagery.
+
+**The headline is a claim about the image it sits on** — check the pair before writing the next
+variant (`guardrails.md` §6).
 
 ## Variant set checklist (per campaign round)
 

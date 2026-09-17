@@ -4,7 +4,7 @@ description: Meta (Facebook/Instagram) ads toolkit with the media-buying strateg
 license: MIT
 metadata:
   author: psanders
-  version: "1.1"
+  version: "1.2"
 ---
 
 # ads
@@ -26,8 +26,10 @@ Pedro knows the product but not media buying. Every step should explain *why* in
 Read these before acting — they are the rulebook:
 
 - `references/strategy.md` — objective chooser, learning-phase math, structure, testing ladder, kill/scale rules, diagnosis tree.
-- `references/copy-frameworks.md` — angles, PAS/BAB/AIDA, field limits, CTA mapping, B2B framing, policy.
-- `references/placements.md` — asset presets and safe zones.
+- `references/copy-frameworks.md` — angles, PAS/BAB/AIDA, CTA mapping, B2B framing.
+- `references/canvases.md` — the canvases, safe zones, templates, Pencil build and export rules.
+- `references/guardrails.md` — copy limits, policy, AI disclosure, enhancement defaults, creative craft, pre-publish checklist.
+- `references/publishing.md` — image upload (headless and browser) and the UI build path for ads.
 - `references/naming.md` — naming grammar for campaigns, ad sets, ads, asset files, tracker ids.
 
 ## Guardrails (every subcommand)
@@ -69,6 +71,24 @@ Read these before acting — they are the rulebook:
    rules that apply ("pain angle has won 3 of 4 for QCobro"). Brand data beats generic defaults
    once a cell has n≥4.
 
+### Account readiness (check before building anything, show as a table)
+
+The pieces of an ad account are owned in different places and can quietly not belong to each
+other. Run this once per account and show Pedro the result as a table with a ✅/⚠️ per row.
+**Answer it before creative work, not at publish time:** two of these rows are effectively
+unfixable later without opening a different ad account.
+
+| Row | How to check | Why it matters |
+| :--- | :--- | :--- |
+| **Page** | `ads_get_ad_account_pages`; note `leadgen_tos_accepted` | Creatives can't be created without a Page. Ask which Page *speaks* — the advertiser Page is often the company while the product has its own name. |
+| **Pixel owner** | `ads_get_datasets` for the ad account, and for the business as well — a pixel commonly lives under a business rather than the ad account, and won't show up otherwise | An unowned or unshared pixel means no conversion event to optimize for. |
+| **Instagram** | `ads_get_ig_accounts` | Without `instagram_user_id`, creatives never deliver on Instagram. |
+| **Payment method** | the account's funding source | Meta refuses to create **ads** — even PAUSED — without one (error 1359188). Campaigns, ad sets, uploads and creatives all work without it, so build those first and leave one call per ad. |
+| **Billing country, currency, time zone** | the account's billing settings, checked **against the payer's actual card** | Set at account creation and effectively permanent. A card from a different country fails outright; changing the country warns it will close the account and open a new one, and can then fail anyway. A mismatch here means picking a different ad account or opening a support case — before any creative exists. |
+
+A failing row blocks the **Create** step, not the direction and creative work. Say which row
+failed, what it blocks, and keep going on everything it doesn't block.
+
 ---
 
 ## `new` — campaign wizard
@@ -96,7 +116,7 @@ repo, `learnings.md`, the account's Pixel events) so most answers are one click.
 - **Geo** — countries/cities (for QCobro default suggestion: Dominican Republic; ask, don't assume).
 - **Language** of the ads — Spanish / English / both (both = separate ads, not mixed copy).
 - **Special ad category** — "None (B2B software)" vs "Financial products & services"; explain
-  `copy-frameworks.md` → policy in one line. Pedro decides.
+  `guardrails.md` §2 in one line. Pedro decides, and the reasoning gets recorded.
 
 ### Batch 3 — Money and time
 - **Daily budget** — $5 / $10 (Recommended to start) / $15 / $20 per day, CBO.
@@ -107,24 +127,59 @@ repo, `learnings.md`, the account's Pixel events) so most answers are one click.
 Then **show the learning-phase math** (`strategy.md` §2) with Pedro's numbers, and adjust the
 optimization event if it can't produce signal. Explain the decision in 2–3 lines.
 
-### Batch 4 — Creative plan
+### Batch 4 — Creative direction
+- **Audience awareness** — "Unaware: they don't know this category exists (Recommended for a
+  new brand)" / "Category-aware: they know the category, not us" / "Brand-aware: they know us".
+  This decides what every ad leads with, so ask it before angles.
+  - **Unaware ⇒ every ad opens with the category**, in plain words, as the first thing read or
+    seen. The offer moves later in the funnel; an offer-led ad to an unaware audience sells a
+    discount on something nobody has heard of.
+  - Category-aware ⇒ lead with the differentiator. Brand-aware ⇒ lead with the offer.
 - **Angles** — multiSelect, pick 3 from `copy-frameworks.md` (recommend based on
-  `learnings.md`, else pain + outcome + proof for B2B round 1).
+  `learnings.md`, else pain + outcome + proof for B2B round 1). Filter the options by the
+  awareness answer.
 - **Assets** — "Design them in Pencil (Recommended)" / "I have files" (ask for paths) /
   "Use an existing Instagram post" (`ads_get_ig_media`) / "Copy only for now, assets later".
-- **Formats** — feed 4:5 + story 9:16 (Recommended) / feed only / video.
+- **Canvases** — `feed-4x5` + `vertical-9x16` (Recommended) / feed only / video
+  (`canvases.md`).
+
+### Lock the look — show concepts, don't describe them
+
+Before any finished asset, build **3–4 rough visual concepts** and show them as images. A look
+approved in prose ("match the website") gets rejected on sight, because an editorial layout
+that works on a landing page doesn't stop a thumb in a feed — and that answer only arrives when
+there's something to look at.
+
+- One `feed-4x5` frame per concept, rough: real headline, real palette, placeholder proof.
+  Span the plausible range, e.g. photo-led (`tpl/photo-overlay`), type-led (`tpl/bold-type`),
+  product-UI-led (`tpl/proof-card`).
+- Export them (`canvases.md` → Export) and show the images, then ask which one to build the
+  round in — with AskUserQuestion, options named after the concepts.
+- Record the chosen direction in the brief so later rounds don't re-litigate it.
 
 ### Build the plan, then gate
 1. **Names** per `naming.md`: campaign, ad set, and one ad per angle (round `r1`).
 2. **Copy**: for each ad, primary text, headline, description, CTA, image headline, framework,
-   hook type — per `copy-frameworks.md`, in the chosen language, within field limits.
+   hook type — per `copy-frameworks.md`, in the chosen language, within the `guardrails.md` §1
+   lengths (written to the strictest placement, not to the field maximum).
 3. **Assets**: if Pencil → run the `creative` flow inline for these ads. If files → verify each
-   against `placements.md` (read the image; check size/safe zones) and flag problems.
-4. **Plan summary** — one table: campaign (objective, event, budget/day, geo, category), ad set
+   against `canvases.md` (read the image; check size/safe zones) and flag problems.
+4. **Message match** — fetch the landing page and check three things against the plan:
+   - the **offer** the ads promise is actually on the page, in the same words (an ad promising a
+     pilot that lands on a "free demo" page loses the click it paid for);
+   - the **conversion event** chosen in Batch 2 really fires there (the pixel is on the page and
+     the form that fires it is the form the ad points at);
+   - nothing on the page contradicts a claim in the copy.
+
+   Then **decide launch timing from the result**: if the page needs a change, say whether the
+   campaign waits for it or launches against the current page with the copy adjusted to match.
+   Never launch against a page that can't count the event — there's nothing to optimize toward.
+5. **Plan summary** — one table: campaign (objective, event, budget/day, geo, category), ad set
    (targeting, placements), each ad (name, angle, headline, primary text first line, asset
    paths), plus expected events/week and the review date (launch + 3–7 days). Ask Pedro to
    approve, edit, or cancel. **Ask the AI-disclosure question here** (did any asset use
-   generative AI?) — required before creative creation, can't be changed later.
+   generative AI? — `guardrails.md` §3): required before creative creation, can't be changed
+   later, and unavailable at all if the ad gets built in the UI.
 
 ### Create (only after approval)
 In order, stopping on the first failure:
@@ -135,24 +190,24 @@ In order, stopping on the first failure:
    `custom_event_type` (or `custom_conversion_id`); `destination_type`; `targeting` =
    `{"geo_locations":{...}}` broad (+ `locales` only if language targeting is truly needed);
    no budget fields (CBO); Advantage+ placements (omit `placement`).
-3. **Upload assets** with `ads_creative_upload_media`:
-   - Preferred: `upload_source: LOCAL_FILE` (opens Meta's upload app for Pedro to pick the
-     file). Tell Pedro exactly which file path to pick for which ad.
-   - If the upload app can't open in this client: ask Pedro whether a public URL exists (e.g.
-     the brand site's asset folder); only then use `upload_source: URL`. Otherwise ask him to
-     upload the files in Ads Manager → Media library, then find them with `ads_get_ad_images`.
-   - Record each `image_hash` (and hosted URL) per file.
+3. **Upload assets** per `publishing.md` — the three-step local-image flow (prepare → POST the
+   bytes with the entity headers → finalize), which needs no picker and no public host. Upload
+   the **JPEG**, not the PNG. Record each `image_hash` against its canvas.
 4. `ads_create_creative` per ad — `page_id`, `instagram_user_id`, `link_url`, `message`,
-   `headline`, `description`, `call_to_action_type`, `image_hash` (feed45) and `name` = ad name,
-   `self_ai_disclosure` per Pedro. If both feed45 and story916 exist, set them up as
-   placement-customized assets when the tool supports it for images; otherwise use feed45 and
-   note the story asset is kept for a later round.
-5. `ads_create_ad` per ad with the `creative_id`. (PAUSED.)
-6. `ads_get_ad_preview` for one ad; show it.
+   `headline`, `description`, `call_to_action_type`, `image_hash` (`feed-4x5`) and `name` = ad
+   name, `self_ai_disclosure` per Pedro. Set the enhancement flags per `guardrails.md` §4.
+   **The connector customizes placements for video only**, so a `vertical-9x16` *image* variant
+   can't ride along here: when one exists, finish that ad through the UI build path in
+   `publishing.md` instead of shipping feed-only.
+5. `ads_create_ad` per ad with the `creative_id`. (PAUSED.) If the account has no payment
+   method this is the one call that fails — everything above still lands, so finish these ads
+   as UI drafts (`publishing.md`) rather than unwinding the campaign.
+6. `ads_get_ad_preview` for one ad; show it. Then walk the `guardrails.md` §5 setup checklist.
 
 ### Record
-- **Copy every asset** into `data/ads/assets/<brand>/<ad_name>__<preset>.<ext>` (`cp`, then
-  `shasum -a 256`; `sips -g pixelWidth -g pixelHeight` for dimensions).
+- **Copy every asset** into `data/ads/assets/<brand>/<ad_name>__<canvas>.<ext>` (`cp`, then
+  `shasum -a 256`; `sips -g pixelWidth -g pixelHeight` for dimensions). Store the uploaded
+  JPEG, so the tracker holds the file Meta actually received.
 - Append one `campaigns.jsonl` record (status `paused`, full brief, Meta IDs, `ad_ids`).
 - Append one `creatives.jsonl` record per ad: all tags, context, copy, asset files, Meta IDs,
   `snapshots: []`, `verdict: "testing"`, `verdict_history: [{at: today, verdict: "testing",
@@ -172,7 +227,7 @@ and `status: active` in both files.
 ## `creative` — copy + placement-safe assets
 
 Inputs (ask what's unknown, via AskUserQuestion): brand, campaign (existing, from
-`campaigns.jsonl`, or none), angles, formats (default feed45 + story916), language, variants
+`campaigns.jsonl`, or none), angles, canvases (default `feed-4x5` + `vertical-9x16`), language, variants
 per angle (default 1), and whether to attach the results as new PAUSED ads to an existing ad set.
 
 ### 1. Copy
@@ -183,41 +238,52 @@ Pedro edit before designing. Name each per `naming.md` (next round number if ite
 
 ### 2. Verify the current specs
 `ads_get_help_article` for Stories/Reels safe zones and image specs. If it disagrees with
-`placements.md`, use Meta's numbers and mention the drift.
+`canvases.md`, use Meta's numbers and mention the drift.
 
 ### 3. Design in Pencil
-- `get_app_state`, then `read_skill` (and the `execute` doc it references) to learn the current
-  Pencil API. Don't assume function names; the API is documented there. Never `Read`/`Grep` a
-  `.pen` file.
-- **Which file:** the brand repo's `.pen` (e.g. `~/Projects/qcobro/pencil.pen`) so brand
-  tokens/components are available — ask before editing it; add a dedicated page/area named
-  `Ads / <campaign or date>`. Use `get_style` / existing tokens for colors and type; read the
-  brand repo's `CLAUDE.md` for brand rules.
-- **Frames:** one per variant × preset at exact `placements.md` sizes, named
-  `<ad_name>__<preset>`.
-- **Safe-zone guides:** on every frame add a semi-transparent guide frame marking the unsafe
-  top/bottom/side bands (named `safe-zone-guide`, `layoutPosition: "absolute"` so it doesn't
-  disturb layout). Design with it visible; before export set `Update(guideId, {enabled: false})`.
-- **Imagery:** use `Generate(nodeId, "stock", "<1-3 keywords>")` for photos or
+`canvases.md` is the rulebook for this step — canvases, templates, slots, the Pencil gotchas
+and the export sequence. What's specific to a run:
+
+- **Which file:** the brand's ads `.pen` (the brand repo's, so its tokens and components are
+  available) — ask before editing it, and **open it in Pen.app first**: `execute` writes to
+  whatever file the app has open, which silently escapes a worktree. Confirm with
+  `get_app_state`. Then `read_skill` (and the `execute` doc it references); don't assume
+  function names. Never `Read`/`Grep` a `.pen` file.
+- **Frames:** duplicate the right template per variant × canvas, rename to
+  `<ad_name>__<canvas>`, fill the slots. Keep `safe-zone-guide` visible while designing.
+- **Imagery:** `Generate(nodeId, "stock", "<1-3 keywords>")` for photos,
   `Generate(nodeId, "ai", "<prompt>")` for AI images (async — check the placeholder flag before
-  exporting). **Any `ai` generation means the asset is AI-generated**: record it and tell Pedro
-  when asking the `self_ai_disclosure` question. Stock photos are not AI.
-- **Composition:** one idea per frame carrying the angle; on-image headline large (≥ ~60px at
-  1080 wide) inside the safe area; brand mark small; product UI or a person where it fits the
-  angle; no fake buttons.
-- **Verify visually** with `TakeScreenshot([frameId])` once per finished frame (with the guide
-  still on, so safe-zone violations are visible), and `Get(frame, (n,c) => c.problems && Print(...))`
-  for clipping.
-- **Export** inside `execute`: `Export([frameIds], "png", "<abs path>/data/ads/assets/<brand>", {scale: 1})`.
-  **`scale: 1` is mandatory** — the default is 2×, which would produce 2160×2700 instead of
-  1080×1350. Export writes files as `<nodeId>.png`; rename each to
-  `<ad_name>__<preset>.png` right after (`mv`), and confirm size with
-  `sips -g pixelWidth -g pixelHeight`. Re-enable the guide afterwards if more edits are expected.
+  exporting), written to the prompt rules in `guardrails.md` §6. **Any `ai` generation makes
+  the asset AI-generated:** record it for the `self_ai_disclosure` question. Stock is not AI.
+- **Composition:** one idea per frame carrying the angle; headline inside the content box at
+  the canvas's size; brand mark small; no fake buttons; headline and image congruent
+  (`guardrails.md` §6).
+- **Board layout (default canvas organization, so this doesn't need to be re-requested):** lay
+  the whole round out as a review board, one **row per ad**, not a scattered cascade —
+  1. Row 1 for ad A: its canvas variants side by side, left to right in `canvases.md` order
+     (`feed-4x5`, `square-1x1` if built, `vertical-9x16`), each at true size so the row height
+     equals the tallest canvas.
+  2. Directly under that row: one **copy card** frame spanning the row's width — a compact
+     spec sheet with the ad name, angle/framework, hook, primary text, headline, description,
+     and CTA as plain text fields (not an ad mock — a review artifact, styled simply: label +
+     value pairs, brand mono for labels). This is what lets Pedro review creative and copy
+     together without opening a separate file.
+  3. Next ad's row starts below that copy card, same pattern, down the canvas.
+  - Build each ad's frames first, then position the row + card with `FindEmptySpace`/explicit
+    coordinates rather than letting frames land wherever — reposition with `Update(id, {x, y})`
+    if frames already exist from an earlier step.
+  - Reuse one `Copy Card` component (label/value row layout) instanced per ad with the fields
+    overridden via `descendants`, so every card matches.
+- **Export** per `canvases.md` → Export: separate `execute` call, guides off, `scale: 1`,
+  rename, convert to JPEG, `sips` the dimensions, plus one guide-visible copy to a scratch
+  directory for the visual check.
 
 ### 4. Self-check every export
-Read each PNG (the Read tool shows images) and run the `placements.md` checklist: exact size,
-text/logo inside safe area, headline legible when small, correct language, policy. Fix in
-Pencil and re-export anything that fails. Show Pedro the final images.
+Run the `guardrails.md` §5 checklist on every asset. Both halves of the safe-zone check are
+mandatory: the **scripted** bounds dump of every text/icon/pill node against the canvas rule,
+*and* reading back the **guide-visible** export to see whether a face or key subject inside a
+photo sits in a band. Each catches what the other can't. Fix in Pencil and re-export anything
+that fails, then show Pedro the final images.
 
 ### 5. Record / attach
 - Standalone: tell Pedro the paths and the Pencil frame names; tracker records are written when

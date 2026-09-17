@@ -32,17 +32,18 @@ Example: `aud-broad_geo-DO_place-adv_opt-lead`
 | :--- | :--- |
 | `r<round>` | test round within the campaign: `r1`, `r2`… |
 | `angle` | key from `copy-frameworks.md` (`pain`, `outcome`, `proof`, `objection`, `contrast`, `curiosity`, `demo`) |
-| `fmt` | `static45`, `static11`, `story916`, `video916`, `carousel` (use the primary asset; `static45` when feed45+story916 are paired) |
+| `fmt` | `static-4x5`, `static-1x1`, `static-9x16`, `video-9x16`, `carousel` — the canvas keys from `canvases.md`. Name the **primary** asset; use `static-4x5` when `feed-4x5` + `vertical-9x16` are paired (the normal case) |
 | `hook` | 1–3 kebab words summarizing the hook (`sin-agentes`, `100pct-cartera`) |
 | `v<n>` | minor copy variant |
 
-Example: `r1_angle-pain_fmt-static45_hook-no-alcanza_v1`
+Example: `r1_angle-pain_fmt-static-4x5_hook-no-alcanza_v1`
 
 ## Creative (library name) and asset files
 
 - Creative `name`: same as the ad name.
-- Asset copy: `data/ads/assets/<brand-lower>/<ad_name>__<preset>.<ext>`
-  e.g. `data/ads/assets/qcobro/r1_angle-pain_fmt-static45_hook-no-alcanza_v1__feed45.png`
+- Asset copy: `data/ads/assets/<brand-lower>/<ad_name>__<canvas>.<ext>`, one file per canvas,
+  storing the **JPEG that was uploaded** (`canvases.md` → Export)
+  e.g. `…/<brand>/r1_angle-pain_fmt-static-4x5_hook-no-alcanza_v1__feed-4x5.jpg`
 
 ## Tracker id
 
@@ -55,5 +56,10 @@ Ads created before this convention (or in Ads Manager) use `BRAND | Theme | vN`,
 `MICOBRO | Receipts | v1`, campaign `MIKRO | Loans | Financial category DR`. `review` accepts
 these when backfilling: `brand` from the first segment, the middle segment kept as
 `tags.hook_text`/`visual_style` hint, `vN` as the variant. Tags it can't infer stay `null`.
-New ads always use the grammar above; don't rename live ads (renaming is harmless to delivery
-but breaks the join with any existing tracker record unless you update it too).
+Older records also use the 1080-era preset keys in `fmt` and in filenames (`static45`,
+`story916`, `feed45`, `square`, `link191`, `video916`). `review` reads them and maps them to
+the canvas keys (`canvases.md` → Legacy preset keys); it does not rewrite them.
+
+New ads always use the grammar above; don't rename live ads or existing asset files (renaming
+is harmless to delivery but breaks the join with any existing tracker record unless you update
+it too).
