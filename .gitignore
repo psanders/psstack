@@ -1,6 +1,11 @@
 .DS_Store
 node_modules/
 *.log
+__pycache__/
+*.pyc
+
+# Personal drafts / working documents, not part of the plugin, never committed.
+.local/
 
 # SDR signal data contains third-party prospect PII (names, titles, companies,
 # and eventually reply/DM content) — unlike data/social this must never be
