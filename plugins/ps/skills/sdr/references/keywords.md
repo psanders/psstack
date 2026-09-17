@@ -34,6 +34,18 @@ Confirmed **empty or unreliable** as of 2026-07-28 — don't reuse without retes
 - microfinanciera (0 DR company-search results)
 - microcrédito / microcredito (0 DR results, with or without the accent)
 
+Tested 2026-08-27 while narrowing toward payroll-deduction/business-loan books
+specifically (as opposed to consumer coops broadly) — both confirmed **too generic to
+use alone**, don't reuse without pairing with a legal-structure phrase the way
+`cooperativa de ahorro y credito` works:
+- nomina / nómina (paired with Gerente General, Presidente, Director Ejecutivo) — matches
+  HR/payroll/accounting professionals generally, not payroll-deduction lending executives.
+  Zero on-thesis hits across 3 title pairs.
+- empresarial (paired with Gerente General, CEO) — matches any company with "Empresarial"
+  in its own name (generic "grupo empresarial" naming) and generic "business consultant"
+  profiles, not commercial/business-loan lenders specifically. Zero on-thesis hits across
+  2 title pairs.
+
 ### Known real accounts (seed target list, found 2026-07-28)
 - **COOPIBERICA** — Cooperativa de ahorro, crédito y servicios múltiples Iberoamericana
   (Santiago de los Caballeros) — small, on-thesis
@@ -53,6 +65,68 @@ whose name matches:
   Eléctricos"/"eléctrica" (electric utility), and similar patterns
 - Anything without its own public loan/credit product — check the "About" section if
   unsure before ruling it out
+
+## Segment: DR B2B trade credit (QCobro)
+
+Validated 2026-08-27 via live LinkedIn testing. This segment targets businesses that sell
+on account/credit to a repeat roster of retail clients — the debtor wants to pay to
+preserve the credit line, so non-payment tends to be a timing/logistics problem rather
+than a willingness/ability one (unlike much of the consumer-microfinance segment above).
+The `people` pass again outperformed everything else, same as the microfinance segment.
+
+### Executive/decision-maker titles (for the `people` pass)
+- Gerente General
+- Propietario / Propietaria
+- Gerente de Cobros
+- Director de Cobros
+- Gerente Financiero
+
+### Sector terms
+Pair **one** of these with **one** title above per query.
+
+Confirmed to return real DR results:
+- distribuidora (paired with "Gerente General" — surfaced named GMs at real importer/
+  distributor companies, e.g. Importadora y Distribuidora PUMA)
+- ferreteria (no accent; paired with "Propietario" — surfaced multiple named hardware-
+  store owners directly, high hit rate)
+- distribuidora (paired with "Gerente de Cobros" — best title/sector combo tested so far
+  for this segment: direct collections-manager hits at named distributors, e.g.
+  Distribuidora de Pintura America, Grupo Pauliza SRL/Pauli Gas)
+- mayorista (paired with "Gerente Financiero" — weaker than the above, mostly generic
+  finance titles, one usable importer/distributor hit)
+
+Confirmed **empty** as of 2026-08-27 — don't reuse without retesting:
+- ferreteria paired with "Director de Cobros" — 0 results (title too narrow combined with
+  this sector word; "Gerente de Cobros" or "Propietario" work better for ferreterías)
+
+Untested — worth trying next: farmacia / farmacia suplidora, distribuidora de alimentos,
+distribuidora de bebidas, materiales de construccion.
+
+### Known real accounts (seed target list, found 2026-08-27)
+- **Importadora y Distribuidora PUMA, SRL** — GM found directly (contact in local `signals.jsonl`)
+- **Distribuidora Corripio** — large, well-known DR distribution conglomerate; contact
+  found is channel/district-level, not GM — treat as a warm-intro path in, not a direct
+  decision-maker
+- **Distribuidora de Pintura America** — named Gerente de Cobros found directly
+- **Grupo Pauliza SRL (Pauli Gas)** — LPG/gas distributor selling on credit to retail gas
+  stations; named Gerente de Cobros found directly — strong thesis fit
+- **Grupo Bonanza** — named Gerente de Cobros found; verify business line before outreach
+- **Importadora K&G** — automotive/industrial battery importer; commercial-side contact
+  found (not collections/finance) — useful as a company account lead
+- Named ferretería owners with no distinguishing profile info beyond store name: Ferreteria
+  Ghapre S.A., Ferreteria Chardely, Ferreteria Tu Amigo — real named owners, cold (3rd+),
+  worth a company-search cross-check before outreach
+
+### Notes for future runs
+- The `companies` pass via direct URL (`geoUrn` query param) did **not** hold the DR geo
+  filter for company search the way it does for people search — results came back
+  Latin-America/global-wide (Brazil, Costa Rica, Panama, Spain, Argentina...), not DR-only.
+  Don't trust a `companies`-pass URL built the same way as a `people`-pass URL; if the
+  `companies` pass is needed for this segment, it has to go through the UI's Locations
+  filter (per `SKILL.md`'s general geo-filter-reapply guidance), not a copied query param.
+- `get_page_text` never returns individual profile hrefs (a limitation already noted in
+  the microfinance segment above) — plan on a manual profile-URL lookup pass by name
+  before actually reaching out to any signal logged with `profile_url: null`.
 
 ## Segment: Voice AI infra / KARMA / consulting (generic, lower priority)
 
