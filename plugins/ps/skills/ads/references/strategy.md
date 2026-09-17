@@ -55,7 +55,7 @@ Campaign  (CBO, daily budget, one objective)
   audience. Tight interest stacks usually raise CPM and cut volume. Only add interests Pedro
   explicitly provides with real IDs; never invent IDs.
 - **Advantage+ placements** by default (so assets must survive every placement — see
-  `placements.md`).
+  `canvases.md`).
 - **Retargeting** (site visitors, video viewers) only once there's a pool of ~1,000+ people;
   not in the first campaign.
 - **Budget ≥ 3× expected cost per result per day** is the comfort zone. Below that, results
