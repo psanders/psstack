@@ -1,0 +1,392 @@
+{
+  "title": "QCobro — every collection is auditable",
+  "slug": "qcobro-auditoria",
+  "source": "../IMG_5148.MOV",
+  "languages": [
+    "es",
+    "en"
+  ],
+  "brand": "qcobro",
+  "speed": 1.15,
+  "fps": 30,
+  "size": [ 1080, 1920 ],
+  "framing": {
+    "full": {
+      "cx": 0.455,
+      "cy": 0.5,
+      "h": 1.0
+    },
+    "split": {
+      "cx": 0.475,
+      "cy": 0.356,
+      "h": 0.711,
+      "position": "bottom"
+    }
+  },
+  "zoom_anchor": [ 0.5, 0.32 ],
+  "segments": [
+    { "in": 0.11, "out": 2.32, "layout": "full", "zoom": [ 1.0, 1.05 ] },
+    { "in": 2.45, "out": 6.29, "layout": "full", "zoom": [ 1.05, 1.12 ] },
+    { "in": 6.61, "out": 8.57, "layout": "full", "zoom": [ 1.12, 1.16 ] },
+    { "in": 20.34, "out": 26.42, "layout": "split" },
+    { "in": 28.59, "out": 32.95, "layout": "split" },
+    { "in": 33.2, "out": 35.35, "layout": "split" },
+    { "in": 35.83, "out": 39.64, "layout": "split" },
+    { "in": 40.34, "out": 44.79, "layout": "split" },
+    { "in": 45.43, "out": 47.22, "layout": "split" },
+    { "in": 47.41, "out": 49.01, "layout": "split" },
+    { "in": 52.5, "out": 54.16, "layout": "split" },
+    { "in": 54.26, "out": 64.79, "layout": "split" },
+    { "in": 66.19, "out": 67.73, "layout": "full", "zoom": [ 1.0, 1.04 ] },
+    { "in": 67.99, "out": 69.88, "layout": "full", "zoom": [ 1.04, 1.1 ] }
+  ],
+  "audio": {
+    "loudness": -14,
+    "highpass": 70,
+    "sfx": "auto",
+    "sfx_db": -20
+  },
+  "captions": {
+    "emphasis": {
+      "es": [
+        "auditoría",
+        "evidencia",
+        "transcripción",
+        "grabación",
+        "metadata",
+        "transparencia total"
+      ]
+    },
+    "y": 965,
+    "size": 76
+  },
+  "beats": [
+    {
+      "id": "pA",
+      "scene": "pill",
+      "layout": "overlay",
+      "start": 4.5,
+      "dur": 2.4,
+      "props": {
+        "text": {
+          "es": "AUDITORÍA",
+          "en": "AUDIT"
+        },
+        "icon": "audit"
+      }
+    },
+    {
+      "id": "b02",
+      "scene": "evidence",
+      "layout": "panel",
+      "start": 6.967,
+      "end": 12.267,
+      "exit": false,
+      "cues": {
+        "converge": 10.6,
+        "stamp": 11.5
+      },
+      "props": {
+        "title": {
+          "es": "Cualquier *canal*",
+          "en": "Any *channel*"
+        },
+        "channels": [
+          {
+            "icon": "sms",
+            "label": "SMS"
+          },
+          {
+            "icon": "whatsapp",
+            "label": "WhatsApp"
+          },
+          {
+            "icon": "mail",
+            "label": {
+              "es": "Correo",
+              "en": "Email"
+            }
+          },
+          {
+            "icon": "voicemail",
+            "label": {
+              "es": "Voz pregrabada",
+              "en": "Pre-recorded"
+            }
+          },
+          {
+            "icon": "bot",
+            "label": {
+              "es": "Voz IA",
+              "en": "AI voice"
+            }
+          },
+          {
+            "icon": "agent",
+            "label": {
+              "es": "Agente",
+              "en": "Agent"
+            }
+          }
+        ],
+        "result": {
+          "label": {
+            "es": "Evidencia",
+            "en": "Evidence"
+          }
+        }
+      }
+    },
+    {
+      "id": "b03",
+      "scene": "sent",
+      "layout": "panel",
+      "start": 12.267,
+      "end": 17.933,
+      "enter": false,
+      "exit": false,
+      "cues": {
+        "send": 13.9,
+        "highlight": 16.13,
+        "saved": 16.6
+      },
+      "props": {
+        "chip": {
+          "es": "Fire & forget · SMS · Correo",
+          "en": "Fire & forget · SMS · Email"
+        },
+        "preview": {
+          "es": "Hola, tu cuota vence este viernes…",
+          "en": "Hi, your payment is due this Friday…"
+        },
+        "title": {
+          "es": "Mensaje enviado",
+          "en": "Message sent"
+        },
+        "message": {
+          "es": "Hola, tu cuota vence este viernes. ¿Te ayudamos a ponerte al día?",
+          "en": "Hi, your payment is due this Friday. Can we help you catch up?"
+        },
+        "metaLeft": "SMS · 09:02 AM",
+        "metaRight": {
+          "es": "✓✓ Entregado",
+          "en": "✓✓ Delivered"
+        },
+        "saved": {
+          "es": "Guardado en la gestión",
+          "en": "Saved to the record"
+        }
+      }
+    },
+    {
+      "id": "b04",
+      "scene": "chat",
+      "layout": "panel",
+      "start": 17.933,
+      "end": 25.133,
+      "enter": false,
+      "exit": false,
+      "cues": {
+        "m1": 18.3,
+        "m2": 19.3,
+        "m3": 20.3,
+        "m4": 21.2,
+        "push": 21.5,
+        "human": 22.17,
+        "ai": 23.6
+      },
+      "props": {
+        "title": {
+          "es": "Transcripción · WhatsApp",
+          "en": "Transcript · WhatsApp"
+        },
+        "channel": "whatsapp",
+        "messages": [
+          {
+            "from": "human",
+            "name": {
+              "es": "Cliente",
+              "en": "Customer"
+            },
+            "text": {
+              "es": "Hola, ¿cuánto debo?",
+              "en": "Hi, how much do I owe?"
+            }
+          },
+          {
+            "from": "ai",
+            "name": {
+              "es": "IA",
+              "en": "AI"
+            },
+            "text": {
+              "es": "Tienes una cuota pendiente de RD$ 4,200.",
+              "en": "You have a pending payment of RD$ 4,200."
+            }
+          },
+          {
+            "from": "human",
+            "name": {
+              "es": "Cliente",
+              "en": "Customer"
+            },
+            "text": {
+              "es": "Puedo pagar el viernes.",
+              "en": "I can pay on Friday."
+            }
+          },
+          {
+            "from": "ai",
+            "name": {
+              "es": "IA",
+              "en": "AI"
+            },
+            "text": {
+              "es": "Perfecto, registré tu promesa de pago.",
+              "en": "Great, I've logged your promise to pay."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "b05",
+      "scene": "recording",
+      "layout": "panel",
+      "start": 25.133,
+      "end": 28.1,
+      "enter": false,
+      "exit": false,
+      "cues": {
+        "play": 25.233
+      },
+      "props": {
+        "title": {
+          "es": "Grabación de la llamada",
+          "en": "Call recording"
+        },
+        "meta": {
+          "es": "Canal de voz · 12:04 PM",
+          "en": "Voice channel · 12:04 PM"
+        },
+        "length": 7
+      }
+    },
+    {
+      "id": "b06",
+      "scene": "records",
+      "layout": "panel",
+      "start": 28.1,
+      "end": 38.7,
+      "enter": false,
+      "cues": {
+        "row1": 31.55,
+        "flip": 32.35,
+        "row2": 33.3,
+        "row3": 33.85,
+        "row4": 34.45,
+        "push": 34.45,
+        "pulse": 36.6,
+        "change": 37.45
+      },
+      "props": {
+        "title": {
+          "es": "Metadata de entrega",
+          "en": "Delivery metadata"
+        },
+        "rows": [
+          {
+            "icon": "ok",
+            "k": {
+              "es": "Estado",
+              "en": "Status"
+            },
+            "v": {
+              "es": "Entregado",
+              "en": "Delivered"
+            },
+            "tone": "ok",
+            "flip": {
+              "v": {
+                "es": "No entregado",
+                "en": "Not delivered"
+              },
+              "tone": "fail",
+              "icon": "fail"
+            }
+          },
+          {
+            "icon": "clock",
+            "k": {
+              "es": "Hora",
+              "en": "Time"
+            },
+            "v": "09:02:56 AM",
+            "tone": "info"
+          },
+          {
+            "icon": "duration",
+            "k": {
+              "es": "Duración",
+              "en": "Duration"
+            },
+            "v": "0:42 min",
+            "tone": "info"
+          },
+          {
+            "icon": "alert",
+            "k": {
+              "es": "Qué ocurrió",
+              "en": "What happened"
+            },
+            "v": {
+              "es": "Error del proveedor",
+              "en": "Carrier error"
+            },
+            "tone": "warn",
+            "change": {
+              "v": {
+                "es": "Destino inválido",
+                "en": "Invalid destination"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "pG",
+      "scene": "pill",
+      "layout": "overlay",
+      "start": 40.0,
+      "dur": 1.63,
+      "cues": {
+        "brand": 40.6
+      },
+      "props": {
+        "text": {
+          "es": "Transparencia total",
+          "en": "Total transparency"
+        },
+        "icon": "shield",
+        "drift": true,
+        "endcard": {
+          "wordmark": "*Q*Cobro",
+          "tagline": {
+            "es": "Cobranza que se puede auditar",
+            "en": "Collections you can audit"
+          }
+        }
+      }
+    }
+  ],
+  "exports": [
+    "ig",
+    "x",
+    {
+      "name": "linkedin",
+      "lang": "en",
+      "cover": "out/cover_en.jpg"
+    }
+  ]
+}
