@@ -75,16 +75,16 @@ layout, troubleshooting). Whisper runs locally with faster-whisper; the model do
 ## 1. Intake
 
 Ask only what you can't infer (AskUserQuestion when available, one round):
-- **Source video** path. Drop-in folder on Hermes Docker: the host's
-  `~/.hermes/sandboxes/docker/default/workspace/` = `/workspace` in the container.
+- **Source video** path. On Pedro's Hermes (official Docker image): host `hermes/data/inbox/`
+  = `/opt/data/inbox/` in the container.
 - **Languages**: spoken language first (`["es", "en"]` = Spanish reel + English version).
 - **Platforms**: default `ig, x, linkedin` (LinkedIn in English); TikTok on request.
 - **Brand preset**: `qcobro`, `fonoster`, `micobro`, `neutral` or token overrides.
 - **Privacy**: what must never appear (customer names/phones, client company names…).
 - **Goal & audience** in one line — it drives the cut and the graphics.
 
-Then create the reel folder — `reels/<slug>/` under `/workspace` on Hermes Docker, else
-the current directory — copy `templates/reel.example.json` to `reels/<slug>/reel.json`
+Then create the reel folder — `/opt/data/reels/<slug>/` on Hermes in Docker, else
+`reels/<slug>/` in the current directory — copy `templates/reel.example.json` to `reels/<slug>/reel.json`
 and fill it (`source` may be relative to the reel folder), create
 `reels/<slug>/checkpoint.md` from `references/checkpoint-template.md`, and run
 `python3 scripts/probe.py <source> --out reels/<slug>/source.json` (resolution, fps, HDR

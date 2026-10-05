@@ -19,7 +19,22 @@ The other scripts find the cache and load `env.sh` themselves — no `source` ne
 The static ffmpeg comes from BtbN's GitHub builds (`linux64` / `linuxarm64`, GPL).
 Apple Silicon Macs run Docker containers as `linux/arm64` — that's handled.
 
-## Hermes Agent with the Docker backend
+## Hermes running in Docker (`nousresearch/hermes-agent`, compose with `./data:/opt/data`)
+
+- Everything persistent lives in `/opt/data` (host: `hermes/data/`). The cache goes to
+  **`/opt/data/cache/ps-reel`** automatically; put reels in **`/opt/data/reels/<slug>/`**.
+- Skill install: clone psstack inside Hermes (e.g. `/opt/data/repos/psstack`) and add
+  `/opt/data/repos/psstack/plugins/ps/skills` to `skills.external_dirs`
+  (`hermes config set …`); `git pull` there to update.
+- Getting a video in: copy it to `hermes/data/inbox/` on the host → `/opt/data/inbox/` in
+  the container (or `docker cp`). Outputs appear under `hermes/data/reels/`.
+- Previews by link: copy a preview into `data/public/<unguessable>/` and share
+  `$PUBLIC_MEDIA_BASE/<unguessable>/preview_es.mp4` (the compose `media` service).
+- Resources: the compose limit of 2 CPUs / 4 GB works but is slow; 4 CPUs / 8 GB is better.
+- The image must provide `python3` (with venv) and `node`; setup reports what's missing.
+  Remotion's headless Chrome also needs the usual Chromium system libraries.
+
+## Hermes Agent with the Docker terminal backend
 
 - Hermes runs **one long-lived container** for all sessions (`container_persistent: true`,
   the default). Packages and files survive between chats, but recreating the container

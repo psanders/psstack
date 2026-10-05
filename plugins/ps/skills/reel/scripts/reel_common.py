@@ -56,8 +56,12 @@ def _bootstrap_env():
     agent tool calls): find the cache like setup.sh does and load env.sh into os.environ."""
     cache = os.environ.get("REEL_CACHE")
     if not cache:
-        cache = "/workspace/.cache/ps-reel" if os.access("/workspace", os.W_OK) else \
-            str(Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "ps-reel")
+        if os.access("/opt/data", os.W_OK):  # official Hermes image: the persisted data volume
+            cache = "/opt/data/cache/ps-reel"
+        elif os.access("/workspace", os.W_OK):  # Hermes Docker terminal backend
+            cache = "/workspace/.cache/ps-reel"
+        else:
+            cache = str(Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "ps-reel")
         os.environ["REEL_CACHE"] = cache
     env = Path(cache) / "env.sh"
     if env.exists():

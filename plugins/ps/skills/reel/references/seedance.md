@@ -3,7 +3,8 @@
 Status: **guidance only — no script yet.** Run it last, after Pedro approved the reel, on
 selected shots, with a cost estimate he approved.
 
-Models on fal (key in `FAL_KEY`; declare it as a required env var for Hermes):
+Models on fal. Hermes hides `FAL_KEY` from scripts, so read the key from `FAL_API_KEY`
+(the name Pedro's Hermes `.env` already uses) and export it as `FAL_KEY` for the fal client:
 - **Seedance 2.5** — `bytedance/seedance-2.5/reference-to-video` (use `task: editing` to
   re-shoot an existing clip), `…/image-to-video`. Up to ~30 s per generation (input
   1.8–30.2 s), 480p or 720p, 9:16 supported, native audio and lip sync to the reference.

@@ -3,7 +3,8 @@
 # every later run only verifies (a few seconds) and rewrites $REEL_CACHE/env.sh.
 #
 # Everything heavy lives in ONE cache folder so it survives between sessions:
-#   Hermes Docker backend -> /workspace/.cache/ps-reel (bind-mounted to the host)
+#   Hermes in Docker (nousresearch/hermes-agent) -> /opt/data/cache/ps-reel (the data volume)
+#   Hermes Docker terminal backend -> /workspace/.cache/ps-reel (bind-mounted to the host)
 #   anywhere else         -> ${XDG_CACHE_HOME:-~/.cache}/ps-reel
 # Override with REEL_CACHE=/some/path.
 #
@@ -32,7 +33,9 @@ SKILL_DIR="$(dirname "$HERE")"
 TEMPLATE="$SKILL_DIR/templates/remotion"
 
 if [ -z "${REEL_CACHE:-}" ]; then
-  if [ -d /workspace ] && [ -w /workspace ]; then
+  if [ -d /opt/data ] && [ -w /opt/data ]; then   # official Hermes image: /opt/data is the persisted volume
+    REEL_CACHE=/opt/data/cache/ps-reel
+  elif [ -d /workspace ] && [ -w /workspace ]; then
     REEL_CACHE=/workspace/.cache/ps-reel
   else
     REEL_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/ps-reel"
