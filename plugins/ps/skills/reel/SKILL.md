@@ -1,6 +1,6 @@
 ---
 name: reel
-description: Turn one talking-head recording into platform-ready vertical reels — transcribe (local Whisper, cached), cut the fluff, storyboard b-roll and motion graphics, render them with headless-Chrome motion graphics in the Claude Design animation format, burn in captions, keep the phone's HDR color, run an automated frame-by-frame QA review, and export for Instagram, X, LinkedIn (English) and TikTok. Resumable via a per-reel checkpoint. Use when Pedro drops a video to edit into a reel/short, asks for motion graphics, captions, b-roll or platform versions of a recording, or runs /ps:reel.
+description: Turn one talking-head recording into platform-ready vertical reels — transcribe (local Whisper, cached) and stop for Pedro to validate the transcript, cut the fluff, storyboard b-roll and motion graphics (stop for Pedro's OK), render them with headless-Chrome motion graphics in the Claude Design animation format, burn in captions, keep the phone's HDR color, run an automated frame-by-frame QA review, and export for Instagram, X, LinkedIn (English) and TikTok. Resumable via a per-reel checkpoint. Use when Pedro drops a video to edit into a reel/short, asks for motion graphics, captions, b-roll or platform versions of a recording, or runs /ps:reel.
 license: MIT
 metadata:
   author: psanders
@@ -10,7 +10,8 @@ metadata:
 # reel
 
 Raw recording in → reviewed, platform-ready reels out. One pipeline, fixed stages, a
-checkpoint per reel, and an automated review so Pedro looks at the result **once**.
+checkpoint per reel, and an automated review so Pedro only looks at three things: the
+**transcript**, the **storyboard** and the **finished reel**.
 
 ## Persona
 
@@ -40,9 +41,9 @@ background (`nohup … > log 2>&1 &`) and poll the log.
 ```
 0. SETUP        setup.sh — idempotent; Whisper model, ffmpeg, fonts, motion renderer cached once
 1. INTAKE       source, languages, platforms, brand, privacy rules → reels/<slug>/reel.json
-2. TRANSCRIBE   transcribe.py → word-level transcript + cleanup hints
+2. TRANSCRIBE   transcribe.py → gate.py transcript → Pedro validates               [gate: always]
 3. CUT          choose segments/speed/framing → cut.py → A-roll + re-timed words   [gate: full mode]
-4. STORYBOARD   beats in reel.json → mg_render.py --stills → storyboard sheet       [gate: full mode]
+4. STORYBOARD   beats → mg_render.py --stills → gate.py storyboard → Pedro OKs     [gate: always]
 5. MOTION       mg_render.py → transparent ProRes 4444 overlays per beat and language
 6. CAPTIONS     captions.py build → fix text, translate → captions.py ass
 7. ASSEMBLE     assemble.py per language → 10-bit SDR master (+ HDR master) + preview
@@ -56,12 +57,22 @@ silently** — mark it `skipped` with a reason.
 
 ### Review modes
 
-- **minimal** (default — Pedro wants to review as little as possible): no stops until
-  stage 9. You judge the cut and storyboard yourself with the same rigor a human
-  reviewer would, the QA stage catches what slipped, and Pedro gets one message: the
-  preview, a 3–5 line summary, and only the decisions that are truly his.
-- **full**: also stop after stage 3 (send `edit/aroll_preview.mp4`) and stage 4 (send
-  the storyboard sheet). Use when Pedro asks, or the reel is high-stakes.
+Three stops are part of every run, in every mode — **wait for Pedro's reply at each**:
+
+1. **Transcript (after stage 2).** Everything downstream (the cut, captions, word-synced
+   graphics) is built on it, and it is how Pedro confirms the whole message is there.
+2. **Storyboard (after stage 4).** The graphics are the most expensive thing to redo.
+3. **Export (stage 9).** The finished reel.
+
+`cut.py` refuses to run until the transcript is approved, and the full `mg_render.py`
+until the storyboard is. Record an approval only after Pedro actually said OK — never
+approve on his behalf, never to get past an error.
+
+- **minimal** (default): only those three stops. You judge the cut yourself with the
+  same rigor a human reviewer would, QA catches what slipped, and the last message is
+  the preview, a 3–5 line summary, and only the decisions that are truly his.
+- **full**: also stop after stage 3 (send `edit/aroll_preview.mp4`). Use when Pedro
+  asks, or the reel is high-stakes.
 
 Escalate mid-run only when blocked: missing source, an editorial call that changes the
 message, or anything touching privacy you can't resolve.
@@ -90,13 +101,31 @@ and fill it (`source` may be relative to the reel folder), create
 `python3 scripts/probe.py <source> --out reels/<slug>/source.json` (resolution, fps, HDR
 kind). HDR (HLG) iPhone footage is the normal case: keep it.
 
-## 2. Transcribe
+## 2. Transcribe — gate
 
 ```bash
 python3 scripts/transcribe.py <source> --out reels/<slug>/transcript --lang es --hotwords "QCobro"
+python3 scripts/gate.py transcript reels/<slug>/reel.json
 ```
-Read `transcript.txt` (numbered segments with times) and `hints.md` (pauses, fillers,
-low-confidence words, likely retakes). Put brand/product names in `--hotwords`.
+Put brand/product names in `--hotwords` and in reel.json `hotwords` (the review uses them
+to flag names the model misheard, e.g. “Phonostep” → Fonoster?).
+
+`gate.py transcript` writes `transcript/review.md`: a completeness check (stretches with
+sound but no words = possibly missing speech, long silences, first/last word vs the end of
+the audio), words to double-check, and the full numbered transcript. **Send it to Pedro and
+stop.** Add your own suggested fixes (accents, obvious mishearings) as a short list above
+it so he can just say OK. Then:
+
+- **Corrections** → `python3 scripts/gate.py fix reels/<slug>/reel.json "Phonostep => Fonoster" "IBR => IVR"`
+  (keeps word timings; logged in `transcript/corrections.json`). Send the changed lines back
+  if they were not exactly what he wrote.
+- **Missing speech** → re-run `transcribe.py` with `--no-vad` (and `--prompt` with the
+  missing sentence's vocabulary), then `gate.py transcript` again. If it's truly not in the
+  audio, tell Pedro — the recording is incomplete, and that's his call.
+- **OK** → `python3 scripts/gate.py approve reels/<slug>/reel.json transcript`.
+
+Only then read `hints.md` (pauses, fillers, retakes) and plan the cut. Captions start from
+the approved transcript, so stage 6 becomes mostly emphasis and translation.
 
 ## 3. Cut
 
@@ -108,7 +137,7 @@ python3 scripts/cut.py reels/<slug>/reel.json
 Check `edit/timeline.json` (total length) and grab 4–6 frames from
 `edit/aroll_preview.mp4` to confirm framing. Full mode: send the preview and stop.
 
-## 4. Storyboard
+## 4. Storyboard — gate
 
 Run the metaprompt in `references/mg-metaprompt.md` (style bible → beat sheet →
 consistency check) and save it as `mg/brief.md`; scene catalogue in
@@ -120,7 +149,13 @@ proofs and the close. Split-layout segments must be fully covered by panel beats
 python3 scripts/mg_render.py reels/<slug>/reel.json --stills
 ```
 Open `mg/storyboard_<lang>.jpg` and do the metaprompt's self-critique pass (pass 4):
-readable with the sound off, one system, nothing covering the face; rewrite the weakest beat. Full mode: send it and stop.
+readable with the sound off, one system, nothing covering the face; rewrite the weakest beat.
+
+Then `python3 scripts/gate.py storyboard reels/<slug>/reel.json` (beat list → `mg/review.md`).
+**Send Pedro the spoken-language sheet plus that list, and stop.** Apply his changes,
+re-run `--stills` (only changed beats re-render) and send the new sheet. On his OK:
+`python3 scripts/gate.py approve reels/<slug>/reel.json storyboard`. Small beat fixes in
+QA later are fine without re-approval — list them in the final summary.
 
 ## 5. Motion graphics
 
@@ -193,10 +228,10 @@ with a cost estimate approved first. Read `references/seedance.md`.
 
 ```
 reels/<slug>/
-  reel.json  checkpoint.md
-  transcript/  transcript.json transcript.txt hints.md audio16k.wav
+  reel.json  checkpoint.md  approvals.json
+  transcript/  transcript.json transcript.txt hints.md review.md corrections.json audio16k.wav
   edit/        pieces/ aroll.mov aroll_preview.mp4 timeline.json words_out.json
-  mg/          scene project (React; src/custom/ is yours) · out/<lang>/*.mov · stills/ · storyboard_<lang>.jpg
+  mg/          scene project (React; src/custom/ is yours) · out/<lang>/*.mov · stills/ · storyboard_<lang>.jpg · review.md
   captions/    <lang>.json <lang>.ass <lang>_mask.ass
   qa/<lang>/   report.md report.json ai_review.md timeline_*.jpg events_*.jpg
   out/         master_<lang>_{sdr,hdr}.mov preview_<lang>.mp4 <slug>_<platform>_<lang>.mp4 exports.json cover_*.jpg
@@ -216,6 +251,7 @@ resume at the first stage that isn't done.
 - **Privacy is a hard gate.** No real customer names, phone numbers or client company
   names in graphics, screenshots or captions. Graphics use invented, generic data.
 - **Graphics explain, they don't decorate.** One idea per beat, with a payoff cue on the key word.
+- **Never skip a gate.** Transcript and storyboard wait for Pedro's OK; approvals are his, not yours.
 - **Never cut inside a word**, never leave a split screen without a panel.
 - **Re-render only what changed** (pieces and beats are cached by content).
 - **Never publish, post or upload** without Pedro's explicit OK for that post.

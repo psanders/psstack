@@ -9,6 +9,8 @@ Writes into --out:
   transcript.json   {language, duration, model, segments:[{id,start,end,text,words:[{w,start,end,p}]}]}
   transcript.txt    one numbered line per segment with times — what you read to plan the cut
   hints.md          cleanup candidates: long pauses, filler words, low-confidence words, likely retakes
+
+Next: gate.py transcript PROJECT/reel.json — Pedro validates the transcript before the cut.
 """
 from __future__ import annotations
 
@@ -61,6 +63,8 @@ def main():
     ap.add_argument("--prompt", default=None, help="initial prompt (style/vocabulary hint)")
     ap.add_argument("--threads", type=int, default=os.cpu_count() or 4)
     ap.add_argument("--beam", type=int, default=5)
+    ap.add_argument("--no-vad", action="store_true",
+                    help="don't drop audio the voice detector thinks is silence (use when the review shows missing speech)")
     a = ap.parse_args()
 
     try:
@@ -82,7 +86,7 @@ def main():
         language=None if a.lang == "auto" else a.lang,
         beam_size=a.beam,
         word_timestamps=True,
-        vad_filter=True,
+        vad_filter=not a.no_vad,
         vad_parameters={"min_silence_duration_ms": 350, "speech_pad_ms": 150},
         condition_on_previous_text=False,
         initial_prompt=a.prompt,
@@ -97,6 +101,14 @@ def main():
         ]
         segs.append({"id": f"S{i:02d}", "start": round(s.start, 3), "end": round(s.end, 3), "text": s.text.strip(), "words": words})
         print(f"[{fmt(s.start)}–{fmt(s.end)}] S{i:02d} {s.text.strip()}", flush=True)
+
+    approvals = out.parent / "approvals.json"
+    if approvals.exists():  # a new transcript needs a new validation
+        import json as _json
+        rec = _json.loads(approvals.read_text(encoding="utf-8"))
+        if rec.pop("transcript", None) is not None:
+            save_json(approvals, rec)
+            print("previous transcript approval cleared — validate the new one", file=sys.stderr)
 
     data = {
         "language": info.language,

@@ -34,7 +34,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from reel_common import (SKILL_DIR, contact_sheet, die, ffmpeg, load_json, load_plan,  # noqa: E402
-                         norm_word, project_dir, resolve_time, save_json, t_value)
+                         norm_word, project_dir, require_gate, resolve_time, save_json, t_value)
 
 TEMPLATE = SKILL_DIR / "templates" / "motion"
 
@@ -254,6 +254,8 @@ def main():
 
     plan = load_plan(a.plan)
     proj = project_dir(a.plan)
+    if not a.stills and not a.cover:
+        require_gate(proj, "storyboard", strict=False)
     mg = prepare(proj)
     tl_path = proj / "edit" / "timeline.json"
     total = load_json(tl_path)["duration"] if tl_path.exists() else 1e9

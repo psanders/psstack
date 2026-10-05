@@ -1,5 +1,5 @@
 // Claude Design–style animation runtime (Stage / Sprite / useTime), our own open
-// implementation — no Remotion, no Anthropic code. A scene is plain React whose every
+// implementation, no third-party video engine. A scene is plain React whose every
 // visual derives from the playhead, so a headless browser can render it frame by frame:
 //
 //   window.__seek(t)      move the playhead to t seconds and wait for the DOM to settle

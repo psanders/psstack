@@ -279,3 +279,42 @@ def grab_frame(video: str | Path, t: float, out: str | Path) -> Path:
     out.parent.mkdir(parents=True, exist_ok=True)
     ffmpeg(["-ss", f"{max(0.0, t):.3f}", "-i", str(video), "-frames:v", "1", "-q:v", "3", str(out)])
     return out
+
+
+# ---------------------------------------------------------------- review gates
+# Two human checkpoints are part of every run: the transcript (stage 2) and the
+# storyboard (stage 4). gate.py records Pedro's approval in approvals.json with a hash of
+# what he saw; later stages refuse to run until the gate is approved.
+GATES = ("transcript", "storyboard")
+
+
+def gate_fingerprint(proj: Path, gate: str) -> str | None:
+    import hashlib
+    if gate == "transcript":
+        p = proj / "transcript" / "transcript.json"
+        if not p.exists():
+            return None
+        segs = load_json(p).get("segments", [])
+        blob = json.dumps([[w["w"], w["start"], w["end"]] for s in segs for w in s["words"]], ensure_ascii=False)
+    else:
+        rp = proj / "reel.json"
+        if not rp.exists():
+            return None
+        blob = json.dumps(load_json(rp).get("beats", []), ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(blob.encode()).hexdigest()[:16]
+
+
+def require_gate(proj: Path, gate: str, strict: bool = True):
+    """Stop unless Pedro approved `gate`. strict: also stop if it changed after approval."""
+    ap = proj / "approvals.json"
+    rec = (load_json(ap) if ap.exists() else {}).get(gate)
+    hint = f"python3 {Path(__file__).resolve().parent}/gate.py {gate} {proj / 'reel.json'}"
+    if not rec:
+        die(f"the {gate} has not been validated by Pedro yet.\n"
+            f"  Send it for review ({hint}), wait for his OK, then record it with\n"
+            f"  python3 {Path(__file__).resolve().parent}/gate.py approve {proj / 'reel.json'} {gate}")
+    if rec.get("fingerprint") != gate_fingerprint(proj, gate):
+        msg = f"the {gate} changed after Pedro approved it"
+        if strict:
+            die(msg + f" — send the changes for review again ({hint}).")
+        print(f"note: {msg} (fine for QA fixes; mention the changes in the final summary)", file=sys.stderr)

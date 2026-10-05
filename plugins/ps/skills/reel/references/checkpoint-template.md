@@ -13,9 +13,9 @@ Review mode: minimal | full
 | :- | :--- | :--- | :--- |
 | 0 | Setup | pending | |
 | 1 | Intake | in-progress | |
-| 2 | Transcribe | pending | |
+| 2 | Transcribe | pending | gate: transcript validated by Pedro |
 | 3 | Cut | pending | |
-| 4 | Storyboard | pending | |
+| 4 | Storyboard | pending | gate: storyboard approved by Pedro |
 | 5 | Motion | pending | |
 | 6 | Captions | pending | |
 | 7 | Assemble | pending | |
@@ -23,7 +23,8 @@ Review mode: minimal | full
 | 9 | Export | pending | |
 | 10 | Seedance | skipped | optional |
 
-Status values: `pending` · `in-progress` · `done` · `skipped` (with reason).
+Status values: `pending` · `in-progress` · `waiting-for-pedro` · `done` · `skipped` (with reason).
+Gates 2 and 4 are never skipped; `gate.py status` shows what's approved.
 
 ## QA rounds
 

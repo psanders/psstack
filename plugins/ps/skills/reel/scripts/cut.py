@@ -25,7 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from reel_common import (HLG_TO_SDR, SETP, TAGS, die, ffmpeg, load_json, load_plan,  # noqa: E402
-                         probe, project_dir, resolve_source, save_json)
+                         probe, project_dir, require_gate, resolve_source, save_json)
 
 
 PIECE_FORMAT = 2  # bump when the piece encoding changes so cached pieces are rebuilt
@@ -147,6 +147,7 @@ def main():
 
     plan = load_plan(a.plan)
     proj = project_dir(a.plan)
+    require_gate(proj, "transcript")
     src = resolve_source(a.plan, plan)
     info = probe(src)
     if not plan.get("segments"):

@@ -21,7 +21,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --check) CHECK=1 ;;
     --skip-model) SKIP_MODEL=1 ;;
-    --skip-motion|--skip-remotion) SKIP_MOTION=1 ;;
+    --skip-motion) SKIP_MOTION=1 ;;
     --model) [ $# -ge 2 ] || { echo "--model needs a value" >&2; exit 2; }; MODEL="$2"; shift ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
@@ -200,6 +200,10 @@ if [ $FONTS_OK -eq 1 ]; then ok "Inter, Poppins, JetBrains Mono in $REEL_CACHE/f
 # in the cache; each reel project symlinks to it.
 MOTION_DIR="$REEL_CACHE/motion"
 BROWSER_EXE="${REEL_BROWSER:-}"
+# Caches from before the motion engine change (v0.25) kept a separate renderer here.
+if [ -d "$REEL_CACHE/remotion" ] && [ $CHECK -eq 0 ]; then
+  rm -rf "$REEL_CACHE/remotion" && echo "  removed the old renderer cache ($REEL_CACHE/remotion)"
+fi
 if [ $SKIP_MOTION -eq 0 ]; then
   echo "motion graphics"
   if ! command -v node >/dev/null 2>&1; then
@@ -227,7 +231,7 @@ if [ $SKIP_MOTION -eq 0 ]; then
     # Headless browser: REEL_BROWSER, a previously downloaded one, Chrome Headless Shell
     # (downloaded once into the cache), then a system Chromium.
     if [ -z "$BROWSER_EXE" ]; then
-      BROWSER_EXE="$(find "$REEL_CACHE/browser" "$REEL_CACHE/remotion/node_modules/.remotion" -type f \( -name chrome-headless-shell -o -name headless_shell \) 2>/dev/null | head -1)"
+      BROWSER_EXE="$(find "$REEL_CACHE/browser" -type f -name chrome-headless-shell 2>/dev/null | head -1)"
     fi
     if [ -z "$BROWSER_EXE" ] && [ $CHECK -eq 0 ] && [ -d "$MOTION_DIR/node_modules/@puppeteer/browsers" ]; then
       echo "  downloading Chrome Headless Shell (once; ~90 MB) ..."
