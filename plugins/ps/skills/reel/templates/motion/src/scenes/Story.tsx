@@ -328,21 +328,24 @@ export const Records: React.FC<P> = ({brand, p, cues, enter, exit}) => {
 // ------------------------------------------------------------------ pill (+ end card)
 // A keyword pill that pops over the speaker; optionally drifts up while a wordmark
 // end card rises from the bottom (cue: brand).
-// props: {text, icon?, y?: number, drift?: boolean, endcard?: {wordmark: "*Q*Cobro", tagline}}
+// props: {text, icon?, y?: number, drift?: boolean, endcard?: {wordmark: "*Q*Cobro", tagline, y?}}
+// The end card replaces the pill (pill fades out on cue "brand") and sits above the
+// platform UI at the bottom of the frame.
 export const Pill: React.FC<P> = ({brand, p, cues}) => {
   const t = useTime();
   const {durationInFrames, fps} = useVideoConfig();
   const dur = durationInFrames / fps;
   const popIn = ramp(t, 0.05, 0.35, EASE.back(2.2));
   const drift = p.drift ? ramp(t, 0.4, 1.6, EASE.linear) : 0;
-  const out = p.drift ? 0 : ramp(t, dur - 0.3, 0.3, EASE.p2out);
   const bAt = cue(cues, 'brand', 0.6);
+  const out = p.endcard ? ramp(t, bAt - 0.1, 0.3, EASE.p2out) : p.drift ? 0 : ramp(t, dur - 0.3, 0.3, EASE.p2out);
+  const cardY = p.endcard?.y ?? 1130;
   const fade = p.endcard ? ramp(t, bAt - 0.1, 0.5, EASE.p2out) : 0;
   const card = p.endcard ? ramp(t, bAt, 0.45) : 0;
   return (
     <div style={{position: 'absolute', inset: 0}}>
       {p.endcard ? (
-        <div style={abs(0, 1300, {width: 1080, height: 620, background: `linear-gradient(180deg, ${alpha(brand.bg, 0)}, ${alpha(brand.bg, 0.9)})`, opacity: fade})} />
+        <div style={abs(0, cardY - 260, {width: 1080, height: 1920 - cardY + 260, background: `linear-gradient(180deg, ${alpha(brand.bg, 0)}, ${alpha(brand.bg, 0.92)} 45%)`, opacity: fade})} />
       ) : null}
       <div style={{...abs(540, (p.y ?? 1260) - 30 * drift - 20 * out), transform: `translateX(-50%) scale(${0.6 + 0.4 * popIn})`, opacity: Math.min(1, popIn * 1.5) * (1 - out),
         display: 'flex', alignItems: 'center', gap: 20, padding: '24px 40px', borderRadius: 999, background: alpha(brand.bg, 0.82),
@@ -352,8 +355,7 @@ export const Pill: React.FC<P> = ({brand, p, cues}) => {
         {p.text}
       </div>
       {p.endcard ? (
-        <div style={{...abs(0, 1520 + (1 - card) * 30), width: 1080, padding: '40px 0 60px', textAlign: 'center', opacity: card,
-          background: `linear-gradient(180deg, ${alpha(brand.bg, 0)} 0%, ${alpha(brand.bg, 0.85)} 35%, ${alpha(brand.bg, 0.95)} 100%)`,
+        <div style={{...abs(0, cardY + (1 - card) * 30), width: 1080, padding: '40px 0 60px', textAlign: 'center', opacity: card,
           fontFamily: brand.fontDisplay, fontWeight: 800, fontSize: 64, letterSpacing: -1, color: brand.text}}>
           <RichText brand={brand} text={p.endcard.wordmark ?? ''} />
           {p.endcard.tagline ? <small style={{display: 'block', fontSize: 26, fontWeight: 600, color: '#cfd5de', letterSpacing: 1, marginTop: 6}}>{p.endcard.tagline}</small> : null}

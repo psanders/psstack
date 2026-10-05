@@ -22,13 +22,14 @@ reel.json "audio": {"loudness": -14, "highpass": 70, "sfx": "auto"|false, "sfx_d
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from reel_common import (HLG_GRAPHICS_CCM, HLG_TO_SDR, SETP, TAGS, die, ffmpeg,  # noqa: E402
-                         load_json, load_plan, project_dir, require_fonts)
+                         load_json, load_plan, project_dir, require_fonts, run, tool)
 
 SFX = {
     # procedural, license-free one-shots
@@ -53,6 +54,20 @@ def sfx_files(cache: Path) -> dict[str, Path]:
             ffmpeg(["-f", "lavfi", "-i", graph, "-ar", "48000", "-ac", "2", str(f)])
         out[name] = f
     return out
+
+
+def loudnorm_2pass(src: Path, audio: dict) -> str:
+    """Measure first, then normalize linearly: lands on the target (single-pass loudnorm
+    tends to undershoot by 1-2 LU on short clips)."""
+    base = f"loudnorm=I={audio['loudness']}:TP=-1.5:LRA=11"
+    p = run([tool("ffmpeg"), "-hide_banner", "-nostdin", "-i", str(src), "-vn", "-af",
+             f"highpass=f={audio['highpass']},{base}:print_format=json", "-f", "null", "-"], check=False)
+    try:
+        m = json.loads(p.stderr[p.stderr.rindex("{"):p.stderr.rindex("}") + 1])
+        return (f"{base}:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
+                f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
+    except (ValueError, KeyError):
+        return base
 
 
 def wanted_targets(plan: dict, lang: str, source_hdr: bool, choice: str) -> list[str]:
@@ -155,7 +170,7 @@ def main():
 
     # ---- audio: voice chain, optional sfx and music, final limiter (true peak ≤ −1 dBTP)
     n_in = 1 + len(beats)
-    fc.append(f"[0:a]highpass=f={audio['highpass']},loudnorm=I={audio['loudness']}:TP=-1.5:LRA=11,aresample=48000[vo]")
+    fc.append(f"[0:a]highpass=f={audio['highpass']},{loudnorm_2pass(proj / 'edit' / 'aroll.mov', audio)},aresample=48000[vo]")
     mix = ["[voice]"]
     if audio.get("sfx") and not a.no_sfx and beats:
         files = sfx_files(Path(os.environ.get("REEL_CACHE", proj / ".cache")) / "sfx")

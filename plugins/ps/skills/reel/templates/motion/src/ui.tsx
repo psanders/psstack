@@ -149,8 +149,9 @@ export const Frame: React.FC<{
 
   if (layout === 'panel') {
     const h = height / 2;
-    // the panel wipes in from the seam at the start of a run of panel beats, and back out at the end
-    const reveal = Math.min(inP, out);
+    // The panel appears with the cut to the split layout (a wipe would expose the black
+    // padding above the speaker); the scene content does its own entrance and exit.
+    const reveal = 1;
     const seamGlow = interpolate(frame, [0, 0.5 * fps], [0, 1], {extrapolateRight: 'clamp'}) * out;
     return (
       <AbsoluteFill>

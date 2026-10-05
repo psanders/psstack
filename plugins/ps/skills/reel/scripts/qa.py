@@ -187,7 +187,9 @@ def main():
                 content[max(0, seam - 3):seam + 3, :] = False
                 content[seam + 3:, :] = False
             ab = bbox(al > 128)  # solid parts only — soft drop shadows don't count
-            cb = bbox(content) if b["layout"] != "overlay" else ab
+            # edges/safe zone are judged on visible content (text, icons, cards' bright parts):
+            # full-bleed fades and dark backdrops are allowed to touch the frame
+            cb = bbox(content)
             gfx[k].append((b["id"], b["layout"], ab, cb))
             settled = 0.45 <= j / fps <= b["duration"] - 0.45
             if not settled or cb is None:
@@ -241,7 +243,7 @@ def main():
                 if not fb:
                     continue
                 x0, y0, x1, y1 = fb
-                if y0 - 0.35 * (y1 - y0) < top_limit:  # hair / cap above the detected face box
+                if y0 - 0.2 * (y1 - y0) < top_limit:  # hair / cap above the detected face box
                     crop_t.append(grid[k])
                 if x0 < 0 or x1 > W:
                     side_t.append(grid[k])
@@ -254,10 +256,12 @@ def main():
                     iss.add("WARN", "framing", f"segment {seg['i']}", tt, "face touches the side of the frame", "adjust cx")
 
     # ------------------------------------------------------------ collisions
+    cut_times = [s["start"] for s in tl["segments"][1:]]
     for k in range(n):
         t = grid[k]
         cb = cap_box[k]
-        fb = face_box[k]
+        # frames right at a cut can come from either side of it — don't judge faces there
+        fb = None if any(abs(t - c) < 0.12 for c in cut_times) else face_box[k]
         for bid, layout, ab, content in gfx[k]:
             if cb and layout in ("overlay", "full") and inter(cb, ab if layout == "overlay" else content) > 0:
                 if layout == "full" and raw_beats.get(bid, {}).get("captions") is not True:
@@ -296,6 +300,15 @@ def main():
                 t += 0.2
 
     # ------------------------------------------------------------ picture + audio
+    # split segments: the top half must never show the black padding (panel late/early, wipes)
+    splits = [(s["start"], s["end"]) for s in tl["segments"] if s["layout"] == "split"]
+    if splits:
+        for k, fr in enumerate(frames(["-i", str(preview), "-vf", f"fps={fps},crop=iw:ih/2:0:0,scale=64:56,format=gray"], 64, 56, 1)):
+            t = k / fps
+            # any black band (8 rows ≈ 70 px) in the top half — catches partial wipes too
+            bands = [float(fr[r:r + 8].mean()) for r in range(0, 56, 8)]
+            if any(a + 0.02 <= t <= b - 0.02 for a, b in splits) and min(bands) < 6:
+                iss.add("ERROR", "split", "black top half", t, "the top half is black during a split segment", "start the panel at the split's first frame; no panel wipe")
     p = run([tool("ffmpeg"), "-hide_banner", "-nostdin", "-i", str(preview), "-vf",
              "blackdetect=d=0.12:pix_th=0.03,freezedetect=n=-55dB:d=1.2", "-an", "-f", "null", "-"], check=False)
     for m in re.finditer(r"black_start:([\d.]+) black_end:([\d.]+)", p.stderr):
