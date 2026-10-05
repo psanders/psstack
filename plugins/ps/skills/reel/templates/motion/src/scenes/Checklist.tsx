@@ -1,11 +1,11 @@
 // Items that check off one by one (circle fills, tick draws itself).
 // props: {title?, items: [{label, sub?, at?, state?: 'ok'|'fail'}]}
-import {evolvePath} from '@remotion/paths';
+import {evolvePath} from '../animations';
 import React from 'react';
 import {alpha, Brand} from '../brand';
 import {between, enter, enterX, staggerAt, useTime} from '../motion';
 import {Card} from '../ui';
-import {spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {spring, useCurrentFrame, useVideoConfig} from '../animations';
 
 const TICK = 'M 14 27 L 23 36 L 40 17';
 const CROSS = 'M 17 17 L 37 37 M 37 17 L 17 37';

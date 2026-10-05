@@ -1,7 +1,7 @@
 // Thumbnail / cover still: headline, chips, and up to three fanned phone frames
 // showing stills from the reel (speaker frames + motion-graphics frames).
 import React from 'react';
-import {AbsoluteFill, Img, staticFile} from 'remotion';
+import {AbsoluteFill, Img, staticFile} from './animations';
 import {alpha, resolveBrand} from './brand';
 import type {CoverProps} from './schema';
 import {Background, fitSize, Kicker, RichText} from './ui';

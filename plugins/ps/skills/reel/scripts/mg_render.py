@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the motion-graphics beats in reel.json with Remotion.
+"""Render the motion-graphics beats in reel.json (Claude Design–style scenes, headless Chrome).
 
   mg_render.py PROJECT/reel.json                 render every beat, every language
   mg_render.py PROJECT/reel.json --stills        one PNG per beat + storyboard sheet (fast; for the storyboard review)
@@ -15,8 +15,10 @@ Beat fields (reel.json "beats"):
   props (scene props; any string may be {"es": "...", "en": "..."}), still_at (seconds into the beat).
 
 Outputs (PROJECT/mg/): out/<lang>/<id>.mov (ProRes 4444 + alpha), out/<lang>/manifest.json,
-stills/<lang>/<id>.png, storyboard_<lang>.jpg. The Remotion project lives in PROJECT/mg/ —
-`npx remotion studio` there gives a live preview; bespoke scenes go in mg/src/custom/.
+stills/<lang>/<id>.png, storyboard_<lang>.jpg. The scene project lives in PROJECT/mg/ (React,
+Stage/Sprite/useTime runtime in src/animations.tsx); bespoke scenes go in mg/src/custom/.
+Beat scene "html" plays any Stage-based HTML animation (e.g. a Claude Design export that exposes
+window.__seek): props {"src": "path/to/index.html"}.
 """
 from __future__ import annotations
 
@@ -34,13 +36,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from reel_common import (SKILL_DIR, contact_sheet, die, ffmpeg, load_json, load_plan,  # noqa: E402
                          norm_word, project_dir, resolve_time, save_json, t_value)
 
-TEMPLATE = SKILL_DIR / "templates" / "remotion"
+TEMPLATE = SKILL_DIR / "templates" / "motion"
 
 
 def prepare(proj: Path) -> Path:
     mg = proj / "mg"
     (mg / "src").mkdir(parents=True, exist_ok=True)
-    for name in ["package.json", "tsconfig.json", "remotion.config.ts", "render.mjs"]:
+    for name in ["package.json", "tsconfig.json", "index.html", "build.mjs", "render.mjs"]:
         shutil.copy2(TEMPLATE / name, mg / name)
     for item in (TEMPLATE / "src").iterdir():
         dst = mg / "src" / item.name
@@ -60,9 +62,9 @@ def prepare(proj: Path) -> Path:
     for f in fonts.glob("*.ttf"):
         if not (mg / "public" / "fonts" / f.name).exists():
             shutil.copy2(f, mg / "public" / "fonts" / f.name)
-    nm_src = Path(os.environ.get("REEL_REMOTION", "")) / "node_modules"
+    nm_src = Path(os.environ.get("REEL_MOTION", "")) / "node_modules"
     if not nm_src.is_dir():
-        die("REEL_REMOTION/node_modules missing — run setup.sh (without --skip-remotion)")
+        die("REEL_MOTION/node_modules missing — run setup.sh (without --skip-motion)")
     nm = mg / "node_modules"
     if nm.is_symlink() or not nm.exists():
         if nm.is_symlink():
@@ -72,7 +74,7 @@ def prepare(proj: Path) -> Path:
 
 
 def code_hash(mg: Path) -> str:
-    """Hash of the Remotion sources (template + custom scenes): a change re-renders every beat."""
+    """Hash of the scene sources (template + custom scenes): a change re-renders every beat."""
     h = hashlib.sha1()
     for f in sorted((mg / "src").rglob("*")):
         if f.is_file():
@@ -82,7 +84,10 @@ def code_hash(mg: Path) -> str:
 
 
 def job_hash(job: dict, code: str) -> str:
-    return hashlib.sha1((code + json.dumps(job["props"], sort_keys=True) + str(job.get("frame"))).encode()).hexdigest()[:16]
+    extra = ""
+    if job.get("url"):
+        extra = str(Path(job["url"]).stat().st_mtime)
+    return hashlib.sha1((code + json.dumps(job.get("props") or job.get("url"), sort_keys=True) + str(job.get("frame")) + extra).encode()).hexdigest()[:16]
 
 
 def up_to_date(job: dict, code: str) -> bool:
@@ -165,7 +170,7 @@ def build_beats(plan, words, total, lang, spoken):
         dur = max(0.2, min(dur, total - start))
         props = localize(b.get("props", {}), lang)
         beat = {
-            "id": b["id"], "scene": b["scene"], "layout": b.get("layout", "overlay"),
+            "composition": "Beat", "id": b["id"], "scene": b["scene"], "layout": b.get("layout", "overlay"),
             "position": b.get("position", "bottom"), "duration": round(dur, 3),
             "fps": plan["fps"], "width": plan["size"][0], "height": plan["size"][1],
             "lang": lang, "brand": plan.get("brand", "neutral"),
@@ -208,12 +213,30 @@ def storyboard(proj: Path, mg: Path, lang: str, beats):
     return contact_sheet(tiles, mg / f"storyboard_{lang}.jpg", cols=4, tw=360, th=640)
 
 
+def job_for(beat: dict, proj: Path, kind: str, out: Path, frame: int | None = None) -> dict:
+    """Our scenes render from props; scene "html" plays an external Stage-based HTML file."""
+    if beat["scene"] == "html":
+        src = Path(beat["props"].get("src", ""))
+        src = src if src.is_absolute() else proj / src
+        if not src.exists():
+            die(f"beat {beat['id']}: html src not found: {src}")
+        job = {"url": str(src), "duration": beat["duration"], "kind": kind, "out": str(out)}
+    else:
+        job = {"props": beat, "kind": kind, "out": str(out)}
+    if frame is not None:
+        job["frame"] = frame
+    return job
+
+
 def run_jobs(mg: Path, jobs, concurrency):
     jf = mg / "jobs.json"
     save_json(jf, jobs)
     env = dict(os.environ)
     if concurrency:
         env["REEL_CONCURRENCY"] = str(concurrency)
+    b = subprocess.run(["node", "build.mjs"], cwd=mg, env=env)
+    if b.returncode != 0:
+        die("scene bundle failed (see esbuild errors above) — check mg/src")
     p = subprocess.run(["node", "render.mjs", str(jf)], cwd=mg, env=env)
     if p.returncode != 0:
         die("some renders failed (see FAIL lines above)")
@@ -252,7 +275,8 @@ def main():
         props = {"width": cov.get("width", 1080), "height": cov.get("height", 1920), "brand": plan.get("brand", "neutral"),
                  "kicker": cov.get("kicker"), "title": cov["title"], "chips": cov.get("chips", []),
                  "images": imgs, "layout": cov.get("layout")}
-        run_jobs(mg, [{"composition": "Cover", "props": props, "out": str(out), "kind": "still"}], a.concurrency)
+        props["composition"] = "Cover"
+        run_jobs(mg, [{"props": props, "out": str(out), "kind": "still"}], a.concurrency)
         print(f"cover → {out}")
         return
 
@@ -271,12 +295,11 @@ def main():
                 continue
             if a.stills:
                 fr = float(raw.get("still_at", min(beat["duration"] * 0.6, beat["duration"] - 0.2)))
-                jobs.append({"composition": "Beat", "props": beat, "kind": "still",
-                             "frame": max(0, int(fr * plan["fps"])), "out": str(mg / "stills" / lang / f"{beat['id']}.png")})
+                jobs.append(job_for(beat, proj, "still", mg / "stills" / lang / f"{beat['id']}.png", max(0, int(fr * plan["fps"]))))
             elif not shared:
-                jobs.append({"composition": "Beat", "props": beat, "kind": "video", "out": str(vid)})
+                jobs.append(job_for(beat, proj, "video", vid))
             else:  # shared with the spoken language: make sure that render exists
-                jobs.append({"composition": "Beat", "props": spoken_beats[beat["id"]], "kind": "video", "out": str(vid)})
+                jobs.append(job_for(spoken_beats[beat["id"]], proj, "video", vid))
         code = code_hash(mg)
         todo = [j for j in jobs if only or not up_to_date(j, code)]
         if len(todo) < len(jobs):

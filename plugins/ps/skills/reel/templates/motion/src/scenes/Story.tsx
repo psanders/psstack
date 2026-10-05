@@ -4,9 +4,9 @@
 import React from 'react';
 import {alpha, Brand} from '../brand';
 import {cue, EASE, pulse, ramp, sceneIO, shake, useTime} from '../motion';
-import {getLength} from '@remotion/paths';
+import {getLength} from '../animations';
 import {Icon, RichText} from '../ui';
-import {useVideoConfig} from 'remotion';
+import {useVideoConfig} from '../animations';
 
 type P = {brand: Brand; p: Record<string, any>; cues?: Record<string, number>; enter?: boolean; exit?: boolean};
 

@@ -1,7 +1,12 @@
 # Motion graphics
 
-Rendered with Remotion from `templates/remotion` (copied into `reels/<slug>/mg/`). Each
-**beat** in reel.json becomes one transparent ProRes 4444 clip laid over the A-roll.
+Scenes use the **Claude Design animation format**: React components on a `<Stage>`, timed
+with `<Sprite start end>`, every movement derived from `useTime()` (runtime:
+`templates/motion/src/animations.tsx`, our own open implementation). `render.mjs` opens each
+beat in headless Chrome, seeks the playhead frame by frame (`window.__seek`) and captures it
+with a transparent background. Each **beat** in reel.json becomes one ProRes 4444 clip with
+alpha, laid over the A-roll. The format is plain web code — any model can write it, any
+browser plays it.
 
 ## What separates polished from amateur
 
@@ -98,8 +103,10 @@ component in `mg/src/custom/` and register it in `mg/src/custom/index.ts`. Build
 (`rand(seed)` / `noise2D`, never `Math.random()`), no network assets, sizes in px for a
 1080×1920 canvas, everything animated from `useCurrentFrame()`.
 
-Live preview: `cd reels/<slug>/mg && npx remotion studio` (pick the Beat composition and
-paste a beat's props from `mg/jobs.json`).
+Claude Design animations: export the project as HTML and add a beat
+`{"scene": "html", "layout": "full"|"panel", "props": {"src": "mg/imports/<name>/index.html"}}`.
+It must expose `window.__seek(t)` (Stage-based projects do). A solid page background renders
+opaque, so use it as a cutaway/panel; a transparent one works as an overlay.
 
 ## Rendering
 

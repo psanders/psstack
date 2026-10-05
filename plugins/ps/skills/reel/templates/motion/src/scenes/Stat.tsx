@@ -1,7 +1,7 @@
 // A number that counts up, with a progress ring that draws around it.
 // props: {value: number, from?: number, prefix?, suffix?, decimals?, label, sublabel?, ring?: 0..1, at?}
 import React from 'react';
-import {Easing} from 'remotion';
+import {Easing} from '../animations';
 import {alpha, Brand} from '../brand';
 import {between, enter, useSpringAt, useTime} from '../motion';
 

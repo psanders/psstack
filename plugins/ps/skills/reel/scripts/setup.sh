@@ -8,20 +8,20 @@
 #   anywhere else         -> ${XDG_CACHE_HOME:-~/.cache}/ps-reel
 # Override with REEL_CACHE=/some/path.
 #
-# Usage: setup.sh [--check] [--skip-model] [--skip-remotion] [--model NAME]
+# Usage: setup.sh [--check] [--skip-model] [--skip-motion] [--model NAME]
 #   --check          report only, install nothing, exit 1 if something is missing
 #   --skip-model     don't download the Whisper model
-#   --skip-remotion  don't install the Remotion workspace (no motion graphics)
+#   --skip-motion    don't install the motion-graphics renderer
 #   --model NAME     faster-whisper model (default: large-v3-turbo, or $REEL_WHISPER_MODEL)
 set -uo pipefail
 
-CHECK=0; SKIP_MODEL=0; SKIP_REMOTION=0
+CHECK=0; SKIP_MODEL=0; SKIP_MOTION=0
 MODEL="${REEL_WHISPER_MODEL:-large-v3-turbo}"
 while [ $# -gt 0 ]; do
   case "$1" in
     --check) CHECK=1 ;;
     --skip-model) SKIP_MODEL=1 ;;
-    --skip-remotion) SKIP_REMOTION=1 ;;
+    --skip-motion|--skip-remotion) SKIP_MOTION=1 ;;
     --model) [ $# -ge 2 ] || { echo "--model needs a value" >&2; exit 2; }; MODEL="$2"; shift ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
@@ -30,7 +30,7 @@ done
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_DIR="$(dirname "$HERE")"
-TEMPLATE="$SKILL_DIR/templates/remotion"
+TEMPLATE="$SKILL_DIR/templates/motion"
 
 if [ -z "${REEL_CACHE:-}" ]; then
   if [ -d /opt/data ] && [ -w /opt/data ]; then   # official Hermes image: /opt/data is the persisted volume
@@ -176,7 +176,7 @@ if [ -s "$YUNET" ] && [ "$(head -c 200 "$YUNET" | grep -c 'git-lfs')" = 0 ]; the
 else bad "YuNet face model missing ($YUNET)"; fi
 
 # ---------------------------------------------------------------- fonts
-# Captions (libass) and motion graphics (Remotion) read the same TTFs, so the
+# Captions (libass) and motion graphics (headless Chrome) read the same TTFs, so the
 # look is identical everywhere and nothing depends on system fonts.
 echo "fonts"
 GF="https://raw.githubusercontent.com/google/fonts/main/ofl"
@@ -194,51 +194,53 @@ done
 fetch_font "JetBrainsMono.ttf" "$GF/jetbrainsmono/JetBrainsMono%5Bwght%5D.ttf" || FONTS_OK=0
 if [ $FONTS_OK -eq 1 ]; then ok "Inter, Poppins, JetBrains Mono in $REEL_CACHE/fonts"; else bad "fonts missing in $REEL_CACHE/fonts"; fi
 
-# ---------------------------------------------------------------- Remotion
-# One shared node_modules in the cache; each reel project symlinks to it.
-REMOTION_DIR="$REEL_CACHE/remotion"
-BROWSER_EXE="${REMOTION_BROWSER_EXECUTABLE:-}"
-CHROME_MODE="${REMOTION_CHROME_MODE:-}"
-if [ $SKIP_REMOTION -eq 0 ]; then
-  echo "remotion"
+# ---------------------------------------------------------------- motion graphics
+# Claude Design–style scenes (React + Stage/Sprite/useTime) bundled with esbuild and
+# rendered frame by frame by puppeteer-core in headless Chrome. One shared node_modules
+# in the cache; each reel project symlinks to it.
+MOTION_DIR="$REEL_CACHE/motion"
+BROWSER_EXE="${REEL_BROWSER:-}"
+if [ $SKIP_MOTION -eq 0 ]; then
+  echo "motion graphics"
   if ! command -v node >/dev/null 2>&1; then
-    bad "node not found (Remotion needs Node 18+)"
+    bad "node not found (needs Node 18+)"
   else
-    mkdir -p "$REMOTION_DIR"
+    mkdir -p "$MOTION_DIR"
     WANT="$( (sha1sum "$TEMPLATE/package.json" 2>/dev/null || shasum "$TEMPLATE/package.json") | cut -c1-12)"
-    HAVE="$(cat "$REMOTION_DIR/.pkg-hash" 2>/dev/null || true)"
-    if [ "$WANT" != "$HAVE" ] || [ ! -d "$REMOTION_DIR/node_modules/remotion" ]; then
+    HAVE="$(cat "$MOTION_DIR/.pkg-hash" 2>/dev/null || true)"
+    if [ "$WANT" != "$HAVE" ] || [ ! -d "$MOTION_DIR/node_modules/puppeteer-core" ]; then
       if [ $CHECK -eq 0 ]; then
-        echo "  npm install (once; ~2 min) ..."
-        cp "$TEMPLATE/package.json" "$REMOTION_DIR/package.json"
-        if (cd "$REMOTION_DIR" && npm install --no-audit --no-fund --loglevel=error >>"$LOG" 2>&1); then
-          echo "$WANT" >"$REMOTION_DIR/.pkg-hash"
+        echo "  npm install (once; ~1 min) ..."
+        cp "$TEMPLATE/package.json" "$MOTION_DIR/package.json"
+        if (cd "$MOTION_DIR" && npm install --no-audit --no-fund --loglevel=error >>"$LOG" 2>&1); then
+          echo "$WANT" >"$MOTION_DIR/.pkg-hash"
         else
           bad "npm install failed — see $LOG"
         fi
       fi
     fi
-    if [ -d "$REMOTION_DIR/node_modules/remotion" ]; then
-      ok "remotion $(node -p "require('$REMOTION_DIR/node_modules/remotion/package.json').version")"
+    if [ -d "$MOTION_DIR/node_modules/puppeteer-core" ] && [ -d "$MOTION_DIR/node_modules/esbuild" ]; then
+      ok "react + esbuild + puppeteer-core"
     else
-      bad "remotion not installed"
+      bad "motion packages not installed"
     fi
-    # Headless browser: Remotion's own Chrome Headless Shell first, then a
-    # system Chromium (needs chrome-mode=chrome-for-testing).
-    if [ -z "$BROWSER_EXE" ] && [ -d "$REMOTION_DIR/node_modules/remotion" ] && [ $CHECK -eq 1 ]; then
-      warn "browser not checked in --check mode (run setup without --check)"
-    elif [ -z "$BROWSER_EXE" ] && [ -d "$REMOTION_DIR/node_modules/remotion" ]; then
-      if (cd "$REMOTION_DIR" && npx --no-install remotion browser ensure >>"$LOG" 2>&1); then
-        ok "chrome-headless-shell ready"
-      else
-        for c in chromium chromium-browser google-chrome google-chrome-stable; do
-          if command -v "$c" >/dev/null 2>&1; then BROWSER_EXE="$(command -v "$c")"; CHROME_MODE=chrome-for-testing; break; fi
-        done
-        if [ -n "$BROWSER_EXE" ]; then warn "using system browser $BROWSER_EXE"; else bad "no headless browser for Remotion — see $LOG"; fi
-      fi
-    elif [ -n "$BROWSER_EXE" ]; then
-      ok "browser $BROWSER_EXE (from REMOTION_BROWSER_EXECUTABLE)"
+    # Headless browser: REEL_BROWSER, a previously downloaded one, Chrome Headless Shell
+    # (downloaded once into the cache), then a system Chromium.
+    if [ -z "$BROWSER_EXE" ]; then
+      BROWSER_EXE="$(find "$REEL_CACHE/browser" "$REEL_CACHE/remotion/node_modules/.remotion" -type f \( -name chrome-headless-shell -o -name headless_shell \) 2>/dev/null | head -1)"
     fi
+    if [ -z "$BROWSER_EXE" ] && [ $CHECK -eq 0 ] && [ -d "$MOTION_DIR/node_modules/@puppeteer/browsers" ]; then
+      echo "  downloading Chrome Headless Shell (once; ~90 MB) ..."
+      (cd "$MOTION_DIR" && npx --no-install @puppeteer/browsers install chrome-headless-shell@stable --path "$REEL_CACHE/browser" >>"$LOG" 2>&1)
+      BROWSER_EXE="$(find "$REEL_CACHE/browser" -type f -name chrome-headless-shell 2>/dev/null | head -1)"
+    fi
+    if [ -z "$BROWSER_EXE" ]; then
+      for c in chromium chromium-browser google-chrome google-chrome-stable; do
+        if command -v "$c" >/dev/null 2>&1; then BROWSER_EXE="$(command -v "$c")"; break; fi
+      done
+    fi
+    if [ -n "$BROWSER_EXE" ] && [ -x "$BROWSER_EXE" ]; then ok "browser $BROWSER_EXE"
+    else bad "no headless Chrome for the motion graphics — see $LOG (or set REEL_BROWSER)"; BROWSER_EXE=""; fi
   fi
 fi
 
@@ -252,12 +254,11 @@ fi
   echo "# generated by ps-reel setup.sh — source me"
   echo "export REEL_CACHE='$REEL_CACHE'"
   echo "export REEL_FONTS='$REEL_CACHE/fonts'"
-  echo "export REEL_REMOTION='$REMOTION_DIR'"
+  echo "export REEL_MOTION='$MOTION_DIR'"
   echo "export REEL_PY='$PY'"
   echo "export REEL_WHISPER_MODEL='$MODEL_ENV'"
   [ -n "$FFDIR" ] && echo "export PATH='$FFDIR':\"\$PATH\""
-  [ -n "$BROWSER_EXE" ] && echo "export REMOTION_BROWSER_EXECUTABLE='$BROWSER_EXE'"
-  [ -n "$CHROME_MODE" ] && echo "export REMOTION_CHROME_MODE='$CHROME_MODE'"
+  [ -n "$BROWSER_EXE" ] && echo "export REEL_BROWSER='$BROWSER_EXE'"
 } >"$REEL_CACHE/env.sh"
 
 echo

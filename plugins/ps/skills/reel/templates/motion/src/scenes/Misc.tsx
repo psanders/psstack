@@ -1,6 +1,6 @@
 // Smaller scenes: channel chips, lower third, call to action.
 import React from 'react';
-import {spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {spring, useCurrentFrame, useVideoConfig} from '../animations';
 import {alpha, Brand} from '../brand';
 import {between, enter, enterX, staggerAt, useSpringAt, useTime} from '../motion';
 import {Icon, RichText} from '../ui';

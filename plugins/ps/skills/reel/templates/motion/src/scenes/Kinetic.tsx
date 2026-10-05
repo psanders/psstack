@@ -2,7 +2,7 @@
 // props: {text?: string, size?: number, align?: 'center'|'left'}
 // tokens (from mg_render): [{t, emph, at}] — `at` = when the word is spoken.
 import React from 'react';
-import {spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {spring, useCurrentFrame, useVideoConfig} from '../animations';
 import {alpha, Brand} from '../brand';
 import {SPRINGS, tokenize} from '../motion';
 import {fitSize} from '../ui';

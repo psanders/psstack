@@ -28,7 +28,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import React, {CSSProperties, ReactNode} from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from './animations';
 import {alpha, Brand} from './brand';
 import {segments, SPRINGS, useExit, useSpringAt} from './motion';
 

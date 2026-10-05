@@ -1,7 +1,7 @@
 // One storyboard beat = one composition render. Dispatches to a scene and
 // wraps it in the layout frame (overlay / panel / full).
 import React from 'react';
-import {AbsoluteFill} from 'remotion';
+import {AbsoluteFill} from './animations';
 import {resolveBrand} from './brand';
 import {CUSTOM} from './custom';
 import {Checklist} from './scenes/Checklist';

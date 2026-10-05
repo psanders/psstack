@@ -1,7 +1,7 @@
 // Motion vocabulary shared by every scene. Keep scenes on these presets so a
 // reel feels like one system: same springs, same entrances, same exits.
 import {CSSProperties} from 'react';
-import {Easing, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {Easing, interpolate, spring, useCurrentFrame, useVideoConfig} from './animations';
 
 export const SPRINGS = {
   // UI elements landing: quick, tiny overshoot
@@ -9,7 +9,7 @@ export const SPRINGS = {
   // big type and emphasis: visible bounce
   pop: {damping: 11, stiffness: 190, mass: 0.6},
   // panels, camera, backgrounds: no overshoot
-  smooth: {damping: 200, stiffness: 120, mass: 1},
+  smooth: {damping: 22, stiffness: 120, mass: 1}, // critically damped
 } as const;
 
 export type SpringName = keyof typeof SPRINGS;

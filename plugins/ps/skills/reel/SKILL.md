@@ -1,6 +1,6 @@
 ---
 name: reel
-description: Turn one talking-head recording into platform-ready vertical reels — transcribe (local Whisper, cached), cut the fluff, storyboard b-roll and motion graphics, render them with Remotion, burn in captions, keep the phone's HDR color, run an automated frame-by-frame QA review, and export for Instagram, X, LinkedIn (English) and TikTok. Resumable via a per-reel checkpoint. Use when Pedro drops a video to edit into a reel/short, asks for motion graphics, captions, b-roll or platform versions of a recording, or runs /ps:reel.
+description: Turn one talking-head recording into platform-ready vertical reels — transcribe (local Whisper, cached), cut the fluff, storyboard b-roll and motion graphics, render them with headless-Chrome motion graphics in the Claude Design animation format, burn in captions, keep the phone's HDR color, run an automated frame-by-frame QA review, and export for Instagram, X, LinkedIn (English) and TikTok. Resumable via a per-reel checkpoint. Use when Pedro drops a video to edit into a reel/short, asks for motion graphics, captions, b-roll or platform versions of a recording, or runs /ps:reel.
 license: MIT
 metadata:
   author: psanders
@@ -38,7 +38,7 @@ background (`nohup … > log 2>&1 &`) and poll the log.
 ## The loop
 
 ```
-0. SETUP        setup.sh — idempotent; Whisper model, ffmpeg, fonts, Remotion cached once
+0. SETUP        setup.sh — idempotent; Whisper model, ffmpeg, fonts, motion renderer cached once
 1. INTAKE       source, languages, platforms, brand, privacy rules → reels/<slug>/reel.json
 2. TRANSCRIBE   transcribe.py → word-level transcript + cleanup hints
 3. CUT          choose segments/speed/framing → cut.py → A-roll + re-timed words   [gate: full mode]
@@ -130,8 +130,9 @@ python3 scripts/mg_render.py reels/<slug>/reel.json --only b03 # force one beat
 ```
 Renders are cached by content: re-running re-renders only beats whose props or scene code
 changed. Beats without localized text render once and are shared across languages. Bespoke
-scenes go in `mg/src/custom/` (never overwritten); `npx remotion studio` in `mg/` gives
-a live preview.
+scenes go in `mg/src/custom/` (never overwritten), written in the Claude Design animation
+format (`Stage` / `Sprite` / `useTime`). To use an animation made in Claude Design, export it as
+HTML and add a beat with `"scene": "html"`, `props.src` pointing at it.
 
 ## 6. Captions
 
@@ -195,7 +196,7 @@ reels/<slug>/
   reel.json  checkpoint.md
   transcript/  transcript.json transcript.txt hints.md audio16k.wav
   edit/        pieces/ aroll.mov aroll_preview.mp4 timeline.json words_out.json
-  mg/          Remotion project (src/custom/ is yours) · out/<lang>/*.mov · stills/ · storyboard_<lang>.jpg
+  mg/          scene project (React; src/custom/ is yours) · out/<lang>/*.mov · stills/ · storyboard_<lang>.jpg
   captions/    <lang>.json <lang>.ass <lang>_mask.ass
   qa/<lang>/   report.md report.json ai_review.md timeline_*.jpg events_*.jpg
   out/         master_<lang>_{sdr,hdr}.mov preview_<lang>.mp4 <slug>_<platform>_<lang>.mp4 exports.json cover_*.jpg
