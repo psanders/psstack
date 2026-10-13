@@ -1,0 +1,14 @@
+{
+  "name": "ps-reel-motion",
+  "private": true,
+  "description": "Motion graphics for /ps:reel — Claude Design–style scenes (Stage/Sprite/useTime) rendered frame by frame in headless Chrome.",
+  "type": "module",
+  "dependencies": {
+    "@puppeteer/browsers": "3.2.3",
+    "esbuild": "0.28.2",
+    "lucide-react": "1.52.0",
+    "puppeteer-core": "25.12.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}

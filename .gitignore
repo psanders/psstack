@@ -18,3 +18,5 @@ data/sdr/*.jsonl
 data/ads/*.jsonl
 data/ads/assets/
 data/ads/learnings.md
+# /ps:director productions (briefs, plans, renders) are unreleased creative.
+data/ads/productions/
