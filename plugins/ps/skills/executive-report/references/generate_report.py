@@ -4,8 +4,12 @@ Executive Report PDF Generator
 Generates branded PDF reports for Fonoster executive summaries.
 """
 
+import json
 import os
-from datetime import datetime
+import re
+import shutil
+from datetime import date, datetime
+from pathlib import Path
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.lib.colors import HexColor
@@ -232,17 +236,144 @@ def generate_report(
     return output_path
 
 
+# ---------------------------------------------------------------------------
+# Naming + archive
+# ---------------------------------------------------------------------------
+# Every report gets the same file name, built from the customer and the period:
+#   executive-report_<customer-slug>_<YYYY-MM-DD>_<YYYY-MM-DD>.pdf
+# The canonical copy lives in the psstack data store (data/reports/, git-ignored),
+# next to an index.jsonl record holding the raw notes and the structured content,
+# so reports can be searched later and used as eval cases.
+
+
+def slugify(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+
+def report_filename(customer_name: str, period_start: date, period_end: date) -> str:
+    return (
+        f"executive-report_{slugify(customer_name)}_"
+        f"{period_start.isoformat()}_{period_end.isoformat()}.pdf"
+    )
+
+
+def format_period(period_start: date, period_end: date) -> str:
+    if (period_start.year, period_start.month) == (period_end.year, period_end.month):
+        return f"{period_start:%B} {period_start.day}-{period_end.day}, {period_end.year}"
+    if period_start.year == period_end.year:
+        return (f"{period_start:%B} {period_start.day} - "
+                f"{period_end:%B} {period_end.day}, {period_end.year}")
+    return f"{period_start:%B} {period_start.day}, {period_start.year} - {period_end:%B} {period_end.day}, {period_end.year}"
+
+
+def resolve_reports_dir() -> Path:
+    """data/reports/ at the psstack repo root. Order: $PSSTACK_DIR, the checkout
+    this script lives in, the marketplace checkout, ~/Projects/psstack."""
+    candidates = []
+    if os.environ.get("PSSTACK_DIR"):
+        candidates.append(Path(os.environ["PSSTACK_DIR"]))
+    candidates.append(Path(__file__).resolve().parents[5])
+    candidates.append(Path.home() / ".claude/plugins/marketplaces/psstack")
+    candidates.append(Path.home() / "Projects/psstack")
+    for root in candidates:
+        if (root / "data").is_dir() and (root / ".claude-plugin").is_dir():
+            return root / "data" / "reports"
+    raise FileNotFoundError(
+        "Could not locate the psstack checkout; set PSSTACK_DIR to its root."
+    )
+
+
+def skill_version() -> str:
+    try:
+        manifest = Path(__file__).resolve().parents[3] / ".claude-plugin" / "plugin.json"
+        return json.loads(manifest.read_text())["version"]
+    except (OSError, KeyError, ValueError):
+        return "unknown"
+
+
+def save_report(
+    customer_name: str,
+    period_start: date,
+    period_end: date,
+    raw_notes: str,
+    executive_summary: str,
+    accomplishments: list,
+    metrics: list,
+    risks: list,
+    next_steps: list,
+    additional_risks: str = "",
+    copy_to: str = "~/Downloads",
+):
+    """
+    Render the PDF under its normalized name into data/reports/pdf/, upsert its
+    record in data/reports/index.jsonl, and drop a copy in `copy_to` (None to skip).
+    Re-running for the same customer and period replaces the earlier version.
+
+    Returns (archived_pdf_path, copied_pdf_path_or_None).
+    """
+    reports_dir = resolve_reports_dir()
+    pdf_dir = reports_dir / "pdf"
+    pdf_dir.mkdir(parents=True, exist_ok=True)
+
+    filename = report_filename(customer_name, period_start, period_end)
+    pdf_path = pdf_dir / filename
+    generate_report(
+        output_path=str(pdf_path),
+        customer_name=customer_name,
+        report_period=format_period(period_start, period_end),
+        executive_summary=executive_summary,
+        accomplishments=accomplishments,
+        metrics=metrics,
+        risks=risks,
+        next_steps=next_steps,
+    )
+
+    record = {
+        "id": filename[:-len(".pdf")],
+        "customer": customer_name,
+        "customer_slug": slugify(customer_name),
+        "period_start": period_start.isoformat(),
+        "period_end": period_end.isoformat(),
+        "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "skill_version": skill_version(),
+        "pdf": f"pdf/{filename}",
+        "input": {"raw_notes": raw_notes, "additional_risks": additional_risks},
+        "report": {
+            "executive_summary": executive_summary,
+            "accomplishments": accomplishments,
+            "metrics": metrics,
+            "risks": risks,
+            "next_steps": next_steps,
+        },
+    }
+    index_path = reports_dir / "index.jsonl"
+    records = []
+    if index_path.exists():
+        records = [json.loads(line) for line in index_path.read_text().splitlines() if line.strip()]
+    records = [r for r in records if r.get("id") != record["id"]] + [record]
+    records.sort(key=lambda r: (r["period_end"], r["customer_slug"]))
+    index_path.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records))
+    print(f"✓ Archived: {pdf_path}")
+
+    copied = None
+    if copy_to:
+        copied = Path(copy_to).expanduser() / filename
+        shutil.copyfile(pdf_path, copied)
+        print(f"✓ Copied to: {copied}")
+    return str(pdf_path), (str(copied) if copied else None)
+
+
 # Example usage - this will be called by Claude with actual content
 if __name__ == "__main__":
     # Example data structure (Claude will replace this with actual content)
 
-    example_executive_summary = """This reporting period delivered strong progress across multiple fronts, with two minor releases enhancing the TMS Migrator tool and significant advancement on the SIP Bot project. The team successfully supported customer deployments while maintaining responsive ticket resolution.
+    example_executive_summary = """This reporting period delivered strong progress across multiple fronts, with two minor releases enhancing the Data Migrator tool and significant advancement on the Voice Agent project. The team successfully supported customer deployments while maintaining responsive ticket resolution.
 
-Technical excellence remained a priority, with extensive unit and integration testing added to the SIP Bot codebase. Cross-team collaboration was evident through support for a colleague's TMS tool development and multiple customer-facing meetings. The team demonstrated agility in handling both planned development work and reactive support needs."""
+Technical excellence remained a priority, with extensive unit and integration testing added to the Voice Agent codebase. Cross-team collaboration was evident through support for a colleague's migration tool development and multiple customer-facing meetings. The team demonstrated agility in handling both planned development work and reactive support needs."""
 
     example_accomplishments = [
         {
-            "group": "TMS Migrator Releases",
+            "group": "Data Migrator Releases",
             "items": [
                 "Released two minor versions with customer-requested updates",
                 "Added default port configuration to streamline customer deployments",
@@ -250,19 +381,19 @@ Technical excellence remained a priority, with extensive unit and integration te
             ]
         },
         {
-            "group": "SIP Bot Development",
+            "group": "Voice Agent Development",
             "items": [
                 "Completed cleanup of non-v1 features",
                 "Implemented comprehensive unit and integration tests",
                 "Added SDP management and port management test coverage",
-                "Developed integration test for Orchestrator contract"
+                "Developed integration test for Scheduler contract"
             ]
         },
         {
             "group": "Support & Collaboration",
             "items": [
                 "Resolved multiple support tickets efficiently using canned responses",
-                "Assisted a colleague with TMS tool changes and fixes",
+                "Assisted a colleague with migration tool changes and fixes",
                 "Successfully handed off tickets in advanced troubleshooting phases",
                 "Participated in customer meetings with stakeholders"
             ]
@@ -282,14 +413,14 @@ Technical excellence remained a priority, with extensive unit and integration te
             "items": [
                 "5+ tickets resolved",
                 "Hardware issue escalated and handed off",
-                "Upgrade guidance provided for VQ 4.6.3 and CMS 3.12.1"
+                "Upgrade guidance provided for Platform X 4.6.3 and Platform Y 3.12.1"
             ]
         },
         {
             "category": "Code Quality",
             "items": [
                 "Unit tests: Added for SDP and port management",
-                "Integration tests: New Orchestrator contract coverage"
+                "Integration tests: New Scheduler contract coverage"
             ]
         }
     ]
@@ -302,8 +433,8 @@ Technical excellence remained a priority, with extensive unit and integration te
     ]
 
     example_next_steps = [
-        "Continue SIP Bot development toward v1 release",
-        "Monitor customer migration progress post-TMS Migrator updates",
+        "Continue Voice Agent development toward v1 release",
+        "Monitor customer migration progress post-Data Migrator updates",
         "Follow up on customer meetings action items",
         "Complete remaining integration test coverage"
     ]

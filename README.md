@@ -36,6 +36,12 @@ creative. It lives at **`data/ads/`** (campaigns, the `creatives.jsonl` winners/
 tracker, kept asset copies, and derived `learnings.md`), all git-ignored except its
 `README.md` and schemas. See `data/ads/README.md`.
 
+`/ps:executive-report` archives every report it generates in **`data/reports/`**: the PDF
+under a fixed name (`executive-report_<customer>_<start>_<end>.pdf`) plus an `index.jsonl`
+record with the raw notes and the structured content, for search and evals. It is local-only
+for the same reasons (customer names, unreleased work, unanonymized notes); only its
+`README.md` is tracked. See `data/reports/README.md`.
+
 ## Skills
 
 | Skill | Invoke | What it does |
@@ -50,7 +56,7 @@ tracker, kept asset copies, and derived `learnings.md`), all git-ignored except 
 | **post-pulse** | `/ps:post-pulse [week\|month] [--network linkedin\|twitter\|all]` | Recurring engagement harvest — opens a browser, sweeps a window of Pedro's posts, reads impressions/reactions/comments/reposts, and saves it as structured time-series data in `data/social/`. Promotes high performers to exemplars so `/ps:post` drafts from what works. Run weekly/monthly. |
 | **create-validated-function** | `/ps:create-validated-function` | Scaffold one validated function (factory + DI + Zod validation + structured errors) and its sinon test in an existing repo. Reuses bootstrap's canonical templates. |
 | **bootstrap** | `/ps:bootstrap` | Scaffold a new TS/Node project from my opinionated baseline. Presents recurring dependency groups (Prisma SQLite/Postgres, tRPC, Vite+React+Tailwind, Tauri, Expo, oclif CLI, LangChain LLM, Storybook, docs/media, Playwright/Maestro E2E) plus opt-in workflow tooling (psstack commands, OpenSpec) as choices, confirms the stack, then scaffolds Zod-validated functions with DI + mocha/sinon tests + tooling. |
-| **executive-report** | `/ps:executive-report` | Turn raw project notes into a polished, branded biweekly executive report PDF — anonymizing teammate and customer names along the way. |
+| **executive-report** | `/ps:executive-report` | Turn raw project notes into a polished, branded biweekly executive report PDF — anonymizing teammate and customer names along the way. Files get a fixed name and are archived, git-ignored, in `data/reports/` for search and evals. |
 | **sdr** | `/ps:sdr <subcommand>` | SDR toolkit routed by subcommand, `/ps:sdr signal-scan` built first — prospects LinkedIn via a people-first executive/decision-maker search (title + sector keywords), saved **locally, not version-controlled**, to `data/sdr/signals.jsonl` (see above). Other subcommands (intent-score, icp-match, dossier-build, voice-writer, sequence-builder, reply-classify, objection-tag, book-call, no-show-save, pipeline-report, sequence-audit) are planned, not yet built. |
 | **ads** | `/ps:ads <new\|creative\|review>` | Meta (FB/IG) ads with the media-buying strategy built in. `new` is a select-driven campaign wizard (objective, conversion event, geo, budget with learning-phase math, naming, copy) that builds everything **paused** via the Meta Ads MCP; `creative` writes angle-based copy and designs placement-safe assets (feed 4:5 + story 9:16) in Pencil; `review` applies kill/keep/scale rules, marks winners and losers in a local JSON tracker with a kept copy of every asset, and proposes the next single-variable test. Data is **local, not version-controlled** (see above). |
 
