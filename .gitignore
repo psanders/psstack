@@ -18,3 +18,7 @@ data/sdr/*.jsonl
 data/ads/*.jsonl
 data/ads/assets/
 data/ads/learnings.md
+# /ps:executive-report archive: customer names, unreleased work, and raw notes with
+# real names. Only the README is tracked. See data/reports/README.md.
+data/reports/*
+!data/reports/README.md

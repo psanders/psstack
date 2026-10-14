@@ -19,8 +19,8 @@ This skill takes messy bullet points, brain dumps, and unstructured notes and pr
 
 **IMPORTANT: Never include personal names in the generated report.**
 
-- **Teammate names**: Replace with role descriptions (e.g., "Alex" → "a team member", "Jordan" → "a colleague")
-- **Customer names**: Replace with generic references (e.g., "Morgan" → "the customer", "the client team")
+- **Teammate names**: Replace with role descriptions (e.g., "Sam" → "a team member", "Taylor" → "a colleague")
+- **Customer names**: Replace with generic references (e.g., "Jamie" → "the customer", "the client team")
 - **Company names** (external): Replace with "the customer" or "the partner organization" unless it's Fonoster
 - **Meeting attendees**: Describe by role, not name (e.g., "met with stakeholders" not "met with Casey and Riley")
 
@@ -107,8 +107,10 @@ After writing the report content, generate a branded PDF using the included Pyth
 ### To Generate the PDF
 
 1. First, write the report content following the structure above
-2. Run the `references/generate_report.py` script with the report content
-3. The script will create a professionally formatted PDF with:
+2. Write a small script in the scratchpad that imports `references/generate_report.py`
+   (add its directory to `sys.path`) and calls **`save_report()`**, not `generate_report()`
+   directly. Pass the period as two `datetime.date` values and the user's raw notes verbatim.
+3. `save_report()` produces a professionally formatted PDF with:
    - Fonoster logo in the header
    - Branded color accents
    - Consistent typography
@@ -116,17 +118,39 @@ After writing the report content, generate a branded PDF using the included Pyth
 
 ```bash
 pip install reportlab svglib --break-system-packages
-python references/generate_report.py
 ```
+
+### File Naming (fixed, never improvise)
+
+`save_report()` names every report the same way. Never pick a path or name yourself:
+
+```
+executive-report_<customer-slug>_<period-start>_<period-end>.pdf
+e.g. executive-report_acme-corp_2026-01-05_2026-01-16.pdf
+```
+
+### Archive (search + evals)
+
+Every report is archived in the psstack data store at `data/reports/` (git-ignored, never
+committed; see `data/reports/README.md`):
+
+- `data/reports/pdf/<name>.pdf` is the canonical PDF.
+- `data/reports/index.jsonl` has one record per report: customer, period, skill version,
+  the **raw notes as given** (`input`), and the structured content (`report`). These
+  input → output pairs are what evals run on.
+
+A copy also goes to `~/Downloads/<name>.pdf` for sending. Regenerating the same customer
+and period overwrites both and replaces the index record, so the archive holds the final
+version. Tell the user both paths when done.
 
 ## Example Workflow
 
 **User provides raw notes:**
 ```
-- Two minor releases with updates for the tms-migrator
-- Clarification on tool use to Alex
+- Two minor releases with updates for the data-migrator
+- Clarification on tool use to Sam
 - Closed tickets
-- Reply to ticket around upgrading VQ to 4.6.3
+- Reply to ticket around upgrading Platform X to 4.6.3
 ...
 ```
 
@@ -140,9 +164,9 @@ python references/generate_report.py
 2. Organizes content into the five required sections
 3. Writes the Executive Summary in narrative prose
 4. Formats remaining sections with appropriate mix of prose and bullets
-5. Generates the branded PDF
+5. Generates the branded PDF with `save_report()` (normalized name, archived, copied to Downloads)
 
-See `references/example_usage.py` for a full worked example, from raw notes through to the `generate_report()` call.
+See `references/example_usage.py` for a full worked example, from raw notes through to the `save_report()` call.
 
 ## File Structure
 
@@ -150,7 +174,7 @@ See `references/example_usage.py` for a full worked example, from raw notes thro
 executive-report/
 ├── SKILL.md                        # This file
 └── references/
-    ├── generate_report.py           # PDF generation script
+    ├── generate_report.py           # PDF generation + save_report() (naming, archive)
     ├── example_usage.py             # Worked example (raw notes → report)
     └── assets/
         └── logo.svg                 # Fonoster logo
