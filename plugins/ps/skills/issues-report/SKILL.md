@@ -121,7 +121,7 @@ Print the issue URL on success.
 
 ## Guardrails
 
-- Title must start with `[Bug]`, `[Feature]`, or `[Chore]`.
+- The title is plain words, with no type prefix like `[Bug]`, `[Feature]`, or `[Chore]`. The type goes in the label.
 - Never create the issue without user confirmation.
 - Only pass `--label` for labels confirmed to exist in the repo.
 - If `gh` fails, show the error and suggest `gh auth status`.
