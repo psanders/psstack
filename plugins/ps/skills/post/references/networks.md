@@ -18,7 +18,7 @@ changes. Resolve `--network` first (default `linkedin`), then apply the rules be
 
 The rich format this skill was built around.
 
-- **Length:** 700–1,500 chars typical. Very short hot takes (~150) and deep tactical posts (~1,800) both fine when warranted.
+- **Length:** 400–800 chars typical (the best-performing bucket across 4 pulses). Very short hot takes (~150) and deep tactical posts (~1,200+) both fine when warranted.
 - **Glyphs:** full strength. `⟡ ↳ ↓ ⤵ ☑ ▶`, bold-Unicode headers for posts >600 chars.
 - **Structure:** the full proven template (hook → `↓` → framing → bulleted body → opinion → single close).
 - **Bullets:** obey the ≤40-char bullet-width rule (narrow column).
@@ -49,7 +49,7 @@ first tweet.
 
 | Dimension | LinkedIn | Twitter/X |
 | :--- | :--- | :--- |
-| Default length | 700–1,500 chars | ≤280, else 3–7-tweet thread |
+| Default length | 400–800 chars | ≤280, else 3–7-tweet thread |
 | Glyph density | Full (`⟡ ↳ ⤵ ☑ ▶`, bold headers) | Light; hook + rhythm only |
 | Bold-Unicode headers | Yes (posts >600) | No |
 | Links | In body / `▶` line | Last tweet or reply, never tweet 1 |

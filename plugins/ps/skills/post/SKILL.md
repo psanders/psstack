@@ -52,13 +52,13 @@ Your job is to take a prompt and turn it into a post that:
 2. Sounds like Pedro (voice signatures described below).
 3. Is shaped for the target network (`--network`).
 4. Ends with exactly one CTA that matches the pillar.
-5. Includes an engagement question that baits comments naturally.
+5. Closes the way the data favors: a DM-for-advisory line, a `▶` link, or no close. Use an engagement question only when the post invites one specific, answerable reply (see `data/social/patterns.md`).
 
 ## Network adaptation (read the flag first)
 
 Pick the network from `--network` (default `linkedin`). The pillars, voice, and strategy are identical across networks; the **container** changes. Full rules in `references/networks.md`. The essentials:
 
-- **LinkedIn** (default): the rich format this skill was built around. 700–1,500 chars typical, Unicode glyphs/bold/italic as voice signatures, line-break rhythm, single long post or carousel-ready. Links are fine in the body.
+- **LinkedIn** (default): the rich format this skill was built around. 400–800 chars typical (up to ~1,200 for tactical/list posts), Unicode glyphs/bold/italic as voice signatures, line-break rhythm, single long post or carousel-ready. Links are fine in the body.
 - **Twitter/X**: tighter and more native.
   - Single tweet ≤ 280 chars when the idea fits; otherwise a **numbered thread** (`1/`, `2/`, …) with the hook as tweet 1.
   - **Go lighter on Unicode glyphs** — they render but read as spammy on X. Keep the hook and the rhythm; drop most `⟡`/`☑`/bold-header decoration. One italic-Unicode named entity in the hook is still fine.
@@ -133,16 +133,17 @@ Pedro's highest-engagement Industry Take (the KARMA hot take, 6,285 impressions 
 5. **A real opinion, not a summary.** One short paragraph (2–4 lines) where Pedro takes a side, names what he's doing about it, or states what he believes. This is the difference between a thought leader and a recap.
 6. **A single close.** Most drafts get this wrong. Every post has *one* close — either a `▶` link CTA *or* an engagement question, almost never both. Two asks dilute each other.
    - **`▶` link CTA** when the post has a specific destination worth driving to. Use when the purpose is conversion. (On X, the link goes in the last tweet / a reply, not the hook.)
-   - **Engagement question** when the purpose is reach and authority — most Industry Takes and Operator's Journal posts. Ends with `?`, specific enough to answer in 30 seconds without research. Avoid yes/no; favor "what would you add?", "what broke first when you tried X?".
+   - **DM-for-advisory line** when the post shows hands-on field knowledge ("If you run collections in LATAM, DM me."). Across 4 pulses this has pulled ~2× the engagement of an engagement question.
+   - **Engagement question** only when a reader can answer something specific from their own experience. Generic asks ("Agree?", "Ask me anything!", "What do you think?") have drawn 0 comments. Ends with `?`, specific enough to answer in 30 seconds without research. Avoid yes/no; favor "what would you add?", "what broke first when you tried X?".
    - **Both, but only as one integrated line** for explicit launch / time-limited promo posts. E.g. *"▶ I'm running a free masterclass on KARMA next Saturday. Reply 'in' to grab a seat."*
 
    Default close by pillar (override when the post calls for it):
-   - Industry Take → engagement question
+   - Industry Take → no close or a `▶` link to his writing; a specific engagement question only if it earns it
    - Build-in-Public → `▶` link CTA
-   - Operator's Journal → engagement question (or no close if the story lands on its own)
+   - Operator's Journal → DM-for-advisory line (or no close if the story lands on its own)
    - Educational Tactical → either, depending on teach ("what did I miss?") vs sell ("join the waitlist")
 
-LinkedIn posts shorter than ~350 chars can collapse steps 3–5 into one line. Posts over ~1,200 chars should add 1–2 bold Unicode headers. Keep typical LinkedIn length 700–1,500 chars. On X, see the length rules in `references/networks.md`.
+LinkedIn posts shorter than ~350 chars can collapse steps 3–5 into one line. Posts over ~1,200 chars should add 1–2 bold Unicode headers. Keep typical LinkedIn length 400–800 chars; go to ~1,200 only for tactical/list posts. A one-line caption on a video or document is not a substitute for a short post: those scored 11–30 engagement. On X, see the length rules in `references/networks.md`.
 
 ## Weekly cadence — LinkedIn (2 Build / 2 Industry / 2 Operator / 1 Educational)
 

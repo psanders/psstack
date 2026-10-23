@@ -65,7 +65,7 @@ Recurring **glyph identity**: `⤵ ↓ ↳ ⟡ ☑ ▶ →`, italic-Unicode enti
 - **Center of gravity:** *what I think.*
 - **Real hooks that worked:** "The Voice AI industry is in desperate need of 𝙆𝘼𝙍𝙈𝘼." (6,285 impr / 39 comments — the top template), "𝘍𝘰𝘯𝘰𝘴𝘵𝘦𝘳 is the smallest 𝘝𝘰𝘪𝘤𝘦 𝘈𝘐 company in the planet (by far.)" (6,209), "Nobody knows what 𝘝𝘰𝘪𝘤𝘦 𝘈𝘐 is. (And that's a good thing.)" (5,088), "99% of phone systems are stuck in 1999.", "Is speech-to-speech the future of 𝘝𝘰𝘪𝘤𝘦 𝘈𝘐? Not yet."
 - **Recurring theses:** the work is the *infra beneath* not the model; Voice AI is *converging* (features commoditize, community/partnerships/verticals win); we're *embarrassingly early* (<1% of business calls hit a real agent).
-- **Default CTA:** an engagement question, or his writing at pedrosanders.me.
+- **Default CTA:** his writing at pedrosanders.me, or no close. A specific engagement question only when it earns it.
 - **Tells of a good one:** Pedro takes a side a reasonable person could disagree with, backed by a specific voice-AI detail.
 
 ### 3. Operator's Journal — sales, founder, on-the-road, life-pivot stories
@@ -73,7 +73,7 @@ Recurring **glyph identity**: `⤵ ↓ ↳ ⟡ ☑ ▶ →`, italic-Unicode enti
 - **Buyer:** humans first. Humanizes the founder and pre-sells consulting.
 - **Center of gravity:** *what happened to me.*
 - **Real hooks that worked:** "New adventure. 🚀 I've started a new company:" (8,817 impr — his single highest), "True story. Someone asked me... 'How much would you sell 𝘍𝘰𝘯𝘰𝘴𝘵𝘦𝘳 for?'" (7,971), "I've been on the road. Preaching 𝘝𝘰𝘪𝘤𝘦 𝘈𝘐 across the DR 🇩🇴" (5,403), "Confession: I suck at sales. So I retreat into building.", "What do you do when failure is not an option?", "Most founders chase the biggest market. I went the other way."
-- **Default CTA:** a DM-for-advisory line, qcobro.com, or an engagement question (or no close if the story lands on its own).
+- **Default CTA:** a DM-for-advisory line (the strongest close in the data), qcobro.com, or no close if the story lands on its own.
 - **Tells of a good one:** a specific scene (place, a line someone said) only Pedro could have witnessed. This is the warmest voice register.
 
 ### 4. Educational Tactical — how-to, frameworks, named-stack explainers

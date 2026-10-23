@@ -63,23 +63,41 @@ Load `posts.jsonl` into memory (it may be large; read it once).
 
 ### 2. Re-measure pass — refresh recent posts already in the store (do this first)
 
-Before sweeping the new window, re-snapshot posts **already** in `posts.jsonl` so the
-time series actually grows. LinkedIn engagement keeps accruing for weeks, so a single
-snapshot per post is nearly worthless for trend.
+Before sweeping the new window, re-snapshot posts **already** in `posts.jsonl` whose
+last reading was taken too early to be final.
 
-- Select records whose **latest** `snapshots[].captured_at` is **more than ~10 days ago**
-  and whose `posted_at` is **within the last ~60 days** (old enough to have moved, recent
-  enough to still be accruing). Skip anything already snapshotted in the last ~10 days.
+Measured on 2026-10-23: 7 posts re-read 7–9 weeks after their first snapshot gained only
+0–2 engagements each, and impressions rose 2–12%. The only big mover was a post first
+captured 1 hour after publishing. So engagement is roughly final after the first week.
+
+- Select records whose **latest** snapshot was taken **less than ~7 days after
+  `posted_at`** and is itself more than ~7 days old. Those are the ones still moving.
+- Optionally refresh the few highest-engagement posts of the last ~60 days for trend, but
+  don't spend the pass on posts that were already a week old when last read.
 - Visit each one's `url` and read the current counters. **Append** a fresh snapshot (Step 4);
   never overwrite. This is what turns single points into growth curves — the whole reason
   the schema is a time series.
 - This pass reuses URLs you already have, so it's cheap. Cap it at ~15 posts per run if the
   list is long; prioritize the highest-engagement and most-recent ones.
 
-### 3. Open the activity feed for each network
+### 3. List the posts for each network
 New tab, then navigate:
-- **LinkedIn:** Pedro's profile → "Activity" → "Posts" (his own recent posts feed), e.g. `https://www.linkedin.com/in/<handle>/recent-activity/all/`. If the handle isn't known, ask once and remember it for the session.
-- **Twitter/X:** Pedro's profile timeline filtered to his posts, e.g. `https://x.com/<handle>`.
+- **LinkedIn:** use **Creator analytics → Top posts** as the post list:
+  `https://www.linkedin.com/analytics/creator/top-posts/?metricType=IMPRESSIONS&timeRange=past_90_days`
+  (`past_365_days` for a longer window). Don't rely on `/in/<handle>/recent-activity/`:
+  on 2026-10-23 it skipped every post between 2 weeks and 3 months old. Take each post's
+  canonical URL from its "View analytics" link (`urn:li:activity:<id>` →
+  `https://www.linkedin.com/feed/update/urn:li:activity:<id>/`). The impressions column
+  there is limited to the selected window, so read metrics on the post page itself (wait
+  ~4 s after navigating before reading, or you get the previous page's text). Handle:
+  `sanders-pedro`.
+- **Twitter/X:** Pedro's profile timeline, `https://x.com/pedrosanders_`.
+
+**Dates and URLs come from the post ID, not from relative ages.** A LinkedIn activity ID
+encodes its timestamp: `datetime.fromtimestamp((id >> 22) / 1000)` gives `posted_at`
+exactly. Before appending a snapshot to an existing record, confirm the page body matches
+the record's `text`. The 2026-08-27 pulse stored cross-wired URLs and dates for several
+posts, and the 2026-10-23 pulse corrected them.
 
 Scroll to load posts until you pass the start of the window (posts older than the window
 boundary). Use `get_page_text` / `read_page` to extract; scroll incrementally.
@@ -96,10 +114,12 @@ boundary). Use `get_page_text` / `read_page` to extract; scroll incrementally.
   posts whose comments are worth mining for voice, so this is not optional for them. For
   the rest, capture comments best-effort if they're already visible; don't click into
   every post. (Empty `top_comments` across the store is a known gap — this rule closes it.)
-  **Privacy: never store a commenter's full name.** This file is committed to git, and
-  these are third parties who never consented to being in a version-controlled dataset.
-  Write `author` as first name + last initial only (e.g. "Jeff Pulver" → "Jeff P."). If
-  only a single name/handle is visible, keep it as-is (nothing to truncate).
+  **Privacy: store no audience PII.** This file is committed to git, and commenters are
+  third parties who never consented to being in a version-controlled dataset. Always set
+  `author` to `null`. Keep only the comment text, and strip any name, handle, employer,
+  phone, email, or other identifying detail from it (and from `notes`). The voice signal
+  is in what was said, not who said it. Pedro's own replies are not audience comments;
+  skip them.
 
 Best-effort classify `pillar`, `hook_pattern`, and `cta` by matching the text against the
 `/ps:post` references (pillars / hook-library). Leave `hook_pattern: null` if unsure.
