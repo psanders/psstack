@@ -80,8 +80,8 @@ One compact briefing, sections in order, empty sections omitted:
 TODAY · <repo>
 
 ISSUES (N)
-  #123  P1  [Bug] Short title                       <url>
-  #130  P1  [Feature] Add export                     <url>
+  #123  P1  Short title                             <url>
+  #130  P1  Add export                               <url>
 
 PRS NEEDING YOU (N)
   ↳ review requested   #88  Fix race in scheduler    <url>
