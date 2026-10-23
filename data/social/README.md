@@ -22,11 +22,11 @@ It lives in the psstack repo (not inside the plugin) so a marketplace reinstall 
 - **Engagement optimization is a separate query, not the `exemplar` flag.** To answer
   "which posts get the most comments / reach / engagement-per-impression?" or "what posted
   best", read the per-snapshot metrics across records — don't conflate that with `exemplar`.
-- **Third-party commenter names are truncated to first name + last initial** (e.g.
-  "Jeff Pulver" → "Jeff P.") in `top_comments[].author`, since this file is committed to
-  git and commenters never consented to full names living in version-controlled history.
-  Existing records were scrubbed to this format on 2026-07-28; `/ps:post-pulse` writes
-  new captures in this form going forward. See the same policy discussion in
+- **No audience PII.** `top_comments[].author` is always `null`, and comment text and
+  `notes` carry no names, handles, or other identifying details of commenters. This file
+  is committed to git, and commenters never consented to being in version-controlled
+  history. Names were truncated to first name + last initial on 2026-07-28 and removed
+  entirely on 2026-10-23. `/ps:post-pulse` writes no author going forward. See the same policy discussion in
   `data/sdr/README.md`, which goes further (no PII in git at all) because SDR signals are
   about people who never interacted with Pedro's content at all.
 - **Bodies are stored em-dash-free.** Pedro's one forward style rule is "no em-dash," so the
@@ -83,7 +83,7 @@ contract. Summary:
       "saves": null,
       "clicks": null,
       "top_comments": [                     // a few notable comments, for qualitative learning
-        { "author": "…", "text": "…" }
+        { "author": null, "text": "…" }
       ]
     }
   ],
