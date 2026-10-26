@@ -249,7 +249,7 @@ the Brief saying so, so the maintainer applying `ready` sees it first.
   Problem line, type and labels against what you meant to file. Fix any mismatch before
   adding links, so a bulk filing can't shift bodies between issues unnoticed.
 - **From a pull request:** only a closing keyword in the PR body links it. Append
-  `Closes #<n>` to the body (`gh pr edit <pr> --body-file`), keeping the rest unchanged.
+  `Closes #<n>` to the body (`gh api -X PATCH repos/$REPO/pulls/<pr> -F body=@<file>`), keeping the rest unchanged.
   For an external PR, also comment: thank the author, and say the issue was created and
   linked. Remove `needs-issue` from the PR.
 
