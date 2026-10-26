@@ -110,6 +110,9 @@ Do the legwork the reporter shouldn't have to:
   passes, the bug may be fixed or the repro is wrong: tell the user and stop.
 - Judge Breaking change against AGENTS.md `## Compatibility`, and Risk against
   `## Risk hotspots`.
+- When the reporter points elsewhere ("do it the way Fonoster does", "I'm not sure, look at
+  our other repos"), read that repo's code and docs, and offer its pattern as an option in
+  the next question, with the file it came from.
 
 Respect `loop-limits.md` here too: two identical failures of the same command and you stop
 with a blocker report instead of trying a third time.
