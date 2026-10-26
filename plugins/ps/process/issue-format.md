@@ -5,7 +5,8 @@ and when; they can stop reading after it. The **Spec** is for whoever implements
 agent, and must leave them nothing to ask. The same shape serves Bug, Feature and Task; only
 the Spec's first fields change.
 
-An issue holds work, never questions. If a decision is still pending (two designs, a naming
+An issue holds work, never questions (the one exception is a `needs-human` issue's
+`## Needs a decision` section, see `readiness.md`). If a decision is still pending (two designs, a naming
 choice, "should we?"), it goes to a Discussion and the issue is filed once it's decided.
 
 ## Template

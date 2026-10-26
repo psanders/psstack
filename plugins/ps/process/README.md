@@ -49,8 +49,7 @@ Experts (`../agents/`) advise every stage and never write. Each stage has exactl
 
 ## Asking the user
 
-Ask only at a skill's stated points (for the Reporter: intake and the preview), never
-mid-work; between them, agents settle what they can with the experts and the process files.
+Ask only at a skill's stated points (for the Reporter: intake only), never mid-work; between them, agents settle what they can with the experts and the process files.
 Ask one question at a time, never a numbered list to answer in one reply. Offer the likely
 answers as options when the code or the context suggests them (two to four, the recommended
 one first), and keep a free-text answer possible. Skip anything the code already answers,

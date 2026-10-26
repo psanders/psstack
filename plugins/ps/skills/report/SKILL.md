@@ -9,11 +9,11 @@ metadata:
 
 # Reporter
 
-**You talk to the user at two points only: intake (step 1) and the preview (step 8).**
-Between them you are the coordinator: settle process questions from this skill and the
-process files, and settle open technical points with the experts, going back to them until
-you're confident (`loop-limits.md`). Anything only the user can decide (intent, priority, a
-product call) waits for the preview.
+**You talk to the user once: intake (step 1).** After that you are the coordinator: settle
+process questions from this skill and the process files, settle technical points with the
+experts (`loop-limits.md`), and publish straight to GitHub. There is no preview. What only a
+human can decide goes on the issue as `needs-human`; the human gate is a maintainer applying
+`ready` on GitHub.
 
 Turn a report into issues so clear that whoever picks them up asks nothing. Clarity is the
 product; no noise, no fluff. Filing nothing is a good outcome when the report isn't work yet.
@@ -137,7 +137,7 @@ applied but was left out by the limit.
 When experts disagree, or a requirement leaves a technical choice open, don't ask the user:
 send the specific point back to the experts it concerns, with the other side's argument, for
 another round. Decide from their answers and record the choice as a Constraint. At most 3
-rounds; anything still open after that is a product decision, so it goes to the preview.
+rounds; anything still open after that is a decision for a human (step 8).
 
 ## 5. Bisect
 
@@ -172,14 +172,18 @@ Give a fresh subagent only the final issue text and ask what it would need to as
 implementing. Fold every question into the Spec, or into a question for the user. Repeat;
 after 3 rounds with questions left, ask the user those questions directly.
 
-## 8. Preview and confirm
+## 8. Resolve or hand over
 
-First ask, one at a time, the decisions you saved for the user, each with the options the
-experts left you. Then preview.
+No preview and no questions. Either everything is settled, or it isn't:
 
-Show the Brief first (all seven lines), then the Spec. When Risk is High, Breaking change is
-Yes, or an expert flagged security, say so above the Brief. Ask: create it, edit first, or
-cancel.
+- **Settled:** go to step 9.
+- **Not settled** (expert rounds or cold reads ran out, or a product decision is open): file
+  it anyway with `needs-human`, and add a `## Needs a decision` section above the Brief. List
+  each open decision as one line with the options the experts left and the one you'd pick.
+  This is the only case where an issue body holds open questions.
+
+When Risk is High, Breaking change is Yes, or an expert flagged security, put one line above
+the Brief saying so, so the maintainer applying `ready` sees it first.
 
 ## 9. File
 
@@ -203,12 +207,13 @@ cancel.
   For an external PR, also comment: thank the author, and say the issue was created and
   linked. Remove `needs-issue` from the PR.
 
-Never apply `ready` on your own. End by asking whether to mark it `ready`; apply it only if
-the user says yes in the conversation. Print every issue URL.
+Never apply `ready`; a maintainer does that on GitHub. Print every issue URL, and say which
+ones carry `needs-human`.
 
 ## Guardrails
 
-- Never file without the user's confirmation, and never file follow-ups, ideas or findings on
-  your own initiative.
-- No open questions, option tables or "questions to settle" in an issue body.
+- File only what this run was asked to report. Never file follow-ups, ideas or findings
+  you noticed on the way.
+- No open questions, option tables or "questions to settle" in an issue body, except the
+  `## Needs a decision` section of a `needs-human` issue.
 - If `gh` fails, show the error and suggest `gh auth status`.
