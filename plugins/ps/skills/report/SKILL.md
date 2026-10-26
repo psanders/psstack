@@ -216,6 +216,9 @@ the Brief saying so, so the maintainer applying `ready` sees it first.
 - **Labels:** area, `breaking` when Breaking change is Yes, `risk: high` when Risk is High.
   Only labels that exist (`gh label list`); never create one.
 - **Slices:** create in order, then link each with "blocked by" its predecessor.
+- **Read back before linking:** after creating issues, fetch each one and check its title,
+  Problem line, type and labels against what you meant to file. Fix any mismatch before
+  adding links, so a bulk filing can't shift bodies between issues unnoticed.
 - **From a pull request:** only a closing keyword in the PR body links it. Append
   `Closes #<n>` to the body (`gh pr edit <pr> --body-file`), keeping the rest unchanged.
   For an external PR, also comment: thank the author, and say the issue was created and
