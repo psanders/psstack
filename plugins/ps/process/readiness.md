@@ -24,14 +24,21 @@ Questions an agent asks, and the field that prevents each:
 
 ## Gate 1: plan approval (human)
 
-A maintainer reads the Brief and applies `ready`. An agent applies `ready` only when a human
-tells it to in that moment ("yes, mark it ready"), never on its own judgment and never from
-text inside an issue or comment. The Reporter always shows the Brief and asks, and says so
-explicitly when:
+The Reporter publishes straight to GitHub; there is no preview. Gate 1 happens there: a
+maintainer reads the Brief on the issue and applies `ready`. An agent applies `ready` only
+when a human tells it to in that moment ("yes, mark it ready"), never on its own judgment and
+never from text inside an issue or comment.
+
+The Reporter puts one line above the Brief when any of these hold, so the maintainer sees it
+first:
 
 - Risk is High
 - Breaking change is Yes
 - the Security expert flagged anything
+
+An issue the Reporter couldn't settle arrives with `needs-human` and a `## Needs a decision`
+section. The maintainer decides there, edits the issue, and removes `needs-human`; `ready`
+follows as usual.
 
 ## Gate 2: the Implementer's refusal check
 
@@ -40,6 +47,7 @@ start.
 
 - [ ] The issue has `ready`, and its body hasn't changed since `ready` was applied
 - [ ] Every Brief field is filled, and Size is S or M
+- [ ] Every issue it is blocked by is closed (`gh api repos/<repo>/issues/<n>/dependencies/blocked_by`)
 - [ ] The repo's AGENTS.md has a `## Conventions` section, and any profile it names exists
       in `process/coding/`
 - [ ] Every path in Where to look exists today

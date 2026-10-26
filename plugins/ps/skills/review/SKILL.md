@@ -77,6 +77,8 @@ While the committee works:
 - **Verify and tests:** for a trusted PR, check out the branch in a separate worktree and run
   the issue's Verify command and the repo's tests (AGENTS.md `## Commands`). Record command
   and result. For an untrusted PR, use the CI results instead and say so.
+- **Docs:** every item in the issue's Docs field is changed in the PR. A missing one is a
+  blocking finding.
 - **Scope:** changes unrelated to the issue are a blocking finding, unless trivial and
   mentioned in the PR.
 - **Breaking change:** if the Brief says Yes, the PR title and a commit carry `!`, or a commit

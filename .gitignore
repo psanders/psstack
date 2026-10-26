@@ -22,3 +22,7 @@ data/ads/learnings.md
 # real names. Only the README is tracked. See data/reports/README.md.
 data/reports/*
 !data/reports/README.md
+# /ps:observe run logs: repo internals and unreleased work from the session under test.
+# Only the README is tracked; learnings are committed as process fixes instead.
+data/runs/*
+!data/runs/README.md

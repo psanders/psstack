@@ -85,12 +85,13 @@ From AGENTS.md `## Conventions`:
 2. **Failing test first.** Write the test the acceptance criteria call for and watch it
    fail for the stated reason.
 3. Make the smallest change that passes it and the Verify command.
-4. Run the repo's build, lint, typecheck and tests from AGENTS.md `## Commands`.
-5. Stay inside Scope and Constraints. Write no defensive code and no tests for cases that
+4. Update everything the issue's Docs field lists, in the same PR.
+5. Run the repo's build, lint, typecheck and tests from AGENTS.md `## Commands`.
+6. Stay inside Scope and Constraints. Write no defensive code and no tests for cases that
    can't realistically happen (`experts.md` § The bar). Something out of scope that clears
    the bar goes in a "Noticed, not done" note for the PR; don't fix it and don't file it.
    Anything below the bar goes nowhere.
-6. You may consult experts (`ps:<expert>`) with a brief when a decision falls in their
+7. You may consult experts (`ps:<expert>`) with a brief when a decision falls in their
    discipline, for example the Architect before touching a public surface. They advise; you
    still write.
 

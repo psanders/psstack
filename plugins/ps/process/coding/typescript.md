@@ -72,9 +72,17 @@ Why each rule exists:
 
 Use it for input-validating operations (DB writes, service calls, business logic). Skip it for
 trivial pure helpers and framework glue: the pattern earns its keep only when there is
-external input to validate.
+external input to validate. A synchronous function that does validate input (parsing a file, loading
+config) keeps the same rules without the async wrapper: `schema.safeParse` at the door, a
+`ValidationError` on failure, one function per file, and the validation-failure test.
 
 ### Adding one validated function to an existing repo
+
+**Adopting the profile part-way through a repo's life:** the first issue that adds a validated
+function also adds the spine it uses: `zod` as a dependency of the shared package and
+`ValidationError` from `templates/`. `withErrorHandlingAndValidation` comes with the first
+async validated function, so no helper lands without a caller. The Reporter
+puts that in the first such slice's Scope; later slices reuse it.
 
 1. **Find the spine.** Locate the shared package and its scope (e.g. `@acme/common`).
    Confirm `withErrorHandlingAndValidation` and `ValidationError` exist there; if not, copy

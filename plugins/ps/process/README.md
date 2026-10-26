@@ -47,6 +47,14 @@ Experts (`../agents/`) advise every stage and never write. Each stage has exactl
 | [research.md](research.md) | Why the process looks like this, with sources |
 | [coding/](coding/) | Coding profiles a repo can declare, their templates and stack menus |
 
+## Asking the user
+
+Ask only at a skill's stated points (for the Reporter: intake only), never mid-work; between them, agents settle what they can with the experts and the process files.
+Ask one question at a time, never a numbered list to answer in one reply. Offer the likely
+answers as options when the code or the context suggests them (two to four, the recommended
+one first), and keep a free-text answer possible. Skip anything the code already answers,
+and stop asking as soon as the next step has what it needs.
+
 ## Changing the process
 
 A change here is a commit with the reason in its message, and a version bump of the plugin.

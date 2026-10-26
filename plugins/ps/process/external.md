@@ -45,8 +45,10 @@ External reporters are never asked to fill in a Brief or Spec.
 
 ## CI safety
 
-- Workflows that handle external PRs use `pull_request`, never `pull_request_target` with a
-  checkout of the PR's code, and never interpolate PR or issue text into `run:` steps.
+- Workflows that build or test external PRs use `pull_request`. `pull_request_target` is only
+  for workflows that read PR metadata and set labels or comments (the two in
+  `templates/github/workflows/`): they never check out the PR's code, and event values reach
+  the shell only through `env:`, never interpolated into `run:`.
 - Agents acting on external content get read-only tokens and no secrets.
 
 ## Tone
@@ -62,5 +64,9 @@ Install them once in the org's `.github` repo, and delete each repo's own
 `.github/ISSUE_TEMPLATE` folder and `pull_request_template.md`: a repo with any file in its own
 `ISSUE_TEMPLATE` folder ignores the org's.
 
-Still to build: the `external` label applied by a workflow, the PR-needs-an-issue check,
-`/ps:report <pr>`, and the "waiting for triage" group in `/ps:today`.
+Two workflows go with them in `templates/github/workflows/`: `require-linked-issue.yml` fails a
+PR that links no issue, adds `needs-issue` and leaves one kind comment; `label-external.yml`
+adds `external` to issues and PRs from outside the org. To make the link check block merges,
+require its `linked-issue` check in an org ruleset or branch protection. Known limit: members
+whose org membership is private can show up as external, because the default workflow token
+can't read private membership; make the membership public or remove the label by hand.
