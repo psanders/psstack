@@ -49,9 +49,12 @@ Keep an append-only run log at <log path> (create the folder if needed). One ent
 Stages: report, gate-1, implement, review, gate-2. Also log every expert you consulted with a
 one-line result, every loop counter you checked, and every time you stop or refuse. When the
 process doesn't cover a situation, log it as Friction rather than improvising quietly.
+
+Start with: <skill and input, e.g. /ps:report "<one-sentence idea>" or /ps:implement 458>
 ```
 
-Then say you'll start watching once they've sent it.
+Ask the user for the `Start with:` line first (one question). Then say you'll start watching
+once they've sent it.
 
 ## 3. Find the session
 
