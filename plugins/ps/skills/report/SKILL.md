@@ -79,6 +79,20 @@ gh api graphql -F owner="${REPO%/*}" -F name="${REPO#*/}" -F n=<n> -f query='
   suggest splitting the PR, and stop.
 - File it as a new issue in step 9, then link it as below.
 
+## From a blocker
+
+`/ps:report <n>` on an issue whose latest `ps:event blocked` comment needs a Spec change.
+The blocker's options are the input; the user isn't asked to choose between them.
+
+- Skip step 1. Rerun step 3's spike once per option, against every Constraint and the
+  repo's AGENTS.md (Conventions, Compatibility).
+- Drop the options that fail a Constraint. Of the rest, take the one that changes least
+  outside the issue's Scope, and ask the owning expert (step 4) to confirm it.
+- It's settled when exactly one option survives, or the expert picks one with evidence.
+  Edit the Spec, record the choice and why in Context, remove `blocked`, and run steps 6–9.
+- Only a trade-off the code and AGENTS.md can't settle (a product or compatibility choice)
+  goes to step 8 as `needs-human`.
+
 ## 1. Ask what only the reporter knows
 
 Ask one question at a time (`process/README.md` § Asking the user), skipping any the report

@@ -44,7 +44,9 @@ when a limit was hit), and ends the session. It does not continue with other wor
 same issue.
 
 - When **Needs** is a change to the issue (its Scope or Constraints are wrong or contradict
-  each other), it also removes `ready`: the issue goes back through `/ps:report` and Gate 1.
+  each other), it also removes `ready`, and **Needs** names `/ps:report <n>`, not a
+  maintainer: the Reporter settles technical options with evidence, and the issue goes back
+  through Gate 1.
   Otherwise `ready` stays, and the next run resumes once the blocker is cleared.
 - Local work is committed on the issue's branch, never pushed, and the branch is named under
   **Tried**, so a later session can resume it or throw it away deliberately.
