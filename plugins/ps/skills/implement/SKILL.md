@@ -111,8 +111,9 @@ reproduces), that is a blocker too, not a reason to improvise.
 
 1. Commit with Conventional Commits. If the Brief says Breaking change: Yes, use `!` and a
    `BREAKING CHANGE:` footer with the migration.
-2. Show the user the diff summary, the Verify output and the test results. Ask before
-   pushing and opening the PR.
+2. Push the branch and open the PR without asking: every implementation ends in a PR, and
+   the PR is where people review it. Then show the user the PR link, the diff summary, the
+   Verify output and the test results.
 3. Open the PR with a title written per `titles.md` (with `!` when breaking), `Closes #<n>`, the Breaking change line from the Brief, the Verify
    command and its output, and the "Noticed, not done" note.
 4. Never merge, and never mark your own PR approved. Review and merge belong to the next
@@ -124,7 +125,7 @@ On the existing PR branch, fix each **Blocking** item from the latest review com
 nothing else. For each
 blocking item, either fix it (with a test when it's a behavior gap) or reply on the PR with
 evidence that it's wrong; never ignore one silently. Rerun Verify and the tests, show the
-user the result, and ask before pushing. Then the Reviewer runs the next round
+user the result, and push without asking. Then the Reviewer runs the next round
 (`/ps:review <pr>`).
 
 ## Guardrails
