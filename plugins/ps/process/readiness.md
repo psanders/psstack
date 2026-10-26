@@ -47,6 +47,7 @@ start.
 
 - [ ] The issue has `ready`, and its body hasn't changed since `ready` was applied
 - [ ] Every Brief field is filled, and Size is S or M
+- [ ] Every issue it is blocked by is closed (`gh api repos/<repo>/issues/<n>/dependencies/blocked_by`)
 - [ ] The repo's AGENTS.md has a `## Conventions` section, and any profile it names exists
       in `process/coding/`
 - [ ] Every path in Where to look exists today
