@@ -22,10 +22,10 @@ reads it directly when no `CLAUDE.md` exists.
 
 ```
 report or idea
-  -> Reporter     /ps:issues-report   asks, triages, investigates, consults experts, bisects
+  -> Reporter     /ps:report          asks, triages, investigates, consults experts, bisects
   -> Gate 1       human               applies `ready` to the plan
   -> Implementer  /ps:implement       refuses unclear work; the only agent that writes code
-  -> Reviewer     (next slice)        committee of experts with clean context
+  -> Reviewer     /ps:review          committee of experts with clean context; reruns Verify
   -> Gate 2       human               approves and merges
 ```
 

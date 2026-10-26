@@ -56,10 +56,13 @@ A missing `## Conventions` section always fails this gate. The Implementer never
 coding style from the code and never applies a psstack profile the repo didn't declare.
 It points to `/ps:adopt`.
 
-## Gate 3: review (Reviewer committee, next slice)
+## Gate 3: review (Reviewer committee, `/ps:review`)
 
-A committee of experts that sees only the issue and the diff. No blocking findings, Verify
-green, and the test suite green: the PR is marked ready for human review.
+A committee of 2 to 4 experts that sees only the issue and the diff, chaired by the Reviewer,
+who also checks every acceptance criterion and reruns Verify and the tests. No blocking
+findings and Verify green: the PR is ready for human review. Blocking findings go back to
+the Implementer, for at most 2 rounds (`loop-limits.md`). Outside contributions are reviewed
+without running their code on a maintainer's machine.
 
 ## Gate 4: merge (human)
 

@@ -34,6 +34,18 @@ gh issue view <n> --repo "$REPO" --json title,body,labels,comments,timelineItems
 Read the repo's `AGENTS.md`. Count the issue's `ps:event` markers. If
 `implement-refused` is already at its limit, apply `needs-human`, say why, and stop.
 
+**Resuming after review.** Find open PRs that close this issue:
+
+```bash
+gh api graphql -F owner="${REPO%/*}" -F name="${REPO#*/}" -F n=<n> -f query='
+  query($owner:String!,$name:String!,$n:Int!){repository(owner:$owner,name:$name){
+    issue(number:$n){closedByPullRequestsReferences(first:5){nodes{number state}}}}}'
+```
+
+If one is open and its latest `ps:event review-round` comment says "Changes needed", skip to
+§ 6. A PR labeled `needs-human` is past its limit:
+stop and say so.
+
 ## 2. Refusal check (Gate 2)
 
 Check every box in `readiness.md` § Gate 2. Run the Verify command as part of it. Do your
@@ -52,7 +64,7 @@ On any failure, refuse:
    **Needs:** <the field to fix, or the decision a human must make>
    ```
 
-3. Stop. Point the user to `/ps:issues-report <n>` to reshape it. Change no code.
+3. Stop. Point the user to `/ps:report <n>` to reshape it. Change no code.
 
 ## 3. Load the conventions
 
@@ -94,6 +106,15 @@ reproduces), that is a blocker too, not a reason to improvise.
    command and its output, and the "Noticed, not done" note.
 4. Never merge, and never mark your own PR approved. Review and merge belong to the next
    gates.
+
+## 6. Address review findings
+
+On the existing PR branch, fix each **Blocking** item from the latest review comment, and
+nothing else. Notes are optional; take one only if it is inside Scope and trivial. For each
+blocking item, either fix it (with a test when it's a behavior gap) or reply on the PR with
+evidence that it's wrong; never ignore one silently. Rerun Verify and the tests, show the
+user the result, and ask before pushing. Then the Reviewer runs the next round
+(`/ps:review <pr>`).
 
 ## Guardrails
 

@@ -18,7 +18,7 @@ psstack/
         │   └── coding/         ← coding profiles a repo can declare, with templates
         ├── agents/             ← expert subagents → ps:<expert>
         └── skills/
-            └── issues-report/
+            └── report/
                 └── SKILL.md
 ```
 
@@ -32,8 +32,9 @@ vendor-specific file. Start at [`plugins/ps/process/README.md`](plugins/ps/proce
 
 ```
 /ps:adopt          set a repo up: draft its AGENTS.md
-/ps:issues-report  report → agent-ready issue(s)        (human applies `ready`)
-/ps:implement      ready issue → PR, or a refusal note   (human reviews and merges)
+/ps:report         report → agent-ready issue(s)        (human applies `ready`)
+/ps:implement      ready issue → PR, or a refusal note
+/ps:review         PR → expert committee verdict        (human merges)
 ```
 
 Pedro's social performance data (shared by `/ps:post` and `/ps:post-pulse`) lives
@@ -65,8 +66,9 @@ for the same reasons (customer names, unreleased work, unanonymized notes); only
 | :--- | :--- | :--- |
 | **docs** | `/ps:docs [topic]` | Write or update ONE documentation page through fixed stages — purpose narrative → sources → placement → Diátaxis-typed outline → Pencil assets → Mintlify MDX → proof → wire into nav. Mintlify-first, repo-agnostic; resumable via a per-doc checkpoint. |
 | **today** | `/ps:today [filter]` | Morning radar for the current repo — open issues, PRs that need you, and pending releases that shouldn't pile up, grouped and ready to act on. (Alias: `/ps:issues-daily`.) |
-| **issues-report** | `/ps:issues-report [desc\|#issue]` | The Reporter: turns a report or an existing issue into agent-ready issues (a Brief for humans, a Spec with a Verify command), or into nothing. Investigates the code, consults experts, bisects big work, runs an advocate and a premortem critic, and cold-reads the result. Never applies `ready` on its own. |
+| **report** | `/ps:report [desc\|#issue]` | The Reporter: turns a report or an existing issue into agent-ready issues (a Brief for humans, a Spec with a Verify command), or into nothing. Investigates the code, consults experts, bisects big work, runs an advocate and a premortem critic, and cold-reads the result. Never applies `ready` on its own. |
 | **implement** | `/ps:implement <issue>` | The Implementer: runs the refusal check and marks unclear issues `not-ready` with a note; otherwise loads the repo's declared coding profile, writes the failing test first, makes Verify pass, and opens a PR on approval. Stops with a blocker report at any loop limit. |
+| **review** | `/ps:review [pr]` | The Reviewer: seats 2 to 4 experts that see only the linked issue and the diff, checks every acceptance criterion, reruns Verify and the tests, and posts one verdict: ready for human review, or blocking findings back to the Implementer (2 rounds max, then `needs-human`). Never approves or merges; never runs an outsider's code locally. |
 | **adopt** | `/ps:adopt` | Drafts or completes a repo's `AGENTS.md` from the code (commands, conventions profile, areas, compatibility, risk hotspots, release, decisions) and migrates vendor files like `CLAUDE.md` into it. |
 | **release-card** | `/ps:release-card [tag] [--color fonoster-green\|blue\|orange] [--logo Routr]` | Generate a branded release-notes image (PNG) for a repo's latest GitHub release — groups the actual commit messages by conventional-commit type (🎉 Features, 🐛 Bug Fixes, …) with short-SHA chips, on a white 1080×1350 social card, via satori + resvg. |
 | **post** | `/ps:post [--network linkedin\|twitter]` | Draft a social post in Pedro's voice for LinkedIn (default) or Twitter/X — picks the content pillar, applies the voice signatures, adds one matching CTA, and shapes length/glyphs/threading to the network. Never uses the em-dash. Drafts from the proven exemplars in the performance store. |
