@@ -55,6 +55,12 @@ start.
 - [ ] Its own cold read of the issue lists no questions
 - [ ] The issue's loop counters are under their limits (see `loop-limits.md`)
 
+The issue is the whole contract. A change the user asks for when invoking the Implementer
+("implement 458, but use only `enabled`") is not applied in the code. Ask which issue it
+belongs to, and hand it to `/ps:report <n>` to edit that issue's Spec, which takes `ready` off
+until Gate 1 passes again. If the user declines, say the change is dropped. It must not
+survive only in a conversation or a run log.
+
 A missing `ready` is not a refusal: Gate 1 simply hasn't happened. The Implementer stops,
 changes nothing, and tells the user the issue is waiting for a maintainer's `ready` (it may
 apply `ready` only on the user's explicit word, as in Gate 1). No `not-ready`, no comment,
