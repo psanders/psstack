@@ -89,7 +89,9 @@ The blocker's options are the input; the user isn't asked to choose between them
 - Drop the options that fail a Constraint. Of the rest, take the one that changes least
   outside the issue's Scope, and ask the owning expert (step 4) to confirm it.
 - It's settled when exactly one option survives, or the expert picks one with evidence.
-  Edit the Spec, record the choice and why in Context, remove `blocked`, and run steps 6–9.
+  Edit the Spec, record the choice and why in Context, remove `blocked` and any `ready` left
+  on it (the edit makes it stale for Gate 2), and run steps 6–9. Step 9 then tells the user
+  the issue is waiting for their `ready`.
 - Only a trade-off the code and AGENTS.md can't settle (a product or compatibility choice)
   goes to step 8 as `needs-human`.
 

@@ -17,7 +17,7 @@ to the repo's `type: bug` / `type: feature` / `type: chore` / `type: docs` label
 | `needs-info` | Waiting on the reporter for something only they know | Reporter | Reporter |
 | `ready` | The plan is approved; agents may implement | **A human**, or an agent on a human's explicit word | Implementer (on refusal), or closing |
 | `not-ready` | The Implementer refused; its comment says why | Implementer | Reporter, once fixed |
-| `blocked` | An agent stopped on a blocker (see `loop-limits.md`) | Any agent | Human |
+| `blocked` | An agent stopped on a blocker (see `loop-limits.md`) | Any agent | Human, or the Reporter once it has settled the blocker and edited the Spec |
 | `needs-human` | A loop limit was hit, or a decision only a human can make | Any agent | Human |
 | `needs-issue` | A PR with no linked issue | PR check | When an issue is linked |
 
