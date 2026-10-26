@@ -62,5 +62,5 @@ something invents findings, and chasing those leads to over-engineering.
 
 Copy an existing file in `agents/`. Keep the same sections: Scope, Planning checklist, Review
 red flags, Output. Planning items become Spec requirements; red flags are blocking on sight.
-Keep it under 80 lines and generic: if a line names a project, it belongs in that project's
+Keep it under 80 lines, plus an optional References section of standards by URL, and generic: if a line names a project, it belongs in that project's
 AGENTS.md instead.
