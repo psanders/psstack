@@ -81,7 +81,11 @@ From AGENTS.md `## Conventions`:
 
 ## 4. Work
 
-1. Branch from the up-to-date default branch: `<fix|feat|chore>/<short-slug>`.
+1. Branch from the up-to-date default branch: `<fix|feat|chore>/<issue>-<short-slug>`
+   (`feat/458-config-secret-refs`). The issue number in the name is how a later run finds
+   unfinished work: before branching, look for a local or remote branch starting with
+   `<type>/<issue>-`. If one exists with commits beyond the default branch, a previous
+   session stopped mid-work; continue on it (rebase if needed) instead of starting over.
 2. **Failing test first.** Write the test the acceptance criteria call for and watch it
    fail for the stated reason.
 3. Make the smallest change that passes it and the Verify command.
