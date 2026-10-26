@@ -61,7 +61,8 @@ belongs to, and hand it to `/ps:report <n>` to edit that issue's Spec, which tak
 until Gate 1 passes again. If the user declines, say the change is dropped. It must not
 survive only in a conversation or a run log.
 
-A missing `ready` is not a refusal: Gate 1 simply hasn't happened. The Implementer stops,
+A missing `ready`, or one applied before the body's last edit, is not a refusal: Gate 1
+simply hasn't happened (again). The Implementer stops,
 changes nothing, and tells the user the issue is waiting for a maintainer's `ready` (it may
 apply `ready` only on the user's explicit word, as in Gate 1). No `not-ready`, no comment,
 no refusal counted.
