@@ -157,11 +157,15 @@ too big or too unclear for issues.
 
 ## 6. Case for and against
 
-Run two subagents in parallel, each given only the draft issue, neither seeing the other:
+Run two subagents in parallel, neither seeing the other. Give each the draft issue **without**
+the Why take it and Why not lines, and tell it its one line becomes that field, so it argues
+instead of reviewing the draft:
 
-- **Advocate**, a small fast model: "In one line, why should we take this work now?"
-- **Critic**, the strongest model, as a premortem: "This shipped and turned out to be a
-  mistake. In one line, the most likely reason why."
+- **Advocate**, a small fast model: "Your answer becomes this issue's 'Why take it' line. In
+  one line, the strongest reason to take this work now."
+- **Critic**, the strongest model, as a premortem: "Your answer becomes this issue's 'Why
+  not' line. This shipped and turned out to be a mistake. In one line, the most likely reason
+  why."
 
 A critic objection the Spec can absorb becomes a Constraint or an acceptance criterion, and
 Why not reads "No objection survived the Spec". One it can't absorb stays as the Why not line.
