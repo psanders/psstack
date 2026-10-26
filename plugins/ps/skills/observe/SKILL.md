@@ -69,6 +69,11 @@ grep -l "ps-run: <run id>" ~/.claude/projects/*/*.jsonl | grep -v <your session 
 No match yet: wait until the user confirms the prompt was sent, then look again. Never guess
 a transcript by recency alone.
 
+Then find which process it runs: the first `Base directory for this skill:` line in the
+transcript names the plugin path (a released cache version, or a local checkout). Tell the
+user, and say it before suggesting a fix "is live": two sessions on the same machine can run
+different versions.
+
 ## 4. Watch
 
 Arm three background monitors, each for the maximum duration, and re-arm each when it
