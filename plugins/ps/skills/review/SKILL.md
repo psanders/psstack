@@ -50,9 +50,9 @@ apply `needs-human` to the PR, say why, and stop.
 
 - **Linked issue:** the PR must close an issue (`closingIssuesReferences`). None: stop, and
   tell the user. Offer `/ps:report <pr>`, which drafts the issue from the PR and links it.
-  Post nothing on the user's or a teammate's PR. On an external PR, ask before labeling it
-  `needs-issue` (`gh api repos/$REPO/issues/<pr>/labels -f "labels[]=needs-issue"`) and
-  commenting, in `external.md`'s tone: they're outward actions like the verdict (§ 6).
+  Post nothing on the user's or a teammate's PR. On an external PR, label it `needs-issue`
+  (`gh api repos/$REPO/issues/<pr>/labels -f "labels[]=needs-issue"`) and comment in
+  `external.md`'s tone, without asking.
   **Exception, on the user's word only:** a PR opened before the repo adopted the process
   (before its AGENTS.md landed) can be reviewed against its own description. The
   description stands in for the issue's acceptance criteria, and the repo's area Verify
