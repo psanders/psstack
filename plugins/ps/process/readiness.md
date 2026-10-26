@@ -55,7 +55,12 @@ start.
 - [ ] Its own cold read of the issue lists no questions
 - [ ] The issue's loop counters are under their limits (see `loop-limits.md`)
 
-On failure it removes `ready`, adds `not-ready`, and comments with the exact gap and the
+A missing `ready` is not a refusal: Gate 1 simply hasn't happened. The Implementer stops,
+changes nothing, and tells the user the issue is waiting for a maintainer's `ready` (it may
+apply `ready` only on the user's explicit word, as in Gate 1). No `not-ready`, no comment,
+no refusal counted.
+
+On any other failure it removes `ready`, adds `not-ready`, and comments with the exact gap and the
 evidence. For example: "Verify passes on main (output below), so the bug may already be
 fixed or the repro is wrong." The issue goes back to the Reporter, not to a human, unless the
 gap is a decision only a human can make.
