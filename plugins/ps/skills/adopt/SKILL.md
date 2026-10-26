@@ -42,7 +42,16 @@ Gather evidence per section:
 If you hold notes about this project from earlier sessions, propose the ones that are project
 decisions (not personal preferences) as `## Decisions` lines, and say where each came from.
 
-## 3. Draft and confirm
+## 3. GitHub templates
+
+Check where the repo's issue forms come from. If the org has a `.github` repo with the
+process forms (`${CLAUDE_PLUGIN_ROOT}/templates/github/`), the repo should have no
+`.github/ISSUE_TEMPLATE` folder and no `pull_request_template.md` of its own; propose deleting
+them. If the org has none, propose installing the templates there first (filling in the
+product links in `config.yml`), and merging `templates/github/labels.yml` into the org's label
+source. Each is a pull request the user approves.
+
+## 4. Draft and confirm
 
 Show the full draft, section by section, marking each line's evidence source. Ask what to
 change. Write `AGENTS.md` only after the user approves, and delete migrated vendor files only

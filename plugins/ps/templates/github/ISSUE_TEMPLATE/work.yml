@@ -1,0 +1,164 @@
+name: Work item (maintainers)
+description: An agent-ready issue. A Brief for humans, a Spec the implementer follows without questions.
+labels: [needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For maintainers. Every field is required; "No" and "Low" are answers. If a decision is
+        still open, start a Discussion instead. Set the issue type (Bug, Feature, Task) after
+        filing.
+
+        ## Brief
+
+  - type: input
+    id: problem
+    attributes:
+      label: Problem
+      description: One sentence with no "and". Who hits what, when.
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: Who is affected, how badly, and whether there is a workaround.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Breaking change
+      description: Does the change (not the bug) break an API, CLI flag, env var, config, schema or wire behavior?
+      options:
+        - "No"
+        - "Yes"
+    validations:
+      required: true
+
+  - type: textarea
+    id: breaking-details
+    attributes:
+      label: Breaking change details
+      description: If Yes, what breaks, for whom, and the migration.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+
+  - type: textarea
+    id: risk-details
+    attributes:
+      label: Risk details
+      description: What the change could break, and how we roll back.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size
+      description: S is under half a day, M up to two days. Anything bigger is split into several issues.
+      options:
+        - S
+        - M
+    validations:
+      required: true
+
+  - type: input
+    id: why-take
+    attributes:
+      label: Why take it
+      description: One line.
+    validations:
+      required: true
+
+  - type: input
+    id: why-not
+    attributes:
+      label: Why not
+      description: One line, or "No objection survived the Spec".
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## Spec"
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Stated as a fact, not "should probably".
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduce
+      description: Bugs only. Exact commands, versions and config, inlined rather than linked.
+    validations:
+      required: false
+
+  - type: textarea
+    id: where
+    attributes:
+      label: Where to look
+      description: Files and functions that exist today, and a similar past change to copy.
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      value: |
+        In:
+        Out:
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Public APIs, schemas, env vars or wire formats that must not change.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ] Given ..., when ..., then ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: verify
+    attributes:
+      label: Verify
+      description: One command that fails today and passes when the work is done.
+      render: shell
+    validations:
+      required: true

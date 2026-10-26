@@ -129,9 +129,12 @@ cancel.
   back to the repo's `type:` label.
 - **Reshaping our own issue** (`not-ready`, or `needs-triage` filed by a maintainer): edit
   the body in place, remove `not-ready` / `needs-triage`.
-- **An external issue** (`external.md`): keep their words. Post the shaped Brief and Spec as a comment,
-  thank them, and ask only what you couldn't find. Remove `needs-triage` once shaped, or add
+- **An external issue** (`external.md`): until it is `ready`, leave the body alone. Post the
+  shaped Brief and Spec as a comment, thank them, and ask only what you couldn't find. Add
   `needs-info` when waiting on them.
+- **Promoting an external issue once `ready`:** rewrite the body as the Brief and Spec, and
+  keep their original report below it in a collapsed `<details>` section titled
+  "Original report by @user". Remove `needs-triage`.
 - **Labels:** area, `breaking` when Breaking change is Yes, `risk: high` when Risk is High.
   Only labels that exist (`gh label list`); never create one.
 - **Slices:** create in order, then link each with "blocked by" its predecessor.
