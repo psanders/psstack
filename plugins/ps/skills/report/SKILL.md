@@ -191,6 +191,10 @@ Repeat; after the third round there's no fourth read. Check the last fold yourse
 the code: a question the code answers is settled; one that needs a decision sends the slice
 to step 8 as undecided.
 
+A fold that adds substance, not just wording (a dependency, a version or import path, a new
+file or package touched, a Constraint), goes back to the expert who owns it before the next
+read, with step 3's spike rerun. Cold readers judge clarity, not whether it can work.
+
 ## 8. Resolve or hand over
 
 No preview and no questions. Either everything is settled, or it isn't:
