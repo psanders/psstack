@@ -72,7 +72,9 @@ Why each rule exists:
 
 Use it for input-validating operations (DB writes, service calls, business logic). Skip it for
 trivial pure helpers and framework glue: the pattern earns its keep only when there is
-external input to validate.
+external input to validate. A synchronous function that does validate input (parsing a file, loading
+config) keeps the same rules without the async wrapper: `schema.safeParse` at the door, a
+`ValidationError` on failure, one function per file, and the validation-failure test.
 
 ### Adding one validated function to an existing repo
 
