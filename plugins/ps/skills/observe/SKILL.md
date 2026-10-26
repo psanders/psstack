@@ -97,6 +97,9 @@ isn't stopping. Stay quiet otherwise.
 - **Fix the process** on the findings branch: one small commit per learning, with the run's
   evidence in the message. Rules go in `process/`, procedure in the skill. Bump the plugin's
   patch or minor version once per run, not per commit.
+- **A fix isn't live in the running session.** Claude Code reads skills at session start, so
+  a session under test keeps the process it started with. To test a fix mid-run, the user
+  starts a fresh session with the same run id and a new `Start with:` line.
 - **Never message the session under test**, even to relay the user. The run tests the process
   as written; a relayed note contaminates it and can't stand in for the user's approval.
 
