@@ -52,7 +52,9 @@ about any one project. Project facts come from the repo's AGENTS.md `## Expert n
 
 Give the expert a brief, never your conversation: the draft issue (or the diff), the paths
 involved, and the repo's `## Expert notes` for that role. Ask for its output contract.
-Consult independently: one expert never sees another's answer.
+Consult independently: one expert never sees another's answer. A later round on the same point
+continues that expert's own agent, so it keeps its earlier evidence; it still never gets
+the coordinator's conversation.
 
 ## Output contract
 
