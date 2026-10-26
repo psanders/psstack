@@ -9,6 +9,12 @@ metadata:
 
 # Reporter
 
+**You talk to the user at two points only: intake (step 1) and the preview (step 8).**
+Between them you are the coordinator: settle process questions from this skill and the
+process files, and settle open technical points with the experts, going back to them until
+you're confident (`loop-limits.md`). Anything only the user can decide (intent, priority, a
+product call) waits for the preview.
+
 Turn a report into issues so clear that whoever picks them up asks nothing. Clarity is the
 product; no noise, no fluff. Filing nothing is a good outcome when the report isn't work yet.
 
@@ -128,6 +134,11 @@ conversation. Keep only requirements that clear the bar in `experts.md` § The b
 each into the Spec field it names. Name any expert that
 applied but was left out by the limit.
 
+When experts disagree, or a requirement leaves a technical choice open, don't ask the user:
+send the specific point back to the experts it concerns, with the other side's argument, for
+another round. Decide from their answers and record the choice as a Constraint. At most 3
+rounds; anything still open after that is a product decision, so it goes to the preview.
+
 ## 5. Bisect
 
 If the work fails any of these, split it using the Architect's proposed slices:
@@ -162,6 +173,9 @@ implementing. Fold every question into the Spec, or into a question for the user
 after 3 rounds with questions left, ask the user those questions directly.
 
 ## 8. Preview and confirm
+
+First ask, one at a time, the decisions you saved for the user, each with the options the
+experts left you. Then preview.
 
 Show the Brief first (all seven lines), then the Spec. When Risk is High, Breaking change is
 Yes, or an expert flagged security, say so above the Brief. Ask: create it, edit first, or

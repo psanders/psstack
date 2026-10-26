@@ -10,7 +10,8 @@ around the obstacle it hit.
 | :--- | :--- | :--- |
 | The same command fails with the same error | 2 attempts | Blocker report |
 | Any step makes no progress (same diff, same failure, same finding) | 1 repeat | Blocker report |
-| Reporter's cold read still lists questions | 3 rounds | Ask the human the remaining questions |
+| Reporter's cold read still lists questions | 3 rounds | Ask the human the remaining questions at the preview |
+| Reporter goes back to experts on an open point | 3 rounds | Treat it as a product decision; ask at the preview |
 | Bisecting work into smaller issues | 2 levels deep, 6 issues total | Stop: too big for issues; propose a Discussion |
 | Implementer refuses, Reporter fixes, Implementer refuses again | 2 refusals per issue | `needs-human` |
 | Reviewer sends blocking findings back to the Implementer | 2 rounds per PR | `needs-human` |
