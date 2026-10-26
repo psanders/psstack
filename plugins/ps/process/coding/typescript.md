@@ -86,7 +86,8 @@ puts that in the first such slice's Scope; later slices reuse it.
 
 1. **Find the spine.** Locate the shared package and its scope (e.g. `@acme/common`).
    Confirm `withErrorHandlingAndValidation` and `ValidationError` exist there; if not, copy
-   them from `templates/` first.
+   them from `templates/` first. A copy is new code in that repo: bring it to the repo's
+   header, format and lint rules (JSDoc, semicolons, quotes) before the first commit.
 2. **Schema** in the shared package's `schemas/`, re-exported from its barrel (§ Schemas).
 3. **Client interface**: reuse one from the shared package's `types/`; add a minimal new one
    only if needed. The factory depends on the interface, not a concrete client.
