@@ -1,8 +1,9 @@
-# Dependency groups — the menu
+# Stack menu for the `typescript` profile
 
-The recurring dependency bundles, distilled from how these projects are actually built.
-Bootstrap presents these to the user as **opt-in groups** and only installs what they pick.
-Package names are the real ones in use; versions are intentionally omitted (install latest).
+The recurring dependency bundles, distilled from how these projects are actually built. Use it
+when starting a new project or adding a surface to one: pick the groups the project needs and
+install only those. The patterns they serve are in `typescript.md`. Package names are the real
+ones in use; versions are intentionally omitted (install latest) unless a pin is noted.
 
 ---
 

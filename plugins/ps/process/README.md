@@ -43,7 +43,7 @@ Experts (`../agents/`) advise every stage and never write. Each stage has exactl
 | [agents-md-contract.md](agents-md-contract.md) | The AGENTS.md sections the skills read |
 | [improvement.md](improvement.md) | How to pick repo-health work worth an issue |
 | [research.md](research.md) | Why the process looks like this, with sources |
-| [coding/](coding/) | Coding profiles a repo can declare |
+| [coding/](coding/) | Coding profiles a repo can declare, their templates and stack menus |
 
 ## Changing the process
 
