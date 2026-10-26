@@ -116,6 +116,11 @@ Do the legwork the reporter shouldn't have to:
   passes, the bug may be fixed or the repro is wrong: tell the user and stop.
   When the work is clearly bigger than one PR, write Verify per slice in step 5 instead;
   the whole has none.
+- Run every Constraint that names a command (a build, a lockfile check) against a throwaway
+  spike of what Scope pins: a new dependency, a version, an import path. Install it in a
+  scratch worktree, use it the way Scope says from one file, run the commands, then drop the
+  worktree. A Constraint the pinned choice can't meet goes back to the user as a question
+  now, not to the Implementer as a blocker later.
 - Judge Breaking change against AGENTS.md `## Compatibility`, and Risk against
   `## Risk hotspots`.
 - When the reporter points elsewhere ("do it the way Fonoster does", "I'm not sure, look at
