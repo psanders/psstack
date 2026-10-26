@@ -191,8 +191,8 @@ A critic objection the Spec can absorb becomes a Constraint or an acceptance cri
 Why not reads "No objection survived the Spec". One it can't absorb stays as the Why not line.
 
 When the critic contradicts an expert's requirement, evidence decides: keep the side that
-cites code, a trace or a standard. If both do, send the point back to that expert with the
-critic's argument (step 4's rounds). If it's still open, it's a decision for a human
+cites code, a trace or a standard. If both do, send the point back to every expert whose
+requirement it contradicts, each with the critic's argument (step 4's rounds). If it's still open, it's a decision for a human
 (step 8).
 
 ## 7. Cold read
