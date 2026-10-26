@@ -1,0 +1,8 @@
+# Ideas and questions start as Discussions; only bugs and decided work become issues.
+# Fill one link per product. An org-level copy applies to every repo without its own
+# .github/ISSUE_TEMPLATE folder, so links must be absolute.
+blank_issues_enabled: false
+contact_links:
+  - name: "{{PRODUCT}}: ideas and questions"
+    url: https://github.com/{{OWNER}}/{{REPO}}/discussions
+    about: Suggest a feature or ask a question. Ideas become issues once a maintainer decides on them.

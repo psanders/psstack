@@ -96,7 +96,7 @@ So:
    `batch_get(patterns:[{reusable:true}])` to find the `Diagram Kit` components.
 2. **No kit yet?** Seed it once: define the `dgm-*` tokens (`SetVariables`) and build the
    reusable components in a `Diagram Kit` frame (see `asset-system.md`). Then instance.
-3. **Honor the project's Pencil build workaround** (`CLAUDE.md` / design memories) — e.g.
+3. **Honor the project's Pencil build workaround** (`AGENTS.md` / design memories) — e.g.
    *copy an existing frame rather than adding raw frames*, which can render blank/shifted.
 4. Make the diagram frame at the `assets.md` preset (16:9 `1600×900`, wide flow `1600×600`).
    Use `layout: "none"` so zones can be absolutely positioned.

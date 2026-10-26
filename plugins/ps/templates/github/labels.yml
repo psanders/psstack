@@ -1,0 +1,42 @@
+# Labels the delivery process uses (process/labels.md): name, color, description, aliases.
+# Merge into the org's label source; don't replace labels it already defines.
+
+# --- status ---
+- name: needs-triage
+  color: "fbca04"
+  description: Not yet reviewed
+- name: needs-info
+  color: "fbca04"
+  description: Waiting on the reporter
+- name: ready
+  color: "0e8a16"
+  description: Plan approved by a maintainer; agents may implement
+- name: not-ready
+  color: "fbca04"
+  description: The implementer refused it; see the comment for the gap
+- name: blocked
+  color: "fbca04"
+  description: Waiting on something external
+- name: needs-human
+  color: "d93f0b"
+  description: A loop limit was hit or a decision needs a maintainer
+- name: needs-issue
+  color: "fbca04"
+  description: A pull request with no linked issue
+
+# --- signals ---
+- name: breaking
+  color: "b60205"
+  description: Needs a major bump or a migration note
+- name: "risk: high"
+  color: "b60205"
+  description: A maintainer reviews the plan before work starts
+- name: external
+  color: "c5def5"
+  description: Opened by someone outside the org
+- name: good first issue
+  color: "fbca04"
+  description: Good for newcomers
+- name: help wanted
+  color: "fbca04"
+  description: Extra attention is needed

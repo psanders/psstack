@@ -1,8 +1,9 @@
-# Dependency groups — the menu
+# Stack menu for the `typescript` profile
 
-The recurring dependency bundles, distilled from how these projects are actually built.
-Bootstrap presents these to the user as **opt-in groups** and only installs what they pick.
-Package names are the real ones in use; versions are intentionally omitted (install latest).
+The recurring dependency bundles, distilled from how these projects are actually built. Use it
+when starting a new project or adding a surface to one: pick the groups the project needs and
+install only those. The patterns they serve are in `typescript.md`. Package names are the real
+ones in use; versions are intentionally omitted (install latest) unless a pin is noted.
 
 ---
 
@@ -74,7 +75,7 @@ The ORM is always Prisma; the engine is the decision.
 - `zod` for tool schemas. **Default to current Claude models** when wiring the client:
   `claude-opus-4-8` (most capable), `claude-sonnet-4-6` (balanced), `claude-haiku-4-5` (fast).
 - Agent tools are declared as function-calling schemas and routed into the **same validated
-  functions** the API uses (see `conventions.md` → optional agent layer).
+  functions** the API uses (see `${CLAUDE_PLUGIN_ROOT}/process/coding/typescript.md` → optional agent layer).
 
 ### I. Storybook  *(component-driven UI dev)*
 - `storybook`, `@storybook/react-vite` (web) or `@storybook/react-native` (mobile)
@@ -100,8 +101,8 @@ The ORM is always Prisma; the engine is the decision.
 
 ### M. Workflow tooling  *(commands & skills wired into the new repo)*
 These are not runtime deps — they configure the project's AI/dev workflow. Offered as opt-in.
-- **psstack commands** — make this toolbelt's skills (`/ps:kaizen`, `/ps:today`,
-  `/ps:issues-report`, `/ps:bootstrap`) available in the new repo by adding the marketplace +
+- **psstack commands** — make this toolbelt's skills (`/ps:today`,
+  `/ps:report`, `/ps:implement`, `/ps:adopt`) available in the new repo by adding the marketplace +
   plugin to the project's `.claude/settings.json` (`extraKnownMarketplaces` + `enabledPlugins`),
   so a fresh clone gets them without per-machine setup.
 - **OpenSpec** — spec-driven development. Package is **`@fission-ai/openspec`** (the `openspec`

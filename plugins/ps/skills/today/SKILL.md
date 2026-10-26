@@ -138,7 +138,7 @@ Then:
 
 **If "Cut a release":** if this repo provides a release workflow (e.g. a `/ps:release-card` skill or a release script), offer to invoke it; otherwise summarize the unreleased commits as draft release notes grouped by conventional-commit type, and confirm before running any `gh release` command.
 
-**If "Report a new issue":** invoke the `/ps:issues-report` skill.
+**If "Report a new issue":** invoke the `/ps:report` skill.
 
 **If "Nothing":** done.
 

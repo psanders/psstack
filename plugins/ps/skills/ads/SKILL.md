@@ -100,7 +100,7 @@ repo, `learnings.md`, the account's Pixel events) so most answers are one click.
 
 ### Batch 1 — What and why
 - **Brand/product** — options from known brands (QCobro, micobro, Mikro, Fonoster, KARMA) + Other. If the brand
-  has a local repo (e.g. `~/Projects/qcobro`), skim its `CLAUDE.md`/README/site for the
+  has a local repo (e.g. `~/Projects/qcobro`), skim its `AGENTS.md` (or legacy `CLAUDE.md`), README/site for the
   product pitch, audience, and language.
 - **Goal** (Pedro's words) → map to objective using `strategy.md` §1. Options:
   "Get demo requests on the site (Recommended for B2B)", "Start WhatsApp conversations",

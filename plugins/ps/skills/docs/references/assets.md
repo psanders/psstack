@@ -47,7 +47,7 @@ the product's design system. The recipe below is the general frame for any asset
 
 1. **Load the schema first**: `get_editor_state(include_schema: true)` if you don't already
    have the file's schema in context.
-2. **Honor the project's Pencil conventions.** Read `CLAUDE.md` and any design memories
+2. **Honor the project's Pencil conventions.** Read `AGENTS.md` and any design memories
    before drawing — projects often have build workarounds (e.g. *copy an existing
    frame/screen and override it rather than adding raw frames, which can render blank or
    shifted*). Follow the project's idiom; don't reinvent it.

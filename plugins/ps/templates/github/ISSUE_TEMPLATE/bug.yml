@@ -1,0 +1,53 @@
+name: Report a bug
+description: Something doesn't work as documented. Ideas and questions go to Discussions.
+type: Bug
+labels: [needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Keep it short; a maintainer will follow up.
+        Remove passwords, tokens and phone numbers before posting.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: One or two sentences.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The package, image or chart version you run.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or traces
+      description: Optional. Paste the relevant part only.
+      render: shell
+    validations:
+      required: false

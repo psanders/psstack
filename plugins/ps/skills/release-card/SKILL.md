@@ -94,7 +94,7 @@ JSON
 
 If no `--color`/`--theme` arg, ask with **AskUserQuestion** — "Brand color?": Fonoster Green (Recommended), Fonoster Blue, Fonoster Orange, micobro. Map to `fonoster-green` / `fonoster-blue` / `fonoster-orange` / `micobro`. The logo wordmark defaults to the repo name unless `--logo` was given.
 
-If no `--lang` arg and the repo's user-facing text is Spanish (e.g. micobro — see its `CLAUDE.md`), ask whether the card itself should be in Spanish rather than assuming; otherwise default to `en` without asking.
+If no `--lang` arg and the repo's user-facing text is Spanish (e.g. micobro — see its `AGENTS.md` (or legacy `CLAUDE.md`)), ask whether the card itself should be in Spanish rather than assuming; otherwise default to `en` without asking.
 
 ### 4. Render the PNG
 
