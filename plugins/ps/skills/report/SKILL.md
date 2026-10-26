@@ -19,6 +19,8 @@ product; no noise, no fluff. Filing nothing is a good outcome when the report is
 - `${CLAUDE_PLUGIN_ROOT}/process/loop-limits.md`: limits and the blocker report
 - `${CLAUDE_PLUGIN_ROOT}/process/experts.md`: who to consult and how
 - `${CLAUDE_PLUGIN_ROOT}/process/labels.md`: the label vocabulary
+- `${CLAUDE_PLUGIN_ROOT}/process/titles.md`: how to write the title
+- `${CLAUDE_PLUGIN_ROOT}/process/external.md`: when the reporter is outside the org
 
 Then read the repo's `AGENTS.md` (`${CLAUDE_PLUGIN_ROOT}/process/agents-md-contract.md` lists
 the sections). If it's missing, continue with generic defaults, say so once, and suggest
@@ -79,7 +81,8 @@ with a blocker report instead of trying a third time.
 Pick experts per `experts.md`: `ps:qa-engineer` and `ps:software-architect` always, plus up
 to two more from the area map and keywords. Run them as subagents, in parallel, each with a
 brief (the draft, the paths, the repo's `## Expert notes` for that role), never this
-conversation. Fold each requirement into the Spec field it names. Name any expert that
+conversation. Keep only requirements that clear the bar in `experts.md` § The bar, and fold
+each into the Spec field it names. Name any expert that
 applied but was left out by the limit.
 
 ## 5. Bisect
@@ -120,13 +123,13 @@ cancel.
 
 ## 9. File
 
-- **New issue:** `gh issue create` with the title (plain words, no prefix) and the body.
+- **New issue:** `gh issue create` with a title written per `titles.md` and the body.
   Then set the native type when the org has issue types:
   `gh api -X PATCH repos/$REPO/issues/<n> -f type=<Bug|Feature|Task>`. If that fails, fall
   back to the repo's `type:` label.
 - **Reshaping our own issue** (`not-ready`, or `needs-triage` filed by a maintainer): edit
   the body in place, remove `not-ready` / `needs-triage`.
-- **An outsider's issue:** keep their words. Post the shaped Brief and Spec as a comment,
+- **An external issue** (`external.md`): keep their words. Post the shaped Brief and Spec as a comment,
   thank them, and ask only what you couldn't find. Remove `needs-triage` once shaped, or add
   `needs-info` when waiting on them.
 - **Labels:** area, `breaking` when Breaking change is Yes, `risk: high` when Risk is High.

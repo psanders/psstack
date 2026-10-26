@@ -38,6 +38,8 @@ Experts (`../agents/`) advise every stage and never write. Each stage has exactl
 | [issue-format.md](issue-format.md) | The Brief (for humans) and the Spec (for the implementer) |
 | [readiness.md](readiness.md) | The gates: what `ready` means, the Implementer's refusal check |
 | [labels.md](labels.md) | The label vocabulary every skill uses |
+| [titles.md](titles.md) | Do's and don'ts for PR and issue titles |
+| [external.md](external.md) | How issues and PRs from outside the org are handled |
 | [loop-limits.md](loop-limits.md) | Hard limits on retries and rounds, and the one way to stop |
 | [experts.md](experts.md) | The expert roster, how experts are picked, their output contract |
 | [agents-md-contract.md](agents-md-contract.md) | The AGENTS.md sections the skills read |
