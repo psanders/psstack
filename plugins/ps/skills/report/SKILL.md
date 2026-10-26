@@ -137,7 +137,10 @@ If the work fails any of these, split it using the Architect's proposed slices:
 - one Verify command proves it
 - one PR can do it
 
-Each slice is a full issue that passes this whole skill. Order slices with "blocked by".
+Each slice is a full issue: its own Brief, Spec and Verify. Don't rerun everything per
+slice: step 6 (advocate and critic) runs once for the whole set, since taking the work is
+one decision; step 7 (cold read) runs per slice; experts are consulted again only for a
+slice that touches an area the first round didn't cover. Order slices with "blocked by".
 Limits: 2 levels deep, 6 issues total. Past that, stop and propose a Discussion; the work is
 too big or too unclear for issues.
 
