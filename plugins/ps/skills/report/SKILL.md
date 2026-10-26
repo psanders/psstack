@@ -199,6 +199,8 @@ requirement it contradicts, each with the critic's argument (step 4's rounds). I
 
 ## 7. Cold read
 
+Each round posts a `<!-- ps:event cold-read-round -->` comment on the issue once it exists
+(for a new issue, in step 9, one per round run), so the counter survives the session.
 Give a fresh subagent only the final issue text and ask what it would need to ask before
 implementing, counting only questions whose answer would change what gets built or how it's
 verified (`experts.md` § The bar). "None" is the expected answer for a good issue; no
