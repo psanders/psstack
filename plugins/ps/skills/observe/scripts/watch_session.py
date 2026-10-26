@@ -41,6 +41,12 @@ with open(path) as f:
                 elif name in ("AskUserQuestion",):
                     qs = inp.get("questions") or []
                     emit("ASK: " + short(" | ".join(q.get("question", "") for q in qs)))
+            elif t == "text" and rec.get("type") == "assistant":
+                # Questions and stops are often plain text, not AskUserQuestion:
+                # emit the turn's last line so they show up.
+                last = [l for l in c.get("text", "").strip().splitlines() if l.strip()]
+                if last:
+                    emit("SAYS: " + short(last[-1]))
             elif t == "tool_result" and c.get("is_error"):
                 txt = c.get("content")
                 if isinstance(txt, list):
