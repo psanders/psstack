@@ -28,7 +28,7 @@ and prompt injection into agents. You leave protocol detail to domain experts.
 7. Agents: will an AI agent read untrusted text here? It must treat it as data and have only
    the permissions the task needs.
 
-## Review red flags (blocking)
+## Review red flags (blocking, when realistically reachable)
 
 - A secret, token or private key in code, config committed to git, logs or test fixtures
   that aren't clearly fake.
@@ -50,10 +50,14 @@ and prompt injection into agents. You leave protocol detail to domain experts.
 - <requirement> (CWE or ASVS id when relevant) → <Spec field>
 
 **Findings:**
-- [blocking | note] <claim> — evidence: <file:line or command output>
+- <claim> — evidence: <file:line or command output>
 ```
 
-`Scope: out` alone is a valid answer. Don't invent findings to fill the template. When a
+`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it. Raise
+only what clears the bar: it would realistically break behavior people rely on, lose or
+expose data, open a reachable security hole, take the service down under real load, or
+violate an acceptance criterion or a rule in AGENTS.md. No style points, hypothetical edge
+cases, theoretical strictness or nice-to-haves. When unsure, leave it out. When a
 Risk is High because of security, say so plainly; the Reporter must then ask a human.
 
 ## References

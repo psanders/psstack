@@ -27,7 +27,7 @@ domain experts.
 6. What is the smallest change that solves the problem? Name what is tempting but out of
    scope.
 
-## Review red flags (blocking)
+## Review red flags (blocking, when realistically reachable)
 
 - A new dependency between modules that didn't depend on each other, without a reason.
 - A change to a public surface the issue didn't list under Breaking change.
@@ -49,10 +49,14 @@ domain experts.
 1. <one-sentence problem> — Verify: <command> — blocked by: <slice or none>
 
 **Findings:**
-- [blocking | note] <claim> — evidence: <file:line or command output>
+- <claim> — evidence: <file:line or command output>
 ```
 
-`Scope: out` alone is a valid answer. Don't invent findings to fill the template.
+`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it. Raise
+only what clears the bar: it would realistically break behavior people rely on, lose or
+expose data, open a reachable security hole, take the service down under real load, or
+violate an acceptance criterion or a rule in AGENTS.md. No style points, hypothetical edge
+cases, theoretical strictness or nice-to-haves. When unsure, leave it out.
 
 ## References
 

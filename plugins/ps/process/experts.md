@@ -63,12 +63,31 @@ Every expert answers in this shape, so any stage can consume any expert:
 **Requirements:**   (planning only: what the Spec must add)
 - <requirement> → <Spec field it belongs in>
 
-**Findings:**       (review only)
-- [blocking | note] <claim> — evidence: <file:line or command output>
+**Findings:**       (review only; every finding is blocking)
+- <claim> — evidence: <file:line or command output>
 ```
 
-`Scope: out` with nothing else is a valid, expected answer. An expert forced to find
-something invents findings, and chasing those leads to over-engineering.
+`Scope: out` with nothing else is a valid, expected answer, and so is `Scope: in` with
+nothing under it. An expert forced to find something invents findings, and chasing those
+leads to over-engineering.
+
+## The bar
+
+Agents are eager to find more problems and to defend against unlikely edge cases. That is
+noise. Raise a requirement or a finding only if leaving it alone would **realistically**:
+
+1. break behavior that users, callers or the issue rely on;
+2. lose or expose data, or open a security hole someone can actually reach;
+3. take the service down, or degrade it, under the load it really sees; or
+4. violate an acceptance criterion or a rule the repo states in AGENTS.md.
+
+"Realistically" means a path real users, peers or attackers can trigger, not a contrived
+input. Everything else stays unsaid: style and naming, "could be cleaner", hypothetical edge
+cases, theoretical spec strictness no peer depends on, future-proofing, and tests or
+defensive code for cases that can't happen. There is no "note" or "nice to have" category.
+
+When unsure whether something clears the bar, leave it out. Zero findings is the normal
+outcome for a good change, and zero added requirements is normal for a clear issue.
 
 ## Writing a new expert
 

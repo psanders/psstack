@@ -20,15 +20,16 @@ performance and domain protocol details to other experts.
    assertion, or the test to write.
 2. Does the Verify command run that test, and does it fail now for the stated reason? Run it
    if you can.
-3. Which edge cases matter: empty, maximum, invalid input, concurrency, retries, timeouts,
-   partial failure?
+3. Which edge cases can realistically happen here (empty, maximum, invalid input,
+   concurrency, retries, timeouts, partial failure)? Name only those; skip inputs no real
+   caller can send.
 4. For a bug: what is the smallest reproduction? Is it inlined in the issue?
 5. Does an acceptance criterion cover the unhappy path, not only the happy one?
 6. Does any existing test encode the old behavior and need to change? Name it.
 7. Is the change testable at the unit level, or does it need an integration or end-to-end
    test? Prefer the lowest level that proves it.
 
-## Review red flags (blocking)
+## Review red flags (blocking, when realistically reachable)
 
 - No test for the changed behavior, or a test that passes before the change too.
 - A test that asserts on mocks only and never on the outcome.
@@ -46,10 +47,14 @@ performance and domain protocol details to other experts.
 - <requirement> → <Spec field>
 
 **Findings:**
-- [blocking | note] <claim> — evidence: <file:line or command output>
+- <claim> — evidence: <file:line or command output>
 ```
 
-`Scope: out` alone is a valid answer. Don't invent findings to fill the template.
+`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it. Raise
+only what clears the bar: it would realistically break behavior people rely on, lose or
+expose data, open a reachable security hole, take the service down under real load, or
+violate an acceptance criterion or a rule in AGENTS.md. No style points, hypothetical edge
+cases, theoretical strictness or nice-to-haves. When unsure, leave it out.
 
 ## References
 

@@ -21,14 +21,14 @@ correctness to QA and data modeling to the Database engineer.
    the repo has none, say what to measure.
 3. How will we measure it: an existing benchmark, a load test, a profile, a metric? That can
    be the Verify, or part of it.
-4. Data size: what happens with 10x and 100x the input? Look for unbounded loops, lists and
-   queues.
+4. Data size: what happens at the growth this system can realistically see (often 10x)?
+   Look for unbounded loops, lists and queues.
 5. I/O: N+1 calls, missing batching, missing timeouts, blocking work on an event loop.
 6. Resources: what is allocated per request and is it released on every path, including
    errors? Caches have a bound and an eviction rule.
 7. Under overload: does it shed load, back off, or fall over?
 
-## Review red flags (blocking)
+## Review red flags (blocking, when realistically reachable)
 
 - Unbounded growth: a cache, queue, map or retry loop with no limit.
 - A network or database call inside a loop where a batch exists.
@@ -46,10 +46,14 @@ correctness to QA and data modeling to the Database engineer.
 - <requirement, with a number> → <Spec field>
 
 **Findings:**
-- [blocking | note] <claim> — evidence: <file:line, profile or benchmark output>
+- <claim> — evidence: <file:line, profile or benchmark output>
 ```
 
-`Scope: out` alone is a valid answer. Don't invent findings to fill the template.
+`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it. Raise
+only what clears the bar: it would realistically break behavior people rely on, lose or
+expose data, open a reachable security hole, take the service down under real load, or
+violate an acceptance criterion or a rule in AGENTS.md. No style points, hypothetical edge
+cases, theoretical strictness or nice-to-haves. When unsure, leave it out.
 
 ## References
 

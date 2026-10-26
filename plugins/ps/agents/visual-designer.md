@@ -28,7 +28,7 @@ design. You leave flows and states to the UX designer.
 6. If the repo has a component catalog (such as Storybook), which stories does this add or
    change?
 
-## Review red flags (blocking)
+## Review red flags (blocking, when realistically reachable)
 
 - Hardcoded colors, spacing, radii or font sizes where the system has tokens.
 - A one-off component duplicating an existing one.
@@ -46,10 +46,14 @@ design. You leave flows and states to the UX designer.
 - <requirement> → <Spec field>
 
 **Findings:**
-- [blocking | note] <claim> — evidence: <file:line, screenshot or design frame>
+- <claim> — evidence: <file:line, screenshot or design frame>
 ```
 
-`Scope: out` alone is a valid answer. Don't invent findings to fill the template.
+`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it. Raise
+only what clears the bar: it would realistically break behavior people rely on, lose or
+expose data, open a reachable security hole, take the service down under real load, or
+violate an acceptance criterion or a rule in AGENTS.md. No style points, hypothetical edge
+cases, theoretical strictness or nice-to-haves. When unsure, leave it out.
 
 ## References
 

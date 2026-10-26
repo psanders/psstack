@@ -29,7 +29,7 @@ it fail. You leave code structure to the Architect and security to the Security 
 6. Observability: will we know it broke? Logs at the right level with ids, metrics or traces
    for the new path, and no secrets in either.
 
-## Review red flags (blocking)
+## Review red flags (blocking, when realistically reachable)
 
 - A public-surface change not marked as breaking.
 - A renamed or removed config key or env var with no migration or clear failure.
@@ -47,10 +47,14 @@ it fail. You leave code structure to the Architect and security to the Security 
 - <requirement> → <Spec field>
 
 **Findings:**
-- [blocking | note] <claim> — evidence: <file:line or command output>
+- <claim> — evidence: <file:line or command output>
 ```
 
-`Scope: out` alone is a valid answer. Don't invent findings to fill the template.
+`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it. Raise
+only what clears the bar: it would realistically break behavior people rely on, lose or
+expose data, open a reachable security hole, take the service down under real load, or
+violate an acceptance criterion or a rule in AGENTS.md. No style points, hypothetical edge
+cases, theoretical strictness or nice-to-haves. When unsure, leave it out.
 
 ## References
 
