@@ -55,7 +55,8 @@ apply `needs-human` to the PR, say why, and stop.
   `external.md`'s tone, without asking.
   **Exception, on the user's word only:** a PR opened before the repo adopted the process
   (before its AGENTS.md landed) can be reviewed against its own description. The
-  description stands in for the issue's acceptance criteria, and the repo's area Verify
+  description stands in for the issue's acceptance criteria (a claim in it that the code
+  doesn't keep is a broken promise under the bar), and the repo's area Verify
   (AGENTS.md § Commands) stands in for Verify. The verdict's first line says so, and a
   `needs-issue` label on the PR comes off with it. Never offer it for a PR opened after.
 - **Ready issue:** the linked issue should carry `ready`. If it doesn't, say so in the
