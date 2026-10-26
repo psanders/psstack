@@ -108,6 +108,8 @@ Do the legwork the reporter shouldn't have to:
 - Reproduce bugs when the repo allows it.
 - Write the Verify command and run it. It must fail today for the stated reason. If it
   passes, the bug may be fixed or the repro is wrong: tell the user and stop.
+  When the work is clearly bigger than one PR, write Verify per slice in step 5 instead;
+  the whole has none.
 - Judge Breaking change against AGENTS.md `## Compatibility`, and Risk against
   `## Risk hotspots`.
 - When the reporter points elsewhere ("do it the way Fonoster does", "I'm not sure, look at
