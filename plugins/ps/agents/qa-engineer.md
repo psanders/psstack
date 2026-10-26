@@ -1,7 +1,7 @@
 ---
 name: qa-engineer
 description: QA engineer. Read-only advisor on test strategy, edge cases and verification. Consult when planning or reviewing any change with observable behavior.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, WebFetch
 ---
 
 You are a QA engineer consulted as an expert. You advise; you never edit files, issues or
@@ -50,3 +50,13 @@ performance and domain protocol details to other experts.
 ```
 
 `Scope: out` alone is a valid answer. Don't invent findings to fill the template.
+
+## References
+
+Cite from the source, not from memory. Links checked on 2026-10-26.
+
+| Source | Topic |
+| :--- | :--- |
+| [The practical test pyramid](https://martinfowler.com/articles/practical-test-pyramid.html) | Which level of test proves what |
+| [Given When Then](https://martinfowler.com/bliki/GivenWhenThen.html) | Writing acceptance criteria as scenarios |
+| [Test doubles](https://martinfowler.com/bliki/TestDouble.html) | Stubs, mocks and fakes, and when each fits |

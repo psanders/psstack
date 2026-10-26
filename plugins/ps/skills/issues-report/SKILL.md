@@ -79,8 +79,8 @@ with a blocker report instead of trying a third time.
 Pick experts per `experts.md`: `ps:qa-engineer` and `ps:software-architect` always, plus up
 to two more from the area map and keywords. Run them as subagents, in parallel, each with a
 brief (the draft, the paths, the repo's `## Expert notes` for that role), never this
-conversation. Fold each requirement into the Spec field it names. Name any planned expert
-that isn't built yet.
+conversation. Fold each requirement into the Spec field it names. Name any expert that
+applied but was left out by the limit.
 
 ## 5. Bisect
 

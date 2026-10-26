@@ -13,26 +13,38 @@ do.
 The expert files live in the plugin's `agents/` folder. Each is generic: it knows nothing
 about any one project. Project facts come from the repo's AGENTS.md `## Expert notes`.
 
-| Expert | Agent | Status |
-| :--- | :--- | :--- |
-| QA engineer | `qa-engineer` | Built |
-| Software architect | `software-architect` | Built |
-| Real-time comms engineer | `realtime-comms-engineer` | Built |
-| UX designer | `ux-designer` | Planned |
-| Visual designer | `visual-designer` | Planned |
-| Performance engineer | `performance-engineer` | Planned |
-| Database engineer | `database-engineer` | Planned |
-| Security engineer | `security-engineer` | Planned |
-| Release / SRE engineer | `release-engineer` | Planned |
-| Technical writer | `technical-writer` | Planned |
+| Expert | Agent |
+| :--- | :--- |
+| QA engineer | `qa-engineer` |
+| Software architect | `software-architect` |
+| Real-time comms engineer | `realtime-comms-engineer` |
+| UX designer | `ux-designer` |
+| Visual designer | `visual-designer` |
+| Performance engineer | `performance-engineer` |
+| Database engineer | `database-engineer` |
+| Security engineer | `security-engineer` |
+| Release / SRE engineer | `release-engineer` |
+| Technical writer | `technical-writer` |
 
 ## Who gets consulted
 
 1. **QA and the Architect always join.**
 2. Others are picked from the repo's AGENTS.md `## Areas` map (paths touched → experts), then
-   from keywords in the report (SIP, WebRTC, migration, latency, UI, auth).
-3. At most 4 per stage (`loop-limits.md`). A planned expert that isn't built yet is skipped
-   and named in the output, so the gap is visible.
+   from what the change touches:
+
+   | The change touches | Expert |
+   | :--- | :--- |
+   | SIP, WebRTC, RTP, SDP, NAT, codecs, trunks | `realtime-comms-engineer` |
+   | A screen, form, CLI prompt, error message people read | `ux-designer` |
+   | Anything visual: components, layout, colors, a design file | `visual-designer` |
+   | Hot paths, loops over unbounded data, I/O, caching, a latency target | `performance-engineer` |
+   | Schemas, migrations, ORM models, queries on large tables | `database-engineer` |
+   | Auth, secrets, untrusted input, dependencies, CI workflows, agent input | `security-engineer` |
+   | Public surfaces, config and env vars, releases, deploys, logs and metrics | `release-engineer` |
+   | Docs, CLI help, changelogs, anything users must learn | `technical-writer` |
+
+3. At most 4 per stage (`loop-limits.md`). When more apply, keep the ones whose red flags the
+   change is most likely to hit, and name the ones left out.
 
 ## How to consult
 
@@ -61,6 +73,6 @@ something invents findings, and chasing those leads to over-engineering.
 ## Writing a new expert
 
 Copy an existing file in `agents/`. Keep the same sections: Scope, Planning checklist, Review
-red flags, Output. Planning items become Spec requirements; red flags are blocking on sight.
+red flags, Output, References. Planning items become Spec requirements; red flags are blocking on sight.
 Keep it under 80 lines, plus an optional References section of standards by URL, and generic: if a line names a project, it belongs in that project's
 AGENTS.md instead.

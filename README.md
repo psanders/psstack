@@ -122,4 +122,4 @@ If left unbumped, the git commit SHA is used as the version (every commit counts
 ## Add an expert
 
 Copy a file in `plugins/ps/agents/`, keep its sections (Scope, Planning checklist, Review red
-flags, Output), keep it generic, and mark it Built in `plugins/ps/process/experts.md`.
+flags, Output, References with checked links), keep it generic, and add it to the roster and keyword map in `plugins/ps/process/experts.md`.
