@@ -31,3 +31,31 @@ jobs:
             fi
           done < <(find plugins -name "SKILL.md" -print0)
           exit $failed
+
+      - name: Validate agent frontmatter
+        run: |
+          failed=0
+          for f in plugins/*/agents/*.md; do
+            [ -e "$f" ] || continue
+            for key in name description tools; do
+              if ! grep -q "^$key:" "$f"; then
+                echo "MISSING $key: in $f"
+                failed=1
+              fi
+            done
+          done
+          exit $failed
+
+      - name: Validate plugin-root references
+        run: |
+          failed=0
+          while read -r ref; do
+            path="plugins/ps/${ref#\${CLAUDE_PLUGIN_ROOT\}/}"
+            path="${path%%[\`)]*}"
+            case "$path" in *'<'*|*'*'*) continue ;; esac
+            if [ ! -e "$path" ]; then
+              echo "BROKEN reference: $ref"
+              failed=1
+            fi
+          done < <(grep -rhoE '\$\{CLAUDE_PLUGIN_ROOT\}/[A-Za-z0-9_./<>*-]+' plugins/ps | sort -u)
+          exit $failed

@@ -12,7 +12,7 @@ This mirrors the memory model: a shared vocabulary, one file per item, and an in
 
 | Memory world | Asset world | Role |
 | :--- | :--- | :--- |
-| `CLAUDE.md` + conventions | **Diagram Kit** (reusable Pencil components, token-bound) | shared vocabulary — *rebrand here, once* |
+| `AGENTS.md` + conventions | **Diagram Kit** (reusable Pencil components, token-bound) | shared vocabulary — *rebrand here, once* |
 | an individual memory file | **per-asset build doc** (`<slug>.md`) | how this asset was built; edit + re-export to change |
 | `MEMORY.md` index | **`ASSETS.md` ledger** | one row per asset; the map for re-exporting at scale |
 

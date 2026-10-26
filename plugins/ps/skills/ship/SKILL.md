@@ -63,7 +63,7 @@ Only if the repo uses Pencil. Otherwise mark the stage `skipped` with a note and
 - From the change's `design.md`/`proposal.md`, identify which screens/flows are in scope.
 - Open them with the `pencil` MCP (`get_editor_state(include_schema: true)` first if the
   schema isn't loaded). Iterate with the user.
-- **Honor the repo's Pencil conventions** — read `CLAUDE.md` and any design memories for
+- **Honor the repo's Pencil conventions** — read `AGENTS.md` and any design memories for
   workarounds (e.g. "copy an existing screen rather than adding raw frames", modal-over-page
   patterns). Do not reinvent the project's design idioms here.
 - This stage is **human-gated**: keep iterating until the user explicitly says the design is
@@ -82,7 +82,7 @@ The spec is the source of truth — design changes must land in the spec before 
 
 ## 3. Build
 
-Implement to the spec, following **the repo's own conventions** (`CLAUDE.md`) — do not
+Implement to the spec, following **the repo's own conventions** (`AGENTS.md`) — do not
 restate or override them here.
 
 - **Storybook-first when present**: build/refine the components in isolation (a story per
@@ -90,7 +90,7 @@ restate or override them here.
 - Then the rest of the vertical slice in dependency order: shared schemas/types → validated
   functions → transport (e.g. tRPC routers) → pages/wiring.
 - Honor the project's stated patterns (validated-function + DI, shared contracts package,
-  i18n for all user-facing text, etc.) by reference — they live in `CLAUDE.md`, not here.
+  i18n for all user-facing text, etc.) by reference — they live in `AGENTS.md`, not here.
 - Check off items in the change's `tasks.md` as you complete them.
 
 ## 4. Test
@@ -149,7 +149,7 @@ current stage; it does not restart finished stages.
   e2e), mark it `skipped` with a one-line reason in the checkpoint.
 - **Spec is the source of truth.** Design changes flow into the spec (stage 2) before code.
 - **Green before sync.** Lint, typecheck, and tests pass at stage 4 or you don't advance.
-- **Defer to the repo's conventions** (`CLAUDE.md`, design memories, `/opsx:*` skills) —
+- **Defer to the repo's conventions** (`AGENTS.md`, design memories, `/opsx:*` skills) —
   orchestrate them, don't duplicate or override them.
 - **Human gates are real.** Stop after design and before sync/archive; wait for approval.
 - **Update the checkpoint** after every stage and decision, so the next session resumes clean.

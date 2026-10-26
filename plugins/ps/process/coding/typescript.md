@@ -1,8 +1,13 @@
-# Engineering conventions — the captured playbook
+# Coding profile: `typescript`
 
-The opinionated baseline this bootstrap encodes. Read it before scaffolding so the
-generated project is internally consistent. These are defaults with reasons, not laws —
-override per project, but override deliberately.
+Pedro's opinionated TypeScript baseline: the validated-function pattern, its helpers, and the
+test shape. `/ps:bootstrap` scaffolds new repos from it, and `/ps:implement` writes code
+with it in any repo whose AGENTS.md declares `Profile: typescript` (see `../agents-md-contract.md`). The copyable code lives in
+`templates/` next to this file.
+
+These are defaults with reasons, not laws: override per project, but override deliberately,
+and record the override in the repo's AGENTS.md `## Conventions` section. Never apply this
+profile to a repo that hasn't declared it; older code keeps its own style.
 
 ## Stack
 
@@ -63,6 +68,25 @@ Why each rule exists:
   See `templates/withErrorHandlingAndValidation.ts` and `templates/ValidationError.ts`.
 - **Verbose logging at entry + exit** — never log secrets/PII; log ids and safe fields.
 - **Barrel `index.ts`** re-exports each `create<Name>` for clean imports.
+
+Use it for input-validating operations (DB writes, service calls, business logic). Skip it for
+trivial pure helpers and framework glue: the pattern earns its keep only when there is
+external input to validate.
+
+### Adding one validated function to an existing repo
+
+1. **Find the spine.** Locate the shared package and its scope (e.g. `@acme/common`).
+   Confirm `withErrorHandlingAndValidation` and `ValidationError` exist there; if not, copy
+   them from `templates/` first.
+2. **Schema** in the shared package's `schemas/`, re-exported from its barrel (§ Schemas).
+3. **Client interface**: reuse one from the shared package's `types/`; add a minimal new one
+   only if needed. The factory depends on the interface, not a concrete client.
+4. **Function**: `create<Name>.ts` in the domain directory, shaped like
+   `templates/createCreateWidget.ts`; re-export it from the domain barrel.
+5. **Transport**, if the repo has one: a thin tRPC procedure (§ Transport).
+6. **Test**: `create<Name>.test.ts`, shaped like `templates/createCreateWidget.test.ts`,
+   including the validation-failure case.
+7. Run the repo's typecheck and tests; the new test must pass.
 
 ## Schemas (in the shared package)
 

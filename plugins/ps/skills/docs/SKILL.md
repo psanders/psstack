@@ -68,8 +68,8 @@ Resolve what page we are writing and what it is for.
   *reference* (look-up: config, API, fields), or *explanation* (the why/concepts).
   If the topic seems to need two types, that is two pages — say so and pick the one to
   write now.
-- **Read the project's docs policy** — a docs-scoped `CLAUDE.md` or similar (Claude Code
-  auto-loads nested `CLAUDE.md`). It defines the **audience** and what is **shareable vs
+- **Read the project's docs policy** — a docs-scoped `AGENTS.md` (the nearest
+  one wins; legacy repos may still have a `CLAUDE.md`). It defines the **audience** and what is **shareable vs
   internal**. Respect it in every page and asset: describe the behavior the reader touches,
   not internal mechanism, unless the policy explicitly allows it. If no policy exists and
   the topic risks exposing internals, ask before writing.
@@ -141,7 +141,7 @@ Only if the outline flagged an asset slot. Otherwise mark the stage `skipped` an
   render by **instancing the project's Diagram Kit** (token-bound components) — seeding the
   kit once if it doesn't exist yet — so the asset looks like the dashboard built it.
 - Draft in **Pencil** when the repo has a `.pen` file, honoring the project's Pencil
-  conventions (read `CLAUDE.md` and any design memories first — e.g. copy an existing
+  conventions (read `AGENTS.md` and any design memories first — e.g. copy an existing
   frame rather than adding raw frames). For screenshots, capture at 2×.
 - **After rendering**, write the per-asset build doc (`references/build-doc-template.md`)
   next to the image and add a row to the ledger, so the asset can be regenerated and
@@ -203,4 +203,4 @@ checkpoint under `.claude/docs/` if one exists, otherwise ask what the page is a
 - Source first: every factual claim traces to real code, specs, or tests — not vibes.
 - Mintlify-first, repo-agnostic: read `docs.json`, match the site's conventions.
 - Respect the gates: confirm purpose+type (0), outline (3), and going-live (7).
-- Honor the project's own `CLAUDE.md` and Pencil conventions; don't override them here.
+- Honor the project's own `AGENTS.md` and Pencil conventions; don't override them here.

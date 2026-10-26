@@ -13,13 +13,15 @@ Stand up a new TypeScript/Node project the way I actually build them, so a fresh
 starts from my conventions instead of a blank page. This is not a generic generator — it
 encodes a specific, opinionated baseline.
 
-**Read `references/conventions.md` and `references/dependency-groups.md` first.** Together they
-are the source of truth for every choice below. The copyable code lives in `references/templates/`.
+**Read `${CLAUDE_PLUGIN_ROOT}/process/coding/typescript.md` and `references/dependency-groups.md`
+first.** Together they are the source of truth for every choice below. The copyable code lives
+in `${CLAUDE_PLUGIN_ROOT}/process/coding/templates/`.
 
 ## When to use
 
 Starting a new project or service from scratch (empty or near-empty directory). For
-improving an existing repo, use `/ps:kaizen` instead.
+changing an existing repo, file the work with `/ps:issues-report` and build it with
+`/ps:implement`; to set an existing repo up for that process, use `/ps:adopt`.
 
 ## Step 1 — Pick the stack (interactive, BEFORE scaffolding)
 
@@ -63,7 +65,7 @@ and confirm them with the user before a single file is written. Drive it like th
 
 ## Step 2 — Scaffold the baseline
 
-Create the structure for the chosen shape. Match `references/conventions.md` exactly.
+Create the structure for the chosen shape. Match `${CLAUDE_PLUGIN_ROOT}/process/coding/typescript.md` exactly.
 
 - **Root**: `package.json` (npm workspaces if monorepo, `"engines": { "node": ">=22" }`),
   `.nvmrc` (`22`), `tsconfig` (strict, ESM, `NodeNext`, `"types": ["node"]` — TypeScript 6 no
@@ -81,17 +83,17 @@ Create the structure for the chosen shape. Match `references/conventions.md` exa
   its barrel `index.ts`, a `logger.ts`, and—if tRPC chosen—a thin router wiring `.input(schema)`
   to the function. Build (`tsc -b`), dev (`nodemon`), test (`mocha`) scripts.
 - **One worked example end to end** so the pattern is copy-pasteable:
-  - schema → `templates/widget.schema.ts`
-  - function → `templates/createCreateWidget.ts`
-  - test → `templates/createCreateWidget.test.ts`
-- **A base `CLAUDE.md`** from `templates/CLAUDE.md`. This is the agent guide for the new repo;
-  fill its placeholders and prune the conditional bullets to match the chosen stack. It follows
-  the project-specific-facts-here / reusable-how-to-by-pointer split: state repo layout and
-  project rules directly, but keep reusable conventions as a one-line summary + a pointer to the
-  plugin (`/ps:create-validated-function`, `/ps:ship`) rather than re-explaining them.
+  - schema → `${CLAUDE_PLUGIN_ROOT}/process/coding/templates/widget.schema.ts`
+  - function → `${CLAUDE_PLUGIN_ROOT}/process/coding/templates/createCreateWidget.ts`
+  - test → `${CLAUDE_PLUGIN_ROOT}/process/coding/templates/createCreateWidget.test.ts`
+- **A base `AGENTS.md`** from `references/AGENTS.template.md`, following
+  `${CLAUDE_PLUGIN_ROOT}/process/agents-md-contract.md`. Fill its placeholders and prune the
+  conditional lines to match the chosen stack. It declares `Profile: typescript` and keeps only
+  project facts; reusable conventions stay in psstack by reference. Never write a `CLAUDE.md`
+  or other vendor-specific instruction file.
 - **Agent layer** (only if chosen): `tools/definitions.ts` + `tools/executor/` that route tool
   calls into the validated functions; an `agents` schema + a config file. See the optional
-  section in `conventions.md`.
+  section in `${CLAUDE_PLUGIN_ROOT}/process/coding/typescript.md`.
 - **E2E** (only if chosen / implied): for **Playwright** (web/desktop), add `playwright.config.ts`,
   an `e2e/` dir with one example spec, and a `test:e2e` script; note `npx playwright install` in
   the README. For **Maestro** (mobile), add `.maestro/` with one example flow (`launch.yaml`), a
@@ -106,7 +108,7 @@ Create the structure for the chosen shape. Match `references/conventions.md` exa
     `.claude/commands/opsx/` + skills under `.claude/skills/openspec-*`). Mention it in the README.
 
 When copying a template, replace placeholders: `{{YEAR}}`, `{{ORG}}`, `{{LICENSE}}`, `{{SCOPE}}`,
-`{{PROJECT}}`, `{{COMMON_DIR}}`.
+`{{PROJECT}}`, `{{COMMON_DIR}}`, `{{DATE}}`.
 
 ## Step 3 — Make it run green
 
@@ -129,12 +131,12 @@ Tell the user what was created and show the one rule that matters most going for
 > typed `fn`, returned wrapped in `withErrorHandlingAndValidation(fn, schema)`. Schema + type
 > in `common`. One sinon test per function.
 
-Point them at `references/conventions.md` as the living spec, and suggest `/ps:kaizen` for the
-daily improvement loop once they're underway.
+Point them at `${CLAUDE_PLUGIN_ROOT}/process/coding/typescript.md` as the living spec, and at
+`/ps:issues-report` → `/ps:implement` for the work that follows.
 
 ## Rules
 
-- Conventions over preferences-of-the-moment: follow `references/conventions.md`; deviate only
+- Conventions over preferences-of-the-moment: follow `${CLAUDE_PLUGIN_ROOT}/process/coding/typescript.md`; deviate only
   when the user asks, and say so.
 - Produce a **working** example (green lint/typecheck/test), not just files.
 - Never invent stack choices silently — surface the SQLite-vs-Postgres and layout decisions.
