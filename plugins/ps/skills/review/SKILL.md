@@ -67,7 +67,8 @@ apply `needs-human` to the PR, say why, and stop.
 
 ## 3. Seat the committee
 
-- **QA always sits.** Add experts from AGENTS.md `## Areas` for the paths the diff touches,
+- **QA and the Architect always sit** (`experts.md` § Who gets consulted). Add experts from
+  AGENTS.md `## Areas` for the paths the diff touches,
   then from the keyword map in `experts.md`. Add the Security engineer for outside
   contributions and for anything touching auth, secrets, CI or dependencies.
 - **2 to 4 members.** Name any expert that applied but was left out.
