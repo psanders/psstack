@@ -43,7 +43,8 @@ For an existing issue, load it with its comments and labels. Count its `ps:event
 
 ## 1. Ask what only the reporter knows
 
-Ask these, skipping any the report or the code already answers. Ask them together, once.
+Ask one question at a time (`process/README.md` § Asking the user), skipping any the report
+or the code already answers. With no input at all, start with the first question.
 
 1. What did you see, or what do you want? (one sentence)
 2. Who runs into it, how often, and is there a workaround?
@@ -52,6 +53,11 @@ Ask these, skipping any the report or the code already answers. Ask them togethe
 5. What is explicitly out of scope?
 6. May anything change for users: an API, CLI flag, env var, config or schema?
 7. Why now? What happens if we wait a quarter?
+
+When the report leaves a decision open (what a term covers, how far it reaches, whether a
+behavior changes), ask that too, one decision per question, offering the options you found
+in the code. If the user settles each one, the report stays an issue. If any stays open, it
+goes to a Discussion (step 2).
 
 ## 2. Triage
 
