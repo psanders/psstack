@@ -64,7 +64,11 @@ same issue.
 <the command and the relevant output, trimmed>
 
 **Needs:** <what would unblock it> from <who: reporter, maintainer, a named expert>
+- <option> — tried: <command → result> | not tried
 ```
+
+List each option the agent found, marked tried (with the result) or not tried. Never
+recommend an option that wasn't tried.
 
 ## What counts as a blocker
 
