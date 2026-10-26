@@ -56,10 +56,10 @@ start.
 - [ ] The issue's loop counters are under their limits (see `loop-limits.md`)
 
 The issue is the whole contract. A change the user asks for when invoking the Implementer
-("implement 458, but use only `enabled`") is not applied in the code. Ask which issue it
-belongs to, and hand it to `/ps:report <n>` to edit that issue's Spec, which takes `ready` off
-until Gate 1 passes again. If the user declines, say the change is dropped. It must not
-survive only in a conversation or a run log.
+("implement 458, but use only `enabled`") is not applied in the code. Implement the issue as
+written, and put the change in the PR's "Noticed, not done" note naming the issue it belongs
+to, so `/ps:report <n>` can pick it up. It must not survive only in a conversation or a run
+log.
 
 A missing `ready`, or one applied before the body's last edit, is not a refusal: Gate 1
 simply hasn't happened (again). The Implementer stops,

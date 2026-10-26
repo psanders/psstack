@@ -48,8 +48,9 @@ same issue.
   maintainer: the Reporter settles technical options with evidence, and the issue goes back
   through Gate 1.
   Otherwise `ready` stays, and the next run resumes once the blocker is cleared.
-- Local work is committed on the issue's branch, never pushed, and the branch is named under
-  **Tried**, so a later session can resume it or throw it away deliberately.
+- Work so far is committed, pushed and opened as a draft PR that links the issue and
+  carries the blocker report, so a later session resumes from it and people can see it.
+  Only a missing tool, credential or service keeps it local (`README.md` § Autonomy).
 
 ```markdown
 <!-- ps:event blocked -->

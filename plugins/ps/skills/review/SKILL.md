@@ -98,7 +98,8 @@ with a note in the verdict, not a third run.
 - **Decide:** no blocking findings and Verify green means ready for human review. Otherwise,
   changes needed.
 
-Show the user the verdict, then ask before posting it to GitHub.
+Post the verdict to GitHub without asking (`README.md` § Autonomy), then show it to the
+user with the link.
 
 ## 7. Post
 
