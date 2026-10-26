@@ -12,6 +12,9 @@ do.
 
 The expert files live in the plugin's `agents/` folder. Each is generic: it knows nothing
 about any one project. Project facts come from the repo's AGENTS.md `## Expert notes`.
+Those notes can go stale. When an expert's evidence contradicts one, the coordinator says so in
+its output to the user (the line, and the file that disproves it), and briefs later experts
+with the correction, so the stale fact stops spreading.
 
 | Expert | Agent |
 | :--- | :--- |
