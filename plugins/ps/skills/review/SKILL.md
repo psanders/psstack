@@ -103,6 +103,8 @@ with a note in the verdict, not a third run.
 - **Confirm** each blocking finding against the code before keeping it.
 - **Decide:** no blocking findings and Verify green means ready for human review. Otherwise,
   changes needed.
+  Wait for the PR's required checks to finish (`gh pr checks <pr> --watch --required`); a
+  failing required check is a blocking finding, with its log as evidence.
 
 Post the verdict to GitHub without asking (`README.md` § Autonomy), then show it to the
 user with the link.
