@@ -181,7 +181,9 @@ Give a fresh subagent only the final issue text and ask what it would need to as
 implementing, counting only questions whose answer would change what gets built or how it's
 verified (`experts.md` § The bar). "None" is the expected answer for a good issue; no
 preferences, nice-to-knows or hypothetical edge cases. Fold each question into the Spec.
-Repeat; after 3 rounds with questions left, the slice goes to step 8 as undecided.
+Repeat; after the third round there's no fourth read. Check the last fold yourself against
+the code: a question the code answers is settled; one that needs a decision sends the slice
+to step 8 as undecided.
 
 ## 8. Resolve or hand over
 
