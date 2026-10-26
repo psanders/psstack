@@ -173,7 +173,9 @@ If the work fails any of these, split it using the Architect's proposed slices:
 Each slice is a full issue: its own Brief, Spec and Verify. Don't rerun everything per
 slice: step 6 (advocate and critic) runs once for the whole set, since taking the work is
 one decision; step 7 (cold read) runs per slice; experts are consulted again only for a
-slice that touches an area the first round didn't cover. Order slices with "blocked by".
+slice that touches an area the first round didn't cover. Order slices with "blocked by". Slice the UI apart from the layers below it (schemas,
+functions, transport, SDK, CLI): those slices never wait on a design, and only the UI slice
+depends on an approved one (`coding/typescript.md` § Building a feature end to end).
 Limits: 2 levels deep, 6 issues total. Past that, stop and propose a Discussion; the work is
 too big or too unclear for issues.
 
