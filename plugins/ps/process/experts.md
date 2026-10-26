@@ -28,7 +28,9 @@ about any one project. Project facts come from the repo's AGENTS.md `## Expert n
 
 ## Who gets consulted
 
-1. **QA and the Architect always join.**
+1. **QA and the Architect always join.** The Technical writer also always joins when the
+   change alters anything a user or operator reads or does (behavior, config, CLI, API,
+   errors, upgrade steps); it fills the Spec's Docs field and doesn't count toward the limit.
 2. Others are picked from the repo's AGENTS.md `## Areas` map (paths touched → experts), then
    from what the change touches:
 

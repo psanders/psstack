@@ -30,6 +30,7 @@ choice, "should we?"), it goes to a Discussion and the issue is filed once it's 
 In: ...
 Out: ...
 ### Constraints
+### Docs
 ### Acceptance criteria
 - [ ] Given ..., when ..., then ...
 ### Verify
@@ -60,6 +61,10 @@ Every field is required. "No" and "Low" are answers; blanks are not.
   copy when there is one.
 - **Out of scope** is never empty. Name the nearby thing you are not doing.
 - **Constraints** list what must not change: public APIs, schemas, env vars, wire formats.
+- **Docs** names every page, CLI help text, README section or changelog note that must
+  change, and what it must say; each becomes an acceptance criterion. "None" only when
+  nothing a user or operator reads or does changes. A breaking change always has a
+  migration note here.
 - **Acceptance criteria** are checkable. Prefer Given / When / Then.
 - **Verify** is one command. It fails today for the stated reason and passes when the work is
   done. "For the stated reason" means its output shows the bug (a failing assertion,
@@ -102,6 +107,8 @@ mods/connect/src/envs.ts; assertOnlyOneEnvIsSet in mods/common.
 In: the assertion and its test. Out: renaming env vars, verifier selection in utils.ts.
 ### Constraints
 Env var names stay as they are.
+### Docs
+docs-site/reference/components/connect.mdx: setting both verifier variables now stops Connect at startup.
 ### Acceptance criteria
 - [ ] Given both vars set, when Connect starts, then it exits non-zero naming both vars.
 - [ ] Given only one set, Connect starts as today.

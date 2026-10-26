@@ -146,6 +146,14 @@ body:
       required: true
 
   - type: textarea
+    id: docs
+    attributes:
+      label: Docs
+      description: Pages, CLI help, README or changelog that must change, and what they must say. "None" only if nothing user-visible changes.
+    validations:
+      required: true
+
+  - type: textarea
     id: acceptance
     attributes:
       label: Acceptance criteria
