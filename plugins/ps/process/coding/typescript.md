@@ -101,7 +101,9 @@ puts that in the first such slice's Scope; later slices reuse it.
 ## Schemas (in the shared package)
 
 See `templates/widget.schema.ts`.
-- `zod/v4`. Every field has a message.
+- `zod/v4`. Every field has a message. In a CommonJS repo, `zod/v4` with zod 3.x resolves
+  to ESM types under `node16`/`nodenext` (TS1479); check the import against every package
+  that consumes the shared one's `.d.ts` before pinning it.
 - `.transform()` **normalizes at the edge** (trim, E.164 phone, canonical formats).
 - Derive the type with `z.infer` — never hand-write the input type.
 - A `create*Schema` and a separate `update*Schema` exposing only mutable fields.
