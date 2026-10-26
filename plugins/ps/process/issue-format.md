@@ -62,7 +62,10 @@ Every field is required. "No" and "Low" are answers; blanks are not.
 - **Constraints** list what must not change: public APIs, schemas, env vars, wire formats.
 - **Acceptance criteria** are checkable. Prefer Given / When / Then.
 - **Verify** is one command. It fails today for the stated reason and passes when the work is
-  done. If no automated check is possible, say why and give the exact manual steps.
+  done. "For the stated reason" means its output shows the bug (a failing assertion,
+  the wrong value), not the environment (command not found, a missing service, a timeout).
+  Prefer the repo's own test runner over ad-hoc shell, and commands that run the same on a
+  laptop and in CI. If no automated check is possible, say why and give the exact manual steps.
 - Inline external context (versions, config, env) instead of linking to it. Issues that send
   the implementer elsewhere for context merge less often (see `research.md`).
 
