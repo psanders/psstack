@@ -215,7 +215,9 @@ the Brief saying so, so the maintainer applying `ready` sees it first.
   "Original report by @user". Remove `needs-triage`.
 - **Labels:** area, `breaking` when Breaking change is Yes, `risk: high` when Risk is High.
   Only labels that exist (`gh label list`); never create one.
-- **Slices:** create in order, then link each with "blocked by" its predecessor.
+- **Slices:** create them in dependency order, so each body can name the issues it depends
+  on by number (`#458`) instead of "slice 1"; no slice should refer to a later one. Then link
+  each with "blocked by" every slice it really depends on, not only the one before it.
 - **Read back before linking:** after creating issues, fetch each one and check its title,
   Problem line, type and labels against what you meant to file. Fix any mismatch before
   adding links, so a bulk filing can't shift bodies between issues unnoticed.
