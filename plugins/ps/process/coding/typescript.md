@@ -79,8 +79,9 @@ config) keeps the same rules without the async wrapper: `schema.safeParse` at th
 ### Adding one validated function to an existing repo
 
 **Adopting the profile part-way through a repo's life:** the first issue that adds a validated
-function also adds the spine: `zod` as a dependency of the shared package, and
-`withErrorHandlingAndValidation` and `ValidationError` copied from `templates/`. The Reporter
+function also adds the spine it uses: `zod` as a dependency of the shared package and
+`ValidationError` from `templates/`. `withErrorHandlingAndValidation` comes with the first
+async validated function, so no helper lands without a caller. The Reporter
 puts that in the first such slice's Scope; later slices reuse it.
 
 1. **Find the spine.** Locate the shared package and its scope (e.g. `@acme/common`).

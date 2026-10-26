@@ -178,8 +178,10 @@ critic's argument (step 4's rounds). If it's still open, it's a decision for a h
 ## 7. Cold read
 
 Give a fresh subagent only the final issue text and ask what it would need to ask before
-implementing. Fold every question into the Spec, or into a question for the user. Repeat;
-after 3 rounds with questions left, ask the user those questions directly.
+implementing, counting only questions whose answer would change what gets built or how it's
+verified (`experts.md` § The bar). "None" is the expected answer for a good issue; no
+preferences, nice-to-knows or hypothetical edge cases. Fold each question into the Spec.
+Repeat; after 3 rounds with questions left, the slice goes to step 8 as undecided.
 
 ## 8. Resolve or hand over
 
