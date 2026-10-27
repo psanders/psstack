@@ -57,8 +57,9 @@ apply `needs-human` to the PR, say why, and stop.
   (before its AGENTS.md landed) can be reviewed against its own description. The
   description stands in for the issue's acceptance criteria (a claim in it that the code
   doesn't keep is a broken promise under the bar), and the repo's area Verify
-  (AGENTS.md § Commands) stands in for Verify. The verdict's first line says so, and a
-  `needs-issue` label on the PR comes off with it. Never offer it for a PR opened after.
+  (AGENTS.md § Commands) stands in for Verify. The verdict's first line says so, and that
+  the PR's `linked-issue` check and `needs-issue` label stay as they are: the workflow owns
+  both, and the check isn't required. Never offer it for a PR opened after.
 - **Ready issue:** the linked issue should carry `ready`. If it doesn't, say so in the
   verdict; review anyway only if the user asks.
 - **External PR** (`external.md`): when `authorAssociation` isn't `OWNER`, `MEMBER` or
