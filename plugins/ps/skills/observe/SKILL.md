@@ -49,9 +49,12 @@ Keep an append-only run log at <log path> (create the folder if needed). One ent
 Stages: report, gate-1, implement, review, gate-2. Also log every expert you consulted with a
 one-line result, every loop counter you checked, and every time you stop or refuse. When the
 process doesn't cover a situation, log it as Friction rather than improvising quietly.
+
+Start with: <skill and input, e.g. /ps:report "<one-sentence idea>" or /ps:implement 458>
 ```
 
-Then say you'll start watching once they've sent it.
+Ask the user for the `Start with:` line first (one question). Then say you'll start watching
+once they've sent it.
 
 ## 3. Find the session
 
@@ -65,6 +68,11 @@ grep -l "ps-run: <run id>" ~/.claude/projects/*/*.jsonl | grep -v <your session 
 
 No match yet: wait until the user confirms the prompt was sent, then look again. Never guess
 a transcript by recency alone.
+
+Then find which process it runs: the first `Base directory for this skill:` line in the
+transcript names the plugin path (a released cache version, or a local checkout). Tell the
+user, and say it before suggesting a fix "is live": two sessions on the same machine can run
+different versions.
 
 ## 4. Watch
 
@@ -94,6 +102,9 @@ isn't stopping. Stay quiet otherwise.
 - **Fix the process** on the findings branch: one small commit per learning, with the run's
   evidence in the message. Rules go in `process/`, procedure in the skill. Bump the plugin's
   patch or minor version once per run, not per commit.
+- **A fix isn't live in the running session.** Claude Code reads skills at session start, so
+  a session under test keeps the process it started with. To test a fix mid-run, the user
+  starts a fresh session with the same run id and a new `Start with:` line.
 - **Never message the session under test**, even to relay the user. The run tests the process
   as written; a relayed note contaminates it and can't stand in for the user's approval.
 

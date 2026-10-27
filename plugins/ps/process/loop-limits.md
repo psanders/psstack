@@ -43,6 +43,15 @@ Stopping has one shape. The agent posts this comment, applies `blocked` (or `nee
 when a limit was hit), and ends the session. It does not continue with other work in the
 same issue.
 
+- When **Needs** is a change to the issue (its Scope or Constraints are wrong or contradict
+  each other), it also removes `ready`, and **Needs** names `/ps:report <n>`, not a
+  maintainer: the Reporter settles technical options with evidence, and the issue goes back
+  through Gate 1.
+  Otherwise `ready` stays, and the next run resumes once the blocker is cleared.
+- Work so far is committed, pushed and opened as a draft PR that links the issue and
+  carries the blocker report, so a later session resumes from it and people can see it.
+  Only a missing tool, credential or service keeps it local (`README.md` § Autonomy).
+
 ```markdown
 <!-- ps:event blocked -->
 **Blocked:** <one sentence: what stopped the work>
@@ -56,7 +65,11 @@ same issue.
 <the command and the relevant output, trimmed>
 
 **Needs:** <what would unblock it> from <who: reporter, maintainer, a named expert>
+- <option> — tried: <command → result> | not tried
 ```
+
+List each option the agent found, marked tried (with the result) or not tried. Never
+recommend an option that wasn't tried.
 
 ## What counts as a blocker
 

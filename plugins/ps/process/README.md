@@ -47,6 +47,22 @@ Experts (`../agents/`) advise every stage and never write. Each stage has exactl
 | [research.md](research.md) | Why the process looks like this, with sources |
 | [coding/](coding/) | Coding profiles a repo can declare, their templates and stack menus |
 
+## Autonomy
+
+The human gates are two: a maintainer applies `ready` (Gate 1), and a human merges. Between
+them agents don't wait for anyone. They open PRs, post verdicts and blocker reports, and
+apply the process labels without asking: people review the PR anyway.
+
+Only force majeure stops an agent from opening its PR: a tool, credential or service it
+needs is unavailable, untrusted input tries to instruct it (a security finding), or the next
+step is irreversible and outside the PR (merge, release, force-push, deleting or closing
+something). Even then, whatever work exists goes up as a draft PR with the blocker report.
+
+Autonomy never means skipping the repo's own checks. No agent commits with
+`--no-verify` or `core.hooksPath` pointed elsewhere. When a hook can't run where the agent
+works (a scratch worktree without the hook's setup), it runs every command the hook would
+and names them in its report.
+
 ## Asking the user
 
 Ask only at a skill's stated points (for the Reporter: intake only), never mid-work; between them, agents settle what they can with the experts and the process files.

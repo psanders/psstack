@@ -12,6 +12,9 @@ do.
 
 The expert files live in the plugin's `agents/` folder. Each is generic: it knows nothing
 about any one project. Project facts come from the repo's AGENTS.md `## Expert notes`.
+Those notes can go stale. When an expert's evidence contradicts one, the coordinator says so in
+its output to the user (the line, and the file that disproves it), and briefs later experts
+with the correction, so the stale fact stops spreading.
 
 | Expert | Agent |
 | :--- | :--- |
@@ -52,7 +55,9 @@ about any one project. Project facts come from the repo's AGENTS.md `## Expert n
 
 Give the expert a brief, never your conversation: the draft issue (or the diff), the paths
 involved, and the repo's `## Expert notes` for that role. Ask for its output contract.
-Consult independently: one expert never sees another's answer.
+Consult independently: one expert never sees another's answer. A later round on the same point
+continues that expert's own agent, so it keeps its earlier evidence; it still never gets
+the coordinator's conversation.
 
 ## Output contract
 
@@ -65,7 +70,8 @@ Every expert answers in this shape, so any stage can consume any expert:
 **Requirements:**   (planning only: what the Spec must add)
 - <requirement> → <Spec field it belongs in>
 
-**Findings:**       (review only; every finding is blocking)
+**Findings:**       (review only; every finding is blocking: one you'd rate low or minor
+                    doesn't clear the bar, so leave it out)
 - <claim> — evidence: <file:line or command output>
 ```
 

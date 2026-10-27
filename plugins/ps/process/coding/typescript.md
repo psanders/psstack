@@ -86,7 +86,8 @@ puts that in the first such slice's Scope; later slices reuse it.
 
 1. **Find the spine.** Locate the shared package and its scope (e.g. `@acme/common`).
    Confirm `withErrorHandlingAndValidation` and `ValidationError` exist there; if not, copy
-   them from `templates/` first.
+   them from `templates/` first. A copy is new code in that repo: bring it to the repo's
+   header, format and lint rules (JSDoc, semicolons, quotes) before the first commit.
 2. **Schema** in the shared package's `schemas/`, re-exported from its barrel (§ Schemas).
 3. **Client interface**: reuse one from the shared package's `types/`; add a minimal new one
    only if needed. The factory depends on the interface, not a concrete client.
@@ -100,7 +101,9 @@ puts that in the first such slice's Scope; later slices reuse it.
 ## Schemas (in the shared package)
 
 See `templates/widget.schema.ts`.
-- `zod/v4`. Every field has a message.
+- `zod/v4`. Every field has a message. In a CommonJS repo, `zod/v4` with zod 3.x resolves
+  to ESM types under `node16`/`nodenext` (TS1479); check the import against every package
+  that consumes the shared one's `.d.ts` before pinning it.
 - `.transform()` **normalizes at the edge** (trim, E.164 phone, canonical formats).
 - Derive the type with `z.infer` — never hand-write the input type.
 - A `create*Schema` and a separate `update*Schema` exposing only mutable fields.
@@ -112,16 +115,17 @@ then delegate to a `create<Name>` function. No business logic in the router.
 
 ## Building a feature end to end
 
-Kept from the retired `/ps:ship` skill. The order a vertical slice gets built in:
+The order a feature gets built in. Design comes last, so it never blocks the layers that
+don't need it:
 
-1. **Design first**, when the repo has a `.pen` file: the screens (desktop and mobile) are
-   reviewed and approved before any code. That approval is part of the issue's plan.
-2. **Spec next**, when the repo uses OpenSpec: a behavior change found in design lands in the
-   change's delta spec before code (`openspec validate <name>`). Specs describe observable,
-   testable behavior, not styling.
-3. **Build in dependency order:** components in Storybook first when the repo has it (a story
-   per component and variant), then shared schemas and types, validated functions, transport,
-   and finally pages and wiring.
+1. **Spec first.** The behavior change lands in the issue's Spec before any code or design,
+   and in the change's delta spec too when the repo uses OpenSpec
+   (`openspec validate <name>`). Specs describe observable, testable behavior, not styling.
+2. **Build from the bottom up:** shared schemas and types, validated functions, transport,
+   then the clients that don't need a design: SDK, CLI, API. Each can ship on its own.
+3. **Design last**, and only for the UI slice: when the repo has a `.pen` file, the screens
+   (desktop and mobile) are reviewed and approved before that slice's components and pages
+   are coded (Storybook first when the repo has it). No other slice waits on the design.
 4. **Test both tiers:** unit tests per function (§ Tests), plus one end-to-end spec for the
    golden path of the flow just built.
 5. **Promote specs only after green.** Syncing and archiving an OpenSpec change are

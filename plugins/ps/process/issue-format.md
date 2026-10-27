@@ -70,7 +70,12 @@ Every field is required. "No" and "Low" are answers; blanks are not.
   done. "For the stated reason" means its output shows the bug (a failing assertion,
   the wrong value), not the environment (command not found, a missing service, a timeout).
   Prefer the repo's own test runner over ad-hoc shell, and commands that run the same on a
-  laptop and in CI. If no automated check is possible, say why and give the exact manual steps.
+  laptop and in CI. For new code, name the test file and the cases the acceptance criteria
+  require (`mocha mods/common/test/resolve_refs.unit.test.ts`, cases: ...): "no test files
+  found" today is acceptable only then, because a pass must mean those cases ran. If no automated check is possible, say why and give the exact manual steps.
+  Its exit code is the verdict. Whoever runs it (Reporter, Implementer, Reviewer) runs it
+  bare or with output sent to a file, never through a pipe: `| tail` reports the last
+  command's exit code, not Verify's. A chain of steps uses `&&`, never `;`.
 - Inline external context (versions, config, env) instead of linking to it. Issues that send
   the implementer elsewhere for context merge less often (see `research.md`).
 
