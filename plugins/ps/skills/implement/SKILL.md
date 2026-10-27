@@ -128,6 +128,15 @@ evidence that it's wrong; never ignore one silently. Rerun Verify and the tests,
 user the result, and push without asking. Then the Reviewer runs the next round
 (`/ps:review <pr>`).
 
+## 7. Keep the PR current
+
+Main requires an up-to-date branch, and every merge moves main. Before each push in § 5 and
+§ 6, and whenever the user asks, merge `origin/main` into the PR's branch (checked out by
+name, not a detached HEAD, so the merge commit names the branch). Resolve a conflict where
+both sides only add (exports, list entries, manifest rows) by keeping both, then rerun
+Verify and the tests through the normal commit hook. A conflict that needs a judgment about
+behavior is a blocker (`loop-limits.md`), not a guess.
+
 ## Guardrails
 
 - One issue per run. One writer: you.
