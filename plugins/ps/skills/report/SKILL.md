@@ -76,7 +76,7 @@ gh api graphql -F owner="${REPO%/*}" -F name="${REPO#*/}" -F n=<n> -f query='
   Current behavior is main today, read from the code. Expected behavior is what the PR
   achieves. Verify comes from the PR's tests when it has them. Scope matches the diff.
   Components and Contract show what the diff changes, with before read from main and after
-  from the PR.
+  from the PR; so does the Storyboard when the PR changes a screen.
 - Skip step 1 except for what neither the PR nor the code answers. Run steps 2, 3, 4, 6, 7
   and 8 as for any issue. In step 3, read the Verify test from the diff and run it against
   main only for a trusted PR; for an external PR, take the test as written and say so.
@@ -168,6 +168,13 @@ into, counting toward the two extra experts) and fold their requirements into th
 itself: names, defaults, flags, messages, examples. The shape is settled before Verify and
 the acceptance criteria are final, since both test it.
 
+**The Storyboard comes from the UX designer** (`issue-format.md` § Storyboard). When the
+change alters a screen, `ps:ux-designer` joins (counting toward the two extra experts) and
+draws it. Check each before frame against the code, story or design it cites: a frame that
+doesn't match the screen as it is goes back to it. Each step and state in the Storyboard
+gets an acceptance criterion, and its words go into Expected behavior. When the work is
+sliced, the Storyboard goes in the UI slice only.
+
 When experts disagree, or a requirement leaves a technical choice open, don't ask the user:
 send the specific point back to the experts it concerns, with the other side's argument, for
 another round. Decide from their answers and record the choice as a Constraint. At most 3
@@ -218,7 +225,8 @@ requirement it contradicts, each with the critic's argument (step 4's rounds). I
 Each round posts a `<!-- ps:event cold-read-round -->` comment on the issue once it exists
 (for a new issue, in step 9, one per round run), so the counter survives the session.
 Give a fresh subagent only the final issue text and ask what it would need to ask before
-implementing (a contract it can't write code against from the Contract alone counts), counting only questions whose answer would change what gets built or how it's
+implementing (a contract it can't write code against from the Contract alone counts, and
+so does a screen whose steps, states or words the Storyboard leaves open), counting only questions whose answer would change what gets built or how it's
 verified (`experts.md` § The bar). "None" is the expected answer for a good issue; no
 preferences, nice-to-knows or hypothetical edge cases. Fold each question into the Spec.
 Repeat; after the third round there's no fourth read. Check the last fold yourself against

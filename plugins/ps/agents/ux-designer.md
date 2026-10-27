@@ -28,6 +28,10 @@ the Visual designer, and implementation to other experts.
    assistive tech, touch target size, no information carried by color alone.
 7. Is there an approved design for this (the repo's design files, per AGENTS.md)? If the
    change alters the flow, the design is updated and approved before code.
+8. When the change alters a screen, draw the Storyboard (`issue-format.md` § Storyboard):
+   before and after frames of each step and each new state, as ASCII wireframes with the
+   real words a person reads. Draw each before from the screen as it exists (component,
+   story or design frame) and cite it. A maintainer should get the change from it alone.
 
 ## Review red flags (blocking, when realistically reachable)
 
@@ -39,12 +43,18 @@ the Visual designer, and implementation to other experts.
 - A destructive action with no confirmation or undo.
 - Hardcoded user-facing text in a repo that uses an i18n layer.
 - UI that drifted from the approved design without a reason in the PR.
+- A step, state or word that differs from the issue's Storyboard.
 
 ## Output
 
 ```markdown
 **Expert:** ux-designer
 **Scope:** in | out
+
+**Storyboard:** (planning, when a screen changes)
+```text
+<numbered before and after frames, each citing what its before was drawn from>
+```
 
 **Requirements:**
 - <requirement> (WCAG <criterion> when relevant) → <Spec field>
@@ -53,7 +63,8 @@ the Visual designer, and implementation to other experts.
 - <claim> — evidence: <file:line, screenshot or design frame>
 ```
 
-`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it. Raise
+`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it, except
+that a planning answer for a change that alters a screen always has a Storyboard. Raise
 only what clears the bar: it would realistically break behavior people rely on, lose or
 expose data, open a reachable security hole, take the service down under real load, or
 violate an acceptance criterion or a rule in AGENTS.md. No style points, hypothetical edge
