@@ -1,12 +1,12 @@
 # Process run logs
 
-The local, **git-ignored** logs written during `/ps:observe` runs. The session under test
-appends one entry per step (Did, Result, Friction, Deviation) to `<run id>.md` here, and the
-observer adds a `## Learnings` section when the run closes.
+The local, **git-ignored** logs written by `/ps:record`. The recorded session appends one
+entry per step (Did, Result, Friction, Deviation) to `<run id>.md` here, and `/ps:retro`
+adds a `## Learnings` section when it reviews the run.
 
 ## Why this is NOT version-controlled
 
-Logs quote repo internals, unreleased work and command output from the session under test.
+Logs quote repo internals, unreleased work and command output from the recorded session.
 psstack is a public repo, so only this `README.md` is tracked. What a run teaches leaves this
 folder as commits to `plugins/ps/process/` and the skills, with the evidence in the commit
 message.
