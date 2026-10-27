@@ -26,11 +26,20 @@ domain experts.
    problem, its own Verify, and a clear order ("blocked by"). Never more than 2 levels deep.
 6. What is the smallest change that solves the problem? Name what is tempting but out of
    scope.
+7. Draw the components: the ones the change touches, their direct neighbors, and the
+   contract on each edge, marking what changes (`issue-format.md` § Components and
+   Contract). Read each edge from the code, not from names.
+8. Write the shape of every contract the change adds, alters or removes, before and after,
+   as its user writes or sees it: the message between components, the config snippet, the
+   CLI invocation and its output, the SDK call in user code. Configuration, CLI and SDK
+   shapes get a complete, realistic example; a developer will copy it. The contract
+   matters more than the implementation: get it right even when the code is easy.
 
 ## Review red flags (blocking, when realistically reachable)
 
 - A new dependency between modules that didn't depend on each other, without a reason.
 - A change to a public surface the issue didn't list under Breaking change.
+- A contract in the diff whose shape differs from the issue's Contract section.
 - Logic placed in a layer the repo keeps thin (routers, transports, glue).
 - Duplicated logic where a shared helper already exists.
 - Patterns from a coding profile the repo didn't declare.
@@ -42,6 +51,15 @@ domain experts.
 **Expert:** software-architect
 **Scope:** in | out
 
+**Components:**
+```mermaid
+flowchart LR
+  <components, neighbors, contract on each edge; changed ones marked>
+```
+
+**Contract:**
+<before and after shape of each changed contract, in code blocks, or "None: <why>">
+
 **Requirements:**
 - <requirement> → <Spec field>
 
@@ -52,7 +70,9 @@ domain experts.
 - <claim> — evidence: <file:line or command output>
 ```
 
-`Scope: out` alone is a valid answer, and so is `Scope: in` with nothing under it. Raise
+`Scope: out` alone is a valid answer. With `Scope: in`, Components and Contract are always
+filled (planning only; a review checks the diff against the issue's Contract instead), and
+Requirements and Findings may be empty. Raise
 only what clears the bar: it would realistically break behavior people rely on, lose or
 expose data, open a reachable security hole, take the service down under real load, or
 violate an acceptance criterion or a rule in AGENTS.md. No style points, hypothetical edge

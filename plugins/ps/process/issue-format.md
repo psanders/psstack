@@ -11,7 +11,7 @@ choice, "should we?"), it goes to a Discussion and the issue is filed once it's 
 
 ## Template
 
-```markdown
+````markdown
 ## Brief
 **Problem:** <one sentence: who hits what, when>
 **Impact:** <who is affected, how badly, is there a workaround>
@@ -20,6 +20,14 @@ choice, "should we?"), it goes to a Discussion and the issue is filed once it's 
 **Size:** S | M
 **Why take it:** <one line>
 **Why not:** <one line, or "No objection survived the Spec">
+
+### Components
+```mermaid
+flowchart LR
+  <the components this change touches, their direct neighbors, and the contract on each edge>
+```
+### Contract
+<the before and after shape of every contract this change adds, alters or removes, or "None: <why>">
 
 ## Spec
 ### Current behavior
@@ -35,7 +43,7 @@ Out: ...
 - [ ] Given ..., when ..., then ...
 ### Verify
 <one command that fails today and passes when done>
-```
+````
 
 `Reproduce` is for bugs: exact commands, versions and config, inlined rather than linked. A
 feature replaces it with a one-line user story. A task drops it.
@@ -53,6 +61,47 @@ Every field is required. "No" and "Low" are answers; blanks are not.
 | Size | S (under half a day) or M (up to 2 days). L is never filed: split it (see `loop-limits.md` for how far). |
 | Why take it | The advocate's line. |
 | Why not | The critic's line. A fixable objection becomes a Constraint instead. |
+
+## Components and Contract
+
+The maintainer decides on the contract, not the implementation: an implementation can be
+redone in a later PR, a contract other components and developers depend on can't. So the
+Brief shows both, drawn by the Architect, and both are required.
+
+**Components** is a Mermaid `flowchart` (GitHub renders it), always present, even for a
+one-component change:
+
+- Nodes are components a maintainer recognizes (a service, package, CLI, SDK, database, an
+  external system, the developer or operator), never files or functions. At most 10.
+- Draw every component the change touches and its direct neighbors. Mark the ones that
+  change with `:::changed` and add `classDef changed stroke-width:3px`, so the diagram reads
+  without color.
+- Label every edge with the contract it carries (`gRPC CreateApp`, `config.yaml`,
+  `@fonoster/sdk createApp()`, `NATS calls.started`). An edge whose contract changes is drawn
+  thick (`==>`) and its label ends in `(changed)`, or `(new)` / `(removed)`. Quote labels
+  that hold parentheses or punctuation (`==>|"env vars (changed)"|`), or Mermaid won't render.
+
+**Contract** shows the shape of every contract the change adds, alters or removes, before and
+after, written the way its user writes or sees it, in a code block:
+
+- **Between components** (API, RPC, event, wire format, schema): the request, response or
+  message with its fields and types, and the errors a caller can get.
+- **Configuration** (config file, env vars): the snippet an operator writes, with defaults,
+  and what happens on a bad or missing value.
+- **CLI:** the command line a developer types, its flags, and the output and exit code they
+  get, including the error case.
+- **SDK:** the call as it appears in user code, with its signature and what it returns or
+  throws.
+
+Developer-facing shapes (configuration, CLI, SDK) get the most care: show a complete,
+realistic example, not a type sketch, because that is what a developer will copy. A new
+contract reads "Before: none"; a removed one reads "After: none". "None" is valid only when
+nothing that crosses a component boundary or reaches a developer changes, and it says why
+("None: the retry loop is internal to the dispatcher"). Every contract a Breaking change of
+Yes names appears here.
+
+The Contract is binding. The Implementer builds exactly that shape, and a reason to change it
+is a blocker that goes back to the Reporter, not a judgment call in the PR.
 
 ## Spec rules
 
@@ -91,7 +140,7 @@ Every field is required. "No" and "Low" are answers; blanks are not.
 routr #437, rewritten. The Brief surfaces what the original hid: the fix makes a running
 config refuse to start, which is a breaking change.
 
-```markdown
+````markdown
 ## Brief
 **Problem:** Connect starts with two verifiers set because its startup check reads CONNECT_VERIFIER_PUBLIC_KEY, which nothing uses.
 **Impact:** Operators who set both get the public-key verifier silently; no data loss.
@@ -100,6 +149,24 @@ config refuse to start, which is a breaking change.
 **Size:** S
 **Why take it:** A config check that never fires hides misconfiguration.
 **Why not:** No objection survived the Spec.
+
+### Components
+```mermaid
+flowchart LR
+  op[Operator] ==>|"env vars (changed)"| connect[Connect]:::changed
+  connect -->|gRPC verify| verifier[Verifier service]
+  connect -->|public key file| key[(Key file)]
+  classDef changed stroke-width:3px
+```
+### Contract
+Configuration, the case that changes:
+```bash
+CONNECT_VERIFIER_ADDR=verifier:50051
+CONNECT_VERIFIER_PUBLIC_KEY_PATH=/etc/routr/key.pub
+```
+Before: Connect starts and silently uses the public-key verifier.
+After: Connect exits 1 with `only one of CONNECT_VERIFIER_ADDR, CONNECT_VERIFIER_PUBLIC_KEY_PATH may be set`.
+Setting either variable alone behaves as today.
 
 ## Spec
 ### Current behavior
@@ -119,4 +186,4 @@ docs-site/reference/components/connect.mdx: setting both verifier variables now 
 - [ ] Given only one set, Connect starts as today.
 ### Verify
 npm test -w mods/connect
-```
+````
