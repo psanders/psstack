@@ -110,7 +110,10 @@ with a note in the verdict, not a third run.
   issue's scope, or below the bar in `experts.md` § The bar. A reviewer asked to find gaps
   will always find some; a member's style point, hypothetical edge case or nice-to-have is
   dropped, not passed on. When unsure, drop it.
-- **Confirm** each blocking finding against the code before keeping it.
+- **Confirm** each blocking finding against the code, then against the bar: name the
+  realistic trigger (who or what causes it, and how often) and what breaks. A finding that is
+  true in the code but has no realistic trigger, or breaks nothing users rely on, is dropped,
+  not softened.
 - **Decide:** no blocking findings and Verify green means ready for human review. Otherwise,
   changes needed.
   Wait for the PR's required checks to finish (`gh pr checks <pr> --watch --required`); a

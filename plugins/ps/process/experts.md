@@ -70,7 +70,8 @@ Every expert answers in this shape, so any stage can consume any expert:
 **Requirements:**   (planning only: what the Spec must add)
 - <requirement> → <Spec field it belongs in>
 
-**Findings:**       (review only; every finding is blocking)
+**Findings:**       (review only; every finding is blocking: one you'd rate low or minor
+                    doesn't clear the bar, so leave it out)
 - <claim> — evidence: <file:line or command output>
 ```
 
