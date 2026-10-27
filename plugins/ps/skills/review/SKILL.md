@@ -116,8 +116,10 @@ with a note in the verdict, not a third run.
   Wait for the PR's required checks to finish (`gh pr checks <pr> --watch --required`); a
   failing required check is a blocking finding, with its log as evidence.
 
-Post the verdict to GitHub without asking (`README.md` § Autonomy), then show it to the
-user with the link.
+Post the verdict to GitHub without asking (`README.md` § Autonomy). The details live in
+that comment. To the user, answer in at most three lines: the verdict first ("Ready for
+human review" or "Changes needed"), then the one or two findings that decide it, then the
+link. Never paste the full findings into the conversation.
 
 ## 7. Post
 
