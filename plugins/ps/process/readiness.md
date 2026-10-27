@@ -18,6 +18,7 @@ Questions an agent asks, and the field that prevents each:
 | Where is this code? | Where to look |
 | How far should I go? Should I also fix X? | Scope In / Out |
 | Can I change this API, env var or schema? | Constraints, Breaking change |
+| What exactly must the API, config, CLI or SDK look like? | Contract |
 | How do I know I'm done? | Acceptance criteria, Verify |
 | Which version, config, environment? | Reproduce, inlined |
 | Which coding style applies? | The repo's AGENTS.md `## Conventions` |

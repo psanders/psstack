@@ -75,6 +75,8 @@ gh api graphql -F owner="${REPO%/*}" -F name="${REPO#*/}" -F n=<n> -f query='
 - **Draft the issue, not the PR.** Problem is what was wrong or missing before the PR.
   Current behavior is main today, read from the code. Expected behavior is what the PR
   achieves. Verify comes from the PR's tests when it has them. Scope matches the diff.
+  Components and Contract show what the diff changes, with before read from main and after
+  from the PR.
 - Skip step 1 except for what neither the PR nor the code answers. Run steps 2, 3, 4, 6, 7
   and 8 as for any issue. In step 3, read the Verify test from the diff and run it against
   main only for a trusted PR; for an external PR, take the test as written and say so.
@@ -157,6 +159,15 @@ conversation. Keep only requirements that clear the bar in `experts.md` § The b
 each into the Spec field it names. Name any expert that
 applied but was left out by the limit.
 
+**Components and Contract come from the Architect** (`issue-format.md` § Components and
+Contract). Put its diagram and shapes in the Brief after checking each node and edge against
+the code: a component it names that doesn't exist, or an edge the code doesn't have, goes
+back to it. When the Contract changes configuration, a CLI command or an SDK call, also send
+that shape to `ps:technical-writer` (and to `ps:ux-designer` when it's a CLI a person types
+into, counting toward the two extra experts) and fold their requirements into the shape
+itself: names, defaults, flags, messages, examples. The shape is settled before Verify and
+the acceptance criteria are final, since both test it.
+
 When experts disagree, or a requirement leaves a technical choice open, don't ask the user:
 send the specific point back to the experts it concerns, with the other side's argument, for
 another round. Decide from their answers and record the choice as a Constraint. At most 3
@@ -171,7 +182,9 @@ If the work fails any of these, split it using the Architect's proposed slices:
 - one Verify command proves it
 - one PR can do it
 
-Each slice is a full issue: its own Brief, Spec and Verify. Don't rerun everything per
+Each slice is a full issue: its own Brief (with its own Components and Contract), Spec and
+Verify. A contract two slices share is shaped once, in the slice that introduces it; the
+slices that depend on it quote that shape and name the issue, never reshape it. Don't rerun everything per
 slice: step 6 (advocate and critic) runs once for the whole set, since taking the work is
 one decision; step 7 (cold read) runs per slice; experts are consulted again only for a
 slice that touches an area the first round didn't cover. Order slices with "blocked by". Slice the UI apart from the layers below it (schemas,
@@ -205,7 +218,7 @@ requirement it contradicts, each with the critic's argument (step 4's rounds). I
 Each round posts a `<!-- ps:event cold-read-round -->` comment on the issue once it exists
 (for a new issue, in step 9, one per round run), so the counter survives the session.
 Give a fresh subagent only the final issue text and ask what it would need to ask before
-implementing, counting only questions whose answer would change what gets built or how it's
+implementing (a contract it can't write code against from the Contract alone counts), counting only questions whose answer would change what gets built or how it's
 verified (`experts.md` § The bar). "None" is the expected answer for a good issue; no
 preferences, nice-to-knows or hypothetical edge cases. Fold each question into the Spec.
 Repeat; after the third round there's no fourth read. Check the last fold yourself against
