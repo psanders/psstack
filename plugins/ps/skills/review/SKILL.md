@@ -118,8 +118,9 @@ with a note in the verdict, not a third run.
 
 Post the verdict to GitHub without asking (`README.md` § Autonomy). The details live in
 that comment. To the user, answer in at most three lines: the verdict first ("Ready for
-human review" or "Changes needed"), then the one or two findings that decide it, then the
-link. Never paste the full findings into the conversation.
+human review" or "Changes needed"), then the one or two findings that decide it, each with
+how bad it is in production and how big the fix is (a line, a function, a design change),
+then the link. Never paste the full findings into the conversation.
 
 ## 7. Post
 
