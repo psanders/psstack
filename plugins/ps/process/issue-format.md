@@ -28,6 +28,8 @@ flowchart LR
 ```
 ### Contract
 <the before and after shape of every contract this change adds, alters or removes, or "None: <why>">
+### Storyboard
+<only when the change alters a screen: before and after frames of each step a person goes through>
 
 ## Spec
 ### Current behavior
@@ -102,6 +104,36 @@ Yes names appears here.
 
 The Contract is binding. The Implementer builds exactly that shape, and a reason to change it
 is a blocker that goes back to the Reporter, not a judgment call in the PR.
+
+## Storyboard
+
+The Contract shows a developer what changes; the Storyboard shows the maintainer what a
+person will see, so they get the change from the Brief alone, before any design or code
+exists. The UX designer draws it. It appears only when the change alters a screen: a web,
+mobile or desktop UI, a terminal UI, or a multi-step interactive prompt. The output of a
+single CLI command stays in the Contract. No screen changes, no section.
+
+- **Frames:** one per step of the flow that changes, in the order the person goes through
+  it, each titled with its number, the screen and `before` or `after` (`2. Members, after`).
+  Add a frame for each state the change adds or alters (empty, loading, error, no
+  permission). A new screen reads "Before: none". At most 8 frames; more means the issue
+  is too big.
+- **Drawn as text:** an ASCII wireframe in a `text` code block, at most 72 columns, in plain
+  `+ - |` characters (box-drawing characters misalign in some fonts). Regions, controls and
+  the real words a person reads, never lorem ipsum. Mark what changes with `*` in the
+  margin and a short note under the frame.
+- **Before is read, not imagined:** draw each before frame from the screen as it exists:
+  its component, its story when the repo has a component catalog (such as Storybook), or
+  its frame in the design file AGENTS.md names. Under the frame, cite what it was drawn from
+  (`src/members/MembersTable.tsx`, story `Members/Table`, frame `Members`), so a reviewer
+  can open the real one.
+- **Not a design:** it fixes the flow, the states and the words, not layout, spacing or
+  style. Those come from the design system and, for the UI slice, from an approved design
+  (`coding/typescript.md` § Building a feature end to end). A Storyboard never replaces that
+  approval.
+
+The Storyboard's steps, states and words are binding like the Contract: a reason to change
+one goes back to the Reporter. Its layout is not.
 
 ## Spec rules
 
@@ -187,3 +219,37 @@ docs-site/reference/components/connect.mdx: setting both verifier variables now 
 ### Verify
 npm test -w mods/connect
 ````
+
+## Worked example: Storyboard
+
+The routr issue changes no screen, so it has none. An issue that adds a Resend action to a
+members list would carry this after its Contract:
+
+```text
+1. Members, before
++------------------------------------------------------+
+| Members                                  [+ Invite]  |
+|------------------------------------------------------|
+| ana@acme.io     Admin     Active                     |
+| bo@acme.io      Member    Invited                    |
++------------------------------------------------------+
+drawn from src/members/MembersTable.tsx, story Members/Table
+
+1. Members, after
++------------------------------------------------------+
+| Members                                  [+ Invite]  |
+|------------------------------------------------------|
+| ana@acme.io     Admin     Active                     |
+| bo@acme.io      Member    Invited        [Resend]    | *
++------------------------------------------------------+
+* Resend shows only on Invited rows.
+
+2. Members, after Resend
++------------------------------------------------------+
+| (i) Invite sent again to bo@acme.io             [x]  | *
+| Members                                  [+ Invite]  |
+| ...                                                  |
++------------------------------------------------------+
+* Toast, closes after 5 s. On failure: "Couldn't resend the
+  invite. Try again." and the row stays as it was.
+```

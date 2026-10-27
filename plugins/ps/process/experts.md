@@ -40,7 +40,7 @@ with the correction, so the stale fact stops spreading.
    | The change touches | Expert |
    | :--- | :--- |
    | SIP, WebRTC, RTP, SDP, NAT, codecs, trunks | `realtime-comms-engineer` |
-   | A screen, form, CLI prompt, error message people read | `ux-designer` |
+   | A screen, form, CLI prompt, error message people read (draws the Storyboard) | `ux-designer` |
    | Anything visual: components, layout, colors, a design file | `visual-designer` |
    | Hot paths, loops over unbounded data, I/O, caching, a latency target | `performance-engineer` |
    | Schemas, migrations, ORM models, queries on large tables | `database-engineer` |
