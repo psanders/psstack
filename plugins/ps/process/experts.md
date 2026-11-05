@@ -28,6 +28,10 @@ with the correction, so the stale fact stops spreading.
 | Security engineer | `security-engineer` |
 | Release / SRE engineer | `release-engineer` |
 | Technical writer | `technical-writer` |
+| Pruner | `pruner` |
+
+The pruner isn't a discipline. It never adds; it challenges what the others added, so
+the bar is enforced by someone other than the agent who wrote the item (§ Pruning).
 
 ## Who gets consulted
 
@@ -96,6 +100,30 @@ defensive code for cases that can't happen. There is no "note" or "nice to have"
 
 When unsure whether something clears the bar, leave it out. Zero findings is the normal
 outcome for a good change, and zero added requirements is normal for a clear issue.
+
+Examples of what fell below the bar in real runs, and still got in until the owner cut it:
+
+- A missing-file guard, upgrade docs and rollback notes for a config nobody used yet ("No
+  one is using this yet, do not add any fluf not needed").
+- A blocking review finding that needed a CANCEL/200 race plus a provider that challenges
+  BYE, when no such provider was shown.
+- A "secret exposed" finding over a provider's public IP addresses.
+- A check for a problem only the author's own machine had. Put the one-time fix command
+  in the reply or the PR description instead of committing code for it.
+
+## Pruning
+
+Every expert is told the bar, and still adds items below it: each judges its own output.
+So after the experts, the `pruner` reads the assembled result (the Reporter's draft, or the
+Reviewer's merged findings and the diff) and lists cuts. It doesn't count toward the 4.
+
+- A cut the item's author doesn't contest is dropped.
+- To keep an item, its author (the expert who added it, continuing its own agent) answers
+  with a realistic trigger and evidence (`pruner.md` § When the author insists). Evidence
+  decides: with it the item stays; without it the item goes. This uses the stage's normal
+  rounds, never extra ones.
+- The pruner never adds, and never cuts what the Problem, an acceptance criterion, the
+  owner or AGENTS.md requires.
 
 ## Writing a new expert
 
