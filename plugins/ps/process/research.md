@@ -36,6 +36,20 @@ process does because of it. Re-check a source before leaning on it for a new dec
 | Imagining the project already failed raised people's ability to name reasons by 30% (Mitchell, Russo and Pennington, 1989). | [Klein, HBR 2007](https://hbr.org/2007/09/performing-a-project-premortem) | The critic runs as a premortem. |
 | A panel of diverse judges beat one large judge, with less self-preference and 7x lower cost. | [Verga et al. 2024](https://arxiv.org/abs/2404.18796) | The Reviewer is a committee with clean context. |
 
+## Fluff and the pruner
+
+Collected 2026-11-04. The problem: experts and coordinators were told the bar, yet owners
+had to cut fluff by hand twice (runs `2026-10-27-fonoster-routr-config`,
+`2026-10-26-routr-wa-interop`).
+
+| Finding | Source | What we do |
+| :--- | :--- | :--- |
+| A presumptive feature costs build, delay, carry and repair; Yagni doesn't excuse neglecting the code base. | [Fowler: Yagni](https://martinfowler.com/bliki/Yagni.html) | The pruner cuts presumptive work, never refactoring of the code it touches. |
+| "Simplicity—the art of maximizing the amount of work not done—is essential." | [Agile Manifesto](https://agilemanifesto.org/principles.html) | Every item has to name what breaks without it. |
+| Learn why a fence was put up before removing it. | [Chesterton's fence](https://fs.blog/chestertons-fence/) | The pruner can't cut what the Problem, criteria, owner or AGENTS.md require, and the author gets to answer with evidence. |
+| Adding analyst and tester roles inflated code complexity 50–130% with no pass@1 gain; the leanest architectures matched or beat the heaviest. | [Ashrafi 2026, arXiv 2606.00308](https://arxiv.org/abs/2606.00308) | The pruner adds nothing and sits outside the 4-expert limit; it is the one role whose output is smaller. |
+| Instruction-only style prompts held only moderately once a model expanded its own code; instructions plus examples held best. | [Bohr 2025, arXiv 2511.13972](https://arxiv.org/abs/2511.13972) | `experts.md` § The bar now carries real examples, not only the rule. |
+
 ## Platform
 
 | Finding | Source | What we do |
