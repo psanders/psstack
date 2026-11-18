@@ -21,12 +21,12 @@ Questions an agent asks, and the field that prevents each:
 | What exactly must the API, config, CLI or SDK look like? | Contract |
 | What does the person see at each step, and what does it say? | Storyboard |
 | How do I know I'm done? | Acceptance criteria, Verify |
-
-In a repo with `Specs: openspec`, the fields the table names live in the pinned OpenSpec change
-(`issue-format.md` § Spec as an OpenSpec change), and the cold read gets the body and the
-change's files together.
 | Which version, config, environment? | Reproduce, inlined |
 | Which coding style applies? | The repo's AGENTS.md `## Conventions` |
+
+In a repo with `Specs: openspec`, the Spec fields the table names live in the pinned OpenSpec
+change (`issue-format.md` § Spec as an OpenSpec change), and the cold read gets the body and
+the change's files together.
 
 ## Gate 1: plan approval (human)
 

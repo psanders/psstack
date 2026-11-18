@@ -158,10 +158,10 @@ user the result, and push without asking. Then the Reviewer runs the next round
 ## 7. Keep the PR current
 
 Main requires an up-to-date branch, and every merge moves main. Before each push in § 5 and
-§ 6, and whenever the user asks, first fast-forward the local branch from the PR's remote
-branch (with `Specs: openspec`, the Reviewer may have pushed the archive commit there), then
-merge `origin/main` into the PR's branch (checked out by name, not a detached HEAD, so the
-merge commit names the branch). Never force-push. Resolve a conflict where both sides only
+§ 6, and whenever the user asks, merge `origin/main` into the PR's branch (checked out by
+name, not a detached HEAD, so the merge commit names the branch). **With `Specs: openspec`**,
+first fast-forward the local branch from the PR's remote branch, which may hold the
+Reviewer's archive commit, and never force-push. Resolve a conflict where both sides only
 add (exports, list entries, manifest rows, requirements appended to the same spec) by
 keeping both, then rerun Verify and the tests through the normal commit hook. A conflict
 that needs a judgment about behavior is a blocker (`loop-limits.md`), not a guess; two

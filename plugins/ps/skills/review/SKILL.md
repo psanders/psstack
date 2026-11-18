@@ -99,7 +99,9 @@ While the committee works:
   attachment.md --expect <pin hash> --name <pin name> --into <scratch>`. Its scenarios are
   the acceptance criteria, never the PR's copy. Any difference between it and the PR's
   `openspec/changes/<name>/`, other than checkbox state in `tasks.md`, is a blocking finding.
-  A pin that doesn't unpack is blocking too.
+  A pin that doesn't unpack is blocking too. So is a PR branch that doesn't contain
+  `origin/<default>`: the archive in § 7 needs it, so the Implementer merges main first
+  (`/ps:implement` § 7).
 - **Acceptance criteria:** for each one, find the test or change that satisfies it. A
   criterion with no evidence is a blocking finding.
 - **Verify and tests:** for a trusted PR, check out the branch in a separate worktree and run
@@ -145,9 +147,10 @@ then the link. Never paste the full findings into the conversation.
 
 ## 7. Archive the change
 
-Only when AGENTS.md has `Specs: openspec`, the verdict is "Ready for human review", the PR
-isn't external (`external.md` § Who is external; that excludes every fork PR), and the PR
-branch contains `origin/<default>`. In the § 5 worktree, at the head SHA you reviewed:
+Only when AGENTS.md has `Specs: openspec`, the verdict is "Ready for human review" (which
+§ 5 grants only to a branch that contains `origin/<default>`), and the PR isn't external
+(`external.md` § Who is external; that excludes every fork PR). In the § 5 worktree, at the
+head SHA you reviewed:
 
 ```bash
 npx -y @fission-ai/openspec@2.1.0 archive <name> --yes
@@ -156,9 +159,8 @@ git push origin HEAD:<head ref>
 ```
 
 That plain push is the only one you ever make. If it's rejected because the head moved,
-stop and say so in the verdict; never rebase or force. When the branch doesn't contain
-`origin/<default>`, don't archive: the verdict asks the Implementer to merge main first
-(`/ps:implement` § 7), and the next review archives. An external PR is never archived by you.
+stop and say so in the verdict; never rebase or force. An external PR is never archived by
+you.
 
 ## 8. Post
 
