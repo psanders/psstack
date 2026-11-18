@@ -99,6 +99,9 @@ While the committee works:
   attachment.md --expect <pin hash> --name <pin name> --into <scratch>`. Its scenarios are
   the acceptance criteria, never the PR's copy. Any difference between it and the PR's
   `openspec/changes/<name>/`, other than checkbox state in `tasks.md`, is a blocking finding.
+  If an earlier round already archived it (`openspec/changes/archive/*-<name>/` exists on
+  the branch), compare against that folder instead; an open `openspec/changes/<name>/` next
+  to it is blocking.
   A pin that doesn't unpack is blocking too. So is a PR branch that doesn't contain
   `origin/<default>`: the archive in § 7 needs it, so the Implementer merges main first
   (`/ps:implement` § 7).
@@ -149,7 +152,9 @@ then the link. Never paste the full findings into the conversation.
 
 Only when AGENTS.md has `Specs: openspec`, the verdict is "Ready for human review" (which
 § 5 grants only to a branch that contains `origin/<default>`), and the PR isn't external
-(`external.md` § Who is external; that excludes every fork PR). In the § 5 worktree, at the
+(`external.md` § Who is external; that excludes every fork PR), and the change isn't
+archived yet (an earlier round's archive commit counts; then skip this section and the
+Spec line names that commit). In the § 5 worktree, at the
 head SHA you reviewed:
 
 ```bash

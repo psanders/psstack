@@ -111,7 +111,10 @@ From AGENTS.md `## Conventions`:
    attachment into `openspec/changes/` and commit it as
    `docs(spec): add OpenSpec change <name>`. On a branch you resume, if the folder differs
    from the current attachment, unpack over it and commit
-   `docs(spec): update OpenSpec change <name>` before anything else. Your brief is
+   `docs(spec): update OpenSpec change <name>` before anything else. If
+   `openspec/changes/archive/*-<name>/` exists on the branch, the Reviewer already archived
+   the change: unpack nothing, add or update nothing, and leave both the archived folder and
+   `openspec/specs/` alone; your brief is the archived copy. Your brief is
    `proposal.md`, `design.md`, `tasks.md` and the spec deltas; the scenarios are the
    acceptance criteria. Tick `tasks.md` as you go, and change nothing else in the folder.
 2. **Failing test first.** Write the test the acceptance criteria call for and watch it

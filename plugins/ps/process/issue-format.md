@@ -225,7 +225,9 @@ Changing the attachment means changing the pin, which edits the body, which canc
 as the PR's first commit and works from it; the Reviewer checks the PR against the pinned
 copy and, on a ready verdict, archives the change on the PR branch, so the human merge
 moves the delta into `openspec/specs/`. Specs on the default branch only ever describe
-shipped code.
+shipped code. Once archived, the change stays archived: if the PR gets another round, the
+Implementer leaves `openspec/changes/archive/*-<name>/` alone and the Reviewer compares
+against it and doesn't archive again.
 
 A merge conflict in `openspec/specs/` where both sides only add is resolved by keeping both.
 Two changes that MODIFY the same requirement are a blocker, never a judgment call.
