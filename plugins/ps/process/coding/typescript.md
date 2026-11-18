@@ -129,7 +129,9 @@ don't need it:
 4. **Test both tiers:** unit tests per function (§ Tests), plus one end-to-end spec for the
    golden path of the flow just built.
 5. **Promote specs only after green.** Syncing and archiving an OpenSpec change are
-   hard-to-reverse steps: a human confirms each.
+   hard-to-reverse steps: a human confirms each. With `Specs: openspec`, the Reviewer
+   archives the change on the PR branch on a ready verdict, and the human merge is that
+   confirmation (`issue-format.md` § Spec as an OpenSpec change).
 
 ## Tests
 

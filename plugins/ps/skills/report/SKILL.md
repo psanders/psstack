@@ -96,7 +96,10 @@ The blocker's options are the input; the user isn't asked to choose between them
   outside the issue's Scope, and ask the owning expert (step 4) to confirm it.
 - It's settled when exactly one option survives, or the expert picks one with evidence.
   Edit the Spec, record the choice and why in Context, remove `blocked` and any `ready` left
-  on it (the edit makes it stale for Gate 2), and run steps 6–9. Step 9 then tells the user
+  on it (the edit makes it stale for Gate 2), and run steps 6–9. With `Specs: openspec`,
+  "edit the Spec" means: unpack the pinned attachment, change it against the current default
+  branch (the new `base`), repack, edit the attachment comment, and replace the pin, all
+  before step 7 (§ 6b). Step 9 then tells the user
   the issue is waiting for their `ready`.
 - Only a trade-off the code and AGENTS.md can't settle (a product or compatibility choice)
   goes to step 8 as `needs-human`.
@@ -229,11 +232,28 @@ cites code, a trace or a standard. If both do, send the point back to every expe
 requirement it contradicts, each with the critic's argument (step 4's rounds). If it's still open, it's a decision for a human
 (step 8).
 
+## 6b. Write the OpenSpec change (repos with `Specs: openspec`)
+
+Skip this step unless AGENTS.md `## Conventions` has `Specs: openspec`. The format, the
+field mapping and the pin are in `issue-format.md` § Spec as an OpenSpec change.
+
+1. In a scratch worktree of the up-to-date default branch, record its HEAD as `base`
+   (`git rev-parse HEAD`, all 40 hex).
+2. Write the change as `openspec/changes/draft-<slug>/`: `proposal.md`, `design.md`,
+   `tasks.md` and one `specs/<capability>/spec.md` per capability, mapped from the Spec as
+   the table says. Use MODIFIED only for a requirement in that worktree's `openspec/specs/`.
+3. `npx -y @fission-ai/openspec@2.1.0 validate draft-<slug> --strict` must pass. Two
+   identical failures are a blocker (`loop-limits.md`).
+
+The issue body's `## Spec` then holds only `**OpenSpec change:** pending` and Verify. Keep
+the worktree until step 9.
+
 ## 7. Cold read
 
 Each round posts a `<!-- ps:event cold-read-round -->` comment on the issue once it exists
 (for a new issue, in step 9, one per round run), so the counter survives the session.
-Give a fresh subagent only the final issue text and ask what it would need to ask before
+Give a fresh subagent only the final issue text (with `Specs: openspec`, the body plus the
+drafted change's files) and ask what it would need to ask before
 implementing (a contract it can't write code against from the Contract alone counts, and
 so does a screen whose steps, states or words the Storyboard leaves open), counting only questions whose answer would change what gets built or how it's
 verified (`experts.md` § The bar). "None" is the expected answer for a good issue; no
@@ -265,6 +285,20 @@ the Brief saying so, so the maintainer applying `ready` sees it first.
   Then set the native type when the org has issue types:
   `gh api -X PATCH repos/$REPO/issues/<n> -f type=<Bug|Feature|Task>`. If that fails, fall
   back to the repo's `type:` label.
+- **Attach the change** (repos with `Specs: openspec`), right after creating the issue:
+
+  ```bash
+  NAME=<n>-<slug>
+  mv openspec/changes/draft-<slug> "openspec/changes/$NAME"     # in the step 6b worktree
+  npx -y @fission-ai/openspec@2.1.0 validate "$NAME" --strict
+  node ${CLAUDE_PLUGIN_ROOT}/scripts/spec-attachment.mjs pack "openspec/changes/$NAME" --base <base> > attachment.md
+  URL=$(gh issue comment <n> --repo "$REPO" --body-file attachment.md)   # prints the comment URL
+  ```
+
+  Replace `**OpenSpec change:** pending` in the body with the pin, using the URL and the
+  sha256 from the comment's header (all 64 hex): ``**OpenSpec change:** `<name>` ·
+  [attachment](<URL>) · sha256 `<hash>` ``. Then drop the worktree. Nothing is committed to the
+  repo: the change reaches a branch only through the Implementer.
 - **Reshaping our own issue** (`not-ready`, or `needs-triage` filed by a maintainer): edit
   the body in place, remove `not-ready` / `needs-triage`.
 - **An external issue** (`external.md`): until it is `ready`, leave the body alone. Post the

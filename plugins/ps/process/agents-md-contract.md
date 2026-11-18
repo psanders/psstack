@@ -24,6 +24,7 @@ Default Verify per area when an issue doesn't give a narrower one.
 Profile: typescript | repo-native
 Overrides: <deviations from the profile, each with its reason>
 Examples: <2-3 files that show the house style, for repo-native>
+Specs: openspec   (optional; only when openspec/config.yaml exists)
 
 ## Areas
 | Area label | Paths | Experts |
@@ -55,6 +56,9 @@ Dated one-liners of settled choices agents must not reopen.
 - **`Profile: repo-native`** means: follow the style of the files under `Examples`, and
   never introduce a psstack profile's patterns. Older repos use this.
 - **`Profile: typescript`** loads `process/coding/typescript.md` and its templates.
+- **`Specs: openspec`** moves the issue's Spec into an OpenSpec change attached to the issue,
+  which the Reviewer archives on the PR branch (`issue-format.md` § Spec as an OpenSpec
+  change). Without it, the Spec stays in the issue body.
 - **Decisions** replace each other. When one changes, edit the line and let git history keep
   the old one; never leave both.
 - **No vendor files.** Don't add `CLAUDE.md`, `.cursorrules`, `copilot-instructions.md` or
