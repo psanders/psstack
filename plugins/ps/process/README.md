@@ -30,6 +30,8 @@ report or idea
 ```
 
 Experts (`../agents/`) advise every stage and never write. Each stage has exactly one writer.
+In a repo with `Specs: openspec`, the Reviewer also pushes one commit, the OpenSpec archive,
+and the human merge confirms it (`issue-format.md` § Spec as an OpenSpec change).
 
 ## Files
 

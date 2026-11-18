@@ -118,9 +118,10 @@ then delegate to a `create<Name>` function. No business logic in the router.
 The order a feature gets built in. Design comes last, so it never blocks the layers that
 don't need it:
 
-1. **Spec first.** The behavior change lands in the issue's Spec before any code or design,
-   and in the change's delta spec too when the repo uses OpenSpec
-   (`openspec validate <name>`). Specs describe observable, testable behavior, not styling.
+1. **Spec first.** The behavior change lands in the issue's Spec before any code or design;
+   with `Specs: openspec` that Spec is the pinned OpenSpec change
+   (`issue-format.md` § Spec as an OpenSpec change). Specs describe observable, testable
+   behavior, not styling.
 2. **Build from the bottom up:** shared schemas and types, validated functions, transport,
    then the clients that don't need a design: SDK, CLI, API. Each can ship on its own.
 3. **Design last**, and only for the UI slice: when the repo has a `.pen` file, the screens
@@ -128,8 +129,9 @@ don't need it:
    are coded (Storybook first when the repo has it). No other slice waits on the design.
 4. **Test both tiers:** unit tests per function (§ Tests), plus one end-to-end spec for the
    golden path of the flow just built.
-5. **Promote specs only after green.** Syncing and archiving an OpenSpec change are
-   hard-to-reverse steps: a human confirms each.
+5. **Promote specs only after green.** With `Specs: openspec`, the Reviewer archives the
+   change on the PR branch on a ready verdict; it reaches `openspec/specs/` only when a
+   human merges.
 
 ## Tests
 

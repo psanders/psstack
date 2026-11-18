@@ -31,7 +31,7 @@ Gather evidence per section:
 | :--- | :--- |
 | Overview | README, package descriptions |
 | Commands | `package.json` scripts, Makefile, CI workflows (what CI actually runs), per-package test commands |
-| Conventions | Search for `withErrorHandlingAndValidation`, Zod schemas, the `create<Name>.ts` layout. Present → propose `Profile: typescript`. Absent → `Profile: repo-native` with 2-3 representative files as `Examples`. Never propose `typescript` for code that doesn't use it. |
+| Conventions | Search for `withErrorHandlingAndValidation`, Zod schemas, the `create<Name>.ts` layout. Present → propose `Profile: typescript`. Absent → `Profile: repo-native` with 2-3 representative files as `Examples`. Never propose `typescript` for code that doesn't use it. When `openspec/config.yaml` exists, also propose `Specs: openspec`. |
 | Areas | `area:` labels (`gh label list`) matched to directories; experts per area from `${CLAUDE_PLUGIN_ROOT}/process/experts.md` |
 | Compatibility | Public APIs and protos, CLI commands and flags, env vars read at startup, config and DB schemas, wire protocols |
 | Risk hotspots | Auth, migrations, protocol cores, release and deploy scripts; files with many recent fix commits (`git log --format= --name-only --grep '^fix'`) |

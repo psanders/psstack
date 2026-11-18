@@ -21,6 +21,10 @@ Questions an agent asks, and the field that prevents each:
 | What exactly must the API, config, CLI or SDK look like? | Contract |
 | What does the person see at each step, and what does it say? | Storyboard |
 | How do I know I'm done? | Acceptance criteria, Verify |
+
+In a repo with `Specs: openspec`, the fields the table names live in the pinned OpenSpec change
+(`issue-format.md` § Spec as an OpenSpec change), and the cold read gets the body and the
+change's files together.
 | Which version, config, environment? | Reproduce, inlined |
 | Which coding style applies? | The repo's AGENTS.md `## Conventions` |
 
@@ -57,6 +61,15 @@ start.
 - [ ] Its own cold read of the issue lists no questions
 - [ ] The issue's loop counters are under their limits (see `loop-limits.md`)
 
+When AGENTS.md has `Specs: openspec`, also (`issue-format.md` § Spec as an OpenSpec change):
+
+- [ ] The body has the pin, and the comment it links to, fetched by its ID, carries the
+      `ps:spec` marker. Other comments with the marker are ignored and never cause a refusal.
+- [ ] `spec-attachment.mjs unpack` with the pin's hash and name succeeds
+- [ ] `openspec validate <name> --strict` passes on the unpacked change
+- [ ] For each capability with a MODIFIED delta, `git diff <base>..origin/<default> -- openspec/specs/<capability>/`
+      is empty
+
 The issue is the whole contract. A change the user asks for when invoking the Implementer
 ("implement 458, but use only `enabled`") is not applied in the code. Implement the issue as
 written, and put the change in the PR's "Noticed, not done" note naming the issue it belongs
@@ -81,7 +94,10 @@ It points to `/ps:adopt`.
 ## Gate 3: review (Reviewer committee, `/ps:review`)
 
 A committee of 2 to 4 experts that sees only the issue and the diff, chaired by the Reviewer,
-who also checks every acceptance criterion and reruns Verify and the tests. No blocking
+who also checks every acceptance criterion and reruns Verify and the tests. When AGENTS.md
+has `Specs: openspec`, the acceptance criteria are the scenarios of the pinned change, and on a
+ready verdict the Reviewer archives the change on the PR branch: its one push. The human
+merge confirms it. No blocking
 findings and Verify green: the PR is ready for human review. Blocking findings go back to
 the Implementer, for at most 2 rounds (`loop-limits.md`). Outside contributions are reviewed
 without running their code on a maintainer's machine.

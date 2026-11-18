@@ -83,7 +83,8 @@ apply `needs-human` to the PR, say why, and stop.
 ## 4. Each member reviews alone
 
 Run members as subagents, in parallel. Give each the same brief and nothing else: the issue
-body, the diff, the list of changed files, and the repo's `## Expert notes` for its role.
+body (with `Specs: openspec`, plus the files of the pinned change, unpacked in § 5), the
+diff, the list of changed files, and the repo's `## Expert notes` for its role.
 Never your conversation, the Implementer's reasoning, or another member's answer. Ask for
 review mode of the output contract: only findings that clear the bar in `experts.md`,
 each with evidence.
@@ -92,6 +93,13 @@ each with evidence.
 
 While the committee works:
 
+- **The pinned change** (only with `Specs: openspec`; `issue-format.md` § Spec as an OpenSpec
+  change): fetch the comment the issue's pin links to, by its ID, and unpack it into a
+  scratch folder with `node ${CLAUDE_PLUGIN_ROOT}/scripts/spec-attachment.mjs unpack
+  attachment.md --expect <pin hash> --name <pin name> --into <scratch>`. Its scenarios are
+  the acceptance criteria, never the PR's copy. Any difference between it and the PR's
+  `openspec/changes/<name>/`, other than checkbox state in `tasks.md`, is a blocking finding.
+  A pin that doesn't unpack is blocking too.
 - **Acceptance criteria:** for each one, find the test or change that satisfies it. A
   criterion with no evidence is a blocking finding.
 - **Verify and tests:** for a trusted PR, check out the branch in a separate worktree and run
@@ -135,7 +143,24 @@ upgrade, or an edge case and what triggers it), how bad it is then, and how big 
 function, a design change),
 then the link. Never paste the full findings into the conversation.
 
-## 7. Post
+## 7. Archive the change
+
+Only when AGENTS.md has `Specs: openspec`, the verdict is "Ready for human review", the PR
+isn't external (`external.md` § Who is external; that excludes every fork PR), and the PR
+branch contains `origin/<default>`. In the § 5 worktree, at the head SHA you reviewed:
+
+```bash
+npx -y @fission-ai/openspec@2.1.0 archive <name> --yes
+git add -A openspec && git commit -m "docs(spec): archive OpenSpec change <name>"
+git push origin HEAD:<head ref>
+```
+
+That plain push is the only one you ever make. If it's rejected because the head moved,
+stop and say so in the verdict; never rebase or force. When the branch doesn't contain
+`origin/<default>`, don't archive: the verdict asks the Implementer to merge main first
+(`/ps:implement` § 7), and the next review archives. An external PR is never archived by you.
+
+## 8. Post
 
 One comment on the PR, starting with the marker:
 
@@ -146,6 +171,7 @@ One comment on the PR, starting with the marker:
 **Committee:** <experts, and any left out>
 **Verify:** `<command>` → <pass | fail | not run: why>
 **Tests:** <command> → <result>
+**Spec:** archived in <sha> | not archived: <why>   (only with `Specs: openspec`)
 
 **Blocking:**
 1. <finding> — evidence: <file:line or output> — expert: <name>
@@ -159,6 +185,7 @@ round 2 still has blocking findings, apply `needs-human` instead of starting rou
 
 ## Guardrails
 
-- One PR per run. You never push, approve, merge or close.
+- One PR per run. You never push, except the one archive commit in § 7 (repos with
+  `Specs: openspec`, PRs that aren't external); you never approve, merge or close.
 - Every blocking finding carries evidence a human can check in under a minute.
 - Report what you ran and what you skipped, honestly.
