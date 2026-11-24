@@ -25,8 +25,11 @@ Rules of thumb:
 - **confession-contrarian** — *"I spent more time than I admit duct taping 𝙆𝘼𝙍𝙈𝘼 in 2025. And I won't do it again."* Earns the contrarian take by admitting you lived it.
 - **slow-reveal** — *"The more I look at it, the more obvious it gets:"* (then the take).
 
-## Build-in-Public
+## Shipped work (Build-in-Public retired 2026-11-24)
 
+Use these only inside an Industry, Operator or Educational post. Never as a bare announcement or a caption.
+
+- **long-held-frustration** — *"For as long as I can remember, I've wanted to stop using 𝘈𝘴𝘵𝘦𝘳𝘪𝘴𝘬. ⤵"* (Roomr, 3,065 / 11 comments).
 - **milestone-trending** — *"𝘍𝘰𝘯𝘰𝘴𝘵𝘦𝘳 made it to the GitHub Trending. 🚀"* (4,160 / 100 reactions).
 - **number-drop** — *"My open-source project has quietly made over half a million dollars and counting."*
 - **boring-vertical-bet** — *"I made a bet on 𝘝𝘰𝘪𝘤𝘦 𝘈𝘐 and picked the least sexy vertical I could find. ⤵"* (QCobro v0.1.0).

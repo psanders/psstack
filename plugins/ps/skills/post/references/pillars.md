@@ -51,8 +51,12 @@ Recurring **glyph identity**: `⤵ ↓ ↳ ⟡ ☑ ▶ →`, italic-Unicode enti
 
 ## The four pillars in detail
 
-### 1. Build-in-Public — Fonoster, Routr, QCobro & Voice AI infra
-- **What it is:** shipped features, milestones, performance numbers, GitHub moments, demo videos, "we just fixed X."
+### 1. Build-in-Public — RETIRED as a register (2026-11-24)
+Weakest pillar for 5 pulses in a row. Shipped work is told through pillars 2–4 instead,
+with the product as the proof and a `▶` product link as the close. Announcement posts and
+caption-only posts are banned (see SKILL.md, pillar 1). Kept below for history and for
+the hooks that worked, all of which were really a story, a number or an opinion.
+- **What it was:** shipped features, milestones, performance numbers, GitHub moments, demo videos, "we just fixed X."
 - **Buyer:** developers, voice AI builders, CTOs evaluating infra.
 - **Center of gravity:** *what we shipped.*
 - **Real hooks that worked:** "𝘍𝘰𝘯𝘰𝘴𝘵𝘦𝘳 made it to the GitHub Trending. 🚀" (4,160 impr), "My open-source project has quietly made over half a million dollars", "I made a bet on 𝘝𝘰𝘪𝘤𝘦 𝘈𝘐 and picked the least sexy vertical I could find" (QCobro v0.1.0), "Today I did something wild. 🤯".
@@ -96,17 +100,18 @@ Picture these when you write (especially Operator's Journal — the post should 
 
 If a draft would read as generic to all of these, it has drifted. Rewrite until only Pedro could have written it.
 
-## Weekly cadence (2 Build / 2 Industry / 2 Operator / 1 Educational)
+## Weekly cadence (3 Industry / 2 Operator / 2 Educational)
 
-LinkedIn, daily. Each day maps to a pillar; the pillar sets hook + CTA.
+LinkedIn, daily. Each day maps to a pillar; the pillar sets hook + CTA. Tue and Fri were
+Build-in-Public until 2026-11-24; a release can go in any slot, told in that slot's register.
 
 | Day | Pillar | Default CTA |
 |---|---|---|
 | Mon | Industry Take | Engagement question (or pedrosanders.me) |
-| Tue | Build-in-Public | GitHub / Discord |
+| Tue | Industry Take | `▶` product link (the take a release proves) |
 | Wed | Operator's Journal | DM-me / advisory |
 | Thu | Educational Tactical | KARMA waitlist |
-| Fri | Build-in-Public | Repo / qcobro.com |
+| Fri | Educational Tactical | `▶` product link / repo / qcobro.com |
 | Sat | Industry Take | Engagement question (or pedrosanders.me) |
 | Sun | Operator's Journal | Engagement question (or no close) |
 
@@ -114,8 +119,8 @@ For a **week of posts**: 7 drafts in this mix, vary hook patterns (no repeat in 
 
 ### Optional: Flexing Wednesday
 
-On a week with a genuine milestone, Wednesday's Operator's Journal slot can flex into a
-Build-in-Public hybrid — a story-shaped flex about a shipped thing. Use sparingly; only
+On a week with a genuine milestone, Wednesday's Operator's Journal slot can carry it as a
+story-shaped flex about a shipped thing (still a story, never an announcement). Use sparingly; only
 when there's a real win.
 
 ## Monetization order (which paid offer to lean on)
