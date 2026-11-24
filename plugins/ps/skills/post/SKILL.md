@@ -81,11 +81,16 @@ This applies to the post body only, not to this skill's own documentation. Check
 
 ## The four content pillars
 
-**The pillars are formats, not topics.** They are four *registers* for talking about the **same** subject (Voice AI infra — see The North Star). Build = *what we shipped*. Industry = *what I think*. Operator = *what happened to me*. Educational = *how to do it*. The subject never changes; only the voice does. If picking a pillar makes you reach for a different topic, you've misread the pillar.
+**The pillars are formats, not topics.** They are *registers* for talking about the **same** subject (Voice AI infra — see The North Star). Three are live; Build-in-Public is retired (see pillar 1). Industry = *what I think*. Operator = *what happened to me*. Educational = *how to do it*. The subject never changes; only the voice does. If picking a pillar makes you reach for a different topic, you've misread the pillar.
 
 Every post belongs to exactly one pillar. The pillar determines hook, structure, and CTA.
 
-1. **Build-in-Public — Fonoster & Voice AI infra.** Shipped features, architecture decisions, performance numbers, GitHub milestones, "we just fixed X" stories, beta program updates, demo videos. Buyer: developers, voice AI builders, CTOs. CTA: link to GitHub repo, Discord community, or Beta Program.
+1. **Build-in-Public — retired as a register (2026-11-24).** It was the weakest pillar across 5 pulses (avg 40 engagement vs 57–68 for the others), and its worst posts were announcements: "we shipped X" plus a picture and one line. **Shipped work is still the subject; it just never gets its own register.** Tell every release, feature, benchmark or milestone through one of the three pillars below, with the product as the proof and a `▶` product link as the close:
+   - as an **Industry Take** (an opinion the release proves: "Most Voice AI platforms let you down. For one of three reasons.", "A SIP message can open your front door.")
+   - as an **Operator's Journal** story (a confession or war story the release ends: "For as long as I can remember, I've wanted to stop using Asterisk.", "Signaling broke. And we started losing calls.")
+   - as an **Educational Tactical** lesson (how the shipped thing works and how to use it: the WhatsApp + Meta requirements post)
+
+   **Banned:** announcement posts ("We are so back. v0.40 is out.", "Happy Sunday, here's what's new") and caption-only posts (one line under an image, video, chart or release card, e.g. "ROUTR3 rewritten in Go 🚀"). If Pedro asks for one, draft it as one of the three registers instead and say why. New records in the data store are classified by the register they actually use; `build-in-public` remains in the schema only for historical posts.
 
 2. **Industry Take — opinions about Voice AI, telecom, and the voice infrastructure space.** Hot takes, contrarian predictions, "what nobody says out loud" framing, vertical-vs-horizontal arguments, what big platforms get wrong, hype-vs-reality. Buyer: operators, founders, technical buyers. CTA: newsletter signup, "DM me" for technical conversation, or follow-for-more.
 
@@ -93,7 +98,7 @@ Every post belongs to exactly one pillar. The pillar determines hook, structure,
 
 4. **Educational Tactical — how-to, frameworks, methodology, named-stack explainers.** "How to start in Voice AI", "5 mistakes when building a voice agent", state-machine design, KARMA stack walkthroughs, VAD/EoT explainers. Buyer: voice/telecom engineers wanting to upskill. CTA: KARMA training waitlist, save-this-post, or repo link.
 
-When in doubt, look at the prompt's center of gravity: is it about *what we shipped* (build-in-public), *what I think* (industry take), *what happened to me* (operator's journal), or *how to do X* (educational tactical)?
+When in doubt, look at the prompt's center of gravity: is it about *what I think* (industry take), *what happened to me* (operator's journal), or *how to do X* (educational tactical)? If the honest answer is "what we shipped", pick the register that makes the release matter (see pillar 1).
 
 For deeper guidance, example prompts mapped to pillars, the buyer-cluster archetypes, and the Flexing Wednesday optional format, read `references/pillars.md`.
 
@@ -101,7 +106,7 @@ For deeper guidance, example prompts mapped to pillars, the buyer-cluster archet
 
 Pedro posts daily on LinkedIn on a fixed weekly cadence (see "Weekly cadence" below). Each day maps to a pillar. **For LinkedIn posts, before drafting, ask which day the post is for** — he may be drafting Friday's post on a Tuesday, so don't assume "today."
 
-Phrase it naturally: *"Which day is this post for? (Mon Industry / Tue Build / Wed Operator / Thu Educational / Fri Build / Sat Industry / Sun Operator)"*
+Phrase it naturally: *"Which day is this post for? (Mon Industry / Tue Industry / Wed Operator / Thu Educational / Fri Educational / Sat Industry / Sun Operator)"*
 
 Skip the question when:
 - The prompt explicitly names a day or pillar.
@@ -139,21 +144,23 @@ Pedro's highest-engagement Industry Take (the KARMA hot take, 6,285 impressions 
 
    Default close by pillar (override when the post calls for it):
    - Industry Take → no close or a `▶` link to his writing; a specific engagement question only if it earns it
-   - Build-in-Public → `▶` link CTA
+   - Any post about a shipped thing → `▶` product link CTA
    - Operator's Journal → DM-for-advisory line (or no close if the story lands on its own)
    - Educational Tactical → either, depending on teach ("what did I miss?") vs sell ("join the waitlist")
 
 LinkedIn posts shorter than ~350 chars can collapse steps 3–5 into one line. Posts over ~1,200 chars should add 1–2 bold Unicode headers. Keep typical LinkedIn length 400–800 chars; go to ~1,200 only for tactical/list posts. A one-line caption on a video or document is not a substitute for a short post: those scored 11–30 engagement. On X, see the length rules in `references/networks.md`.
 
-## Weekly cadence — LinkedIn (2 Build / 2 Industry / 2 Operator / 1 Educational)
+## Weekly cadence — LinkedIn (3 Industry / 2 Operator / 2 Educational)
+
+Tue and Fri were Build-in-Public days until 2026-11-24. Shipped work now goes in any slot, told in that slot's register.
 
 | Day | Pillar | Default CTA |
 |---|---|---|
 | Mon | Industry Take | Engagement question (or newsletter once Featured) |
-| Tue | Build-in-Public | GitHub / Discord |
+| Tue | Industry Take | `▶` product link (the take a release proves) |
 | Wed | Operator's Journal | DM-me / advisory |
 | Thu | Educational Tactical | KARMA waitlist |
-| Fri | Build-in-Public | Repo / discussion |
+| Fri | Educational Tactical | `▶` product link / repo (how a shipped thing works) |
 | Sat | Industry Take | Engagement question (or newsletter) |
 | Sun | Operator's Journal | Engagement question (or no close) |
 
@@ -165,7 +172,7 @@ Mismatched CTAs are why most posts don't convert. Match the CTA to the pillar:
 
 | Pillar | Default CTA | Backup CTA |
 |---|---|---|
-| Build-in-Public | `▶ Get started with Fonoster: [link]`, `▶ Join our Discord: [link]`, or `▶ See it live: https://qcobro.com` | `▶ Like and re-share if this is relevant to your network.` |
+| Any post about a shipped thing | `▶ Get started with Fonoster: [link]`, `▶ Join our Discord: [link]`, or `▶ See it live: https://qcobro.com` | `▶ Like and re-share if this is relevant to your network.` |
 | Industry Take | `▶ I write about building voice without the legacy stack here: https://pedrosanders.me/` | `▶ DMs are open if you want to talk shop.` |
 | Operator's Journal | `▶ If you're building Voice AI in [vertical] and want a second pair of eyes, my DMs are open. I take on a few advisory engagements each quarter.` | `▶ If you're hiring or building in voice, my DMs are open.` |
 | Educational Tactical | `▶ I'm packaging this into a course (KARMA training). Comment "in" or join the waitlist: [link]` | `▶ Save this for later. And tell me, did I miss anything?` |
@@ -178,7 +185,7 @@ When a post needs the weekly paid-offer mention, prioritize (matches revenue-per
 
 1. **Voice AI consulting / advisory** — Operator's Journal posts default-lean here.
 2. **KARMA training cohort** — Educational Tactical posts default-lean here.
-3. **Fonoster paid tier (Cloud beta / enterprise support)** — Build-in-Public posts lean here when an update warrants.
+3. **Fonoster paid tier (Cloud beta / enterprise support)** — posts about a shipped thing lean here when an update warrants.
 4. **Newsletter sponsorships** — compounding asset; Industry Takes route to the newsletter signup itself (free, not a paid offer yet).
 
 ## The four monetization-aware rules (always baked in)
@@ -197,7 +204,7 @@ Pedro's hooks fall into a small number of named patterns. Pick one that matches 
 The five highest-leverage patterns to memorize:
 
 1. **industry-frustration** (Industry Take): *"The [industry] is in desperate need of [X]."* / *"I'll say what most people in [field] won't:"*
-2. **build-milestone** (Build-in-Public): *"𝘍𝘰𝘯𝘰𝘴𝘵𝘦𝘳 just [verb]. ⤵"* / *"We just shipped [feature]. Here's why it matters."*
+2. **long-held-frustration** (shipped thing as Operator's Journal): *"For as long as I can remember, I've wanted to stop using [old tool]. ⤵"* (replaces build-milestone, which leads to announcement posts)
 3. **operator-on-the-road** (Operator's Journal): *"I spent [N] [days/weeks] with [type of buyer] in [place]. Here's what I heard."*
 4. **educational-roadmap** (Educational Tactical): *"How to [verb] in [field] as a [role]. [N] steps ⤵"*
 5. **demand-validation** (cross-pillar, used sparingly): *"Raise your hand if [training/product] would help. I'm gauging demand."*
@@ -261,7 +268,8 @@ Follow this order. It keeps drafts on-strategy and minimizes back-and-forth.
 8. **Self-check before delivering.** Run this silently; fix anything that fails:
    - **North Star test: does it teach/argue/build/recount something about how Voice AI gets built, from the carrier edge to the LLM?** If it's really about procurement, generic AI/AGI hype, or psstack/Claude-Code/tooling meta, it has drifted — reframe through the voice-infra lens or don't post it.
    - **No "open source" in positioning: not in the hook, not as an identity claim.** Repo/community CTAs are fine; "open-source [anything]" as framing is not (see The North Star).
-   - One pillar?
+   - One pillar? (Industry, Operator or Educational; never a bare announcement)
+   - **Not caption-only?** If the post is a release, the text carries the story on its own, not one line under an image.
    - **One close — `▶` link CTA *or* engagement question, almost never both.** Prefer the close the scorecard (`patterns.md`) currently favors for this pillar; don't reflexively default to an engagement question if the data ranks it below a dm-advisory or bare close.
    - **Zero em-dashes (`—`)?** Scan the draft; rewrite any (see "Never use the em-dash").
    - Italic Unicode on at least one named entity?
@@ -276,7 +284,7 @@ Follow this order. It keeps drafts on-strategy and minimizes back-and-forth.
 
 ## Common Pedro requests and how to handle them
 
-- *"Draft a post about [thing we shipped]"* → Resolve network; confirm the day (LinkedIn). Build-in-Public, milestone hook, Discord/GitHub CTA.
+- *"Draft a post about [thing we shipped]"* → Resolve network; confirm the day (LinkedIn). Pick the register that makes it matter (the opinion it proves, the frustration it ends, or how it works), then close with a `▶` product link. Never an announcement.
 - *"Tweet this"* / *"--network twitter"* → X format. Infer pillar from the prompt; single tweet or thread; link out of tweet 1.
 - *"Write a hot take about [Voice AI topic]"* → Industry Take, frustration/contrarian-prediction hook, newsletter CTA or engagement question.
 - *"Turn this customer call into a post"* → Operator's Journal, on-the-road / "what I heard" hook, consulting/advisory DM CTA. Anonymize the customer.
